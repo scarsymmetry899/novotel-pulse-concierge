@@ -236,24 +236,30 @@ export default function GuestMiniApp() {
         </div>
 
         {/* View Switcher Chips */}
-        <div className="px-4 py-2.5 bg-[#F8F9FC] border-b border-[#E2E5F0] flex items-center justify-between gap-1 text-xs font-medium">
+        <div className="px-4 py-2.5 bg-[#F8F9FC] border-b border-[#E2E5F0] grid grid-cols-4 gap-1 text-xs font-medium">
           <button
             onClick={() => setActiveTab('hub')}
-            className={`flex-1 py-1.5 rounded-xl transition-all ${activeTab === 'hub' ? 'bg-[#171E52] text-white shadow-sm' : 'bg-white text-[#5E6482] hover:bg-slate-100'}`}
+            className={`py-1.5 rounded-xl text-center transition-all ${activeTab === 'hub' ? 'bg-[#171E52] text-white shadow-sm font-semibold' : 'bg-white text-[#5E6482] hover:bg-slate-100'}`}
           >
-            In-Stay Hub
+            Hub
           </button>
           <button
             onClick={() => setActiveTab('onboarding')}
-            className={`flex-1 py-1.5 rounded-xl transition-all ${activeTab === 'onboarding' ? 'bg-[#171E52] text-white shadow-sm' : 'bg-white text-[#5E6482] hover:bg-slate-100'}`}
+            className={`py-1.5 rounded-xl text-center transition-all ${activeTab === 'onboarding' ? 'bg-[#171E52] text-white shadow-sm font-semibold' : 'bg-white text-[#5E6482] hover:bg-slate-100'}`}
           >
-            Preferences (30s)
+            Sanctuary
           </button>
           <button
             onClick={() => setActiveTab('facilities')}
-            className={`flex-1 py-1.5 rounded-xl transition-all ${activeTab === 'facilities' ? 'bg-[#171E52] text-white shadow-sm' : 'bg-white text-[#5E6482] hover:bg-slate-100'}`}
+            className={`py-1.5 rounded-xl text-center transition-all ${activeTab === 'facilities' ? 'bg-[#171E52] text-white shadow-sm font-semibold' : 'bg-white text-[#5E6482] hover:bg-slate-100'}`}
           >
             Facilities
+          </button>
+          <button
+            onClick={() => setActiveTab('keycard')}
+            className={`py-1.5 rounded-xl text-center transition-all ${activeTab === 'keycard' ? 'bg-[#171E52] text-white shadow-sm font-semibold' : 'bg-white text-[#5E6482] hover:bg-slate-100'}`}
+          >
+            Key Pass
           </button>
         </div>
 
@@ -540,21 +546,21 @@ export default function GuestMiniApp() {
 
                   <div className="flex flex-wrap gap-2">
                     {[
-                      'Heated Pool Access (28°C)',
-                      '24/7 InBalance Gym',
-                      'Tennis Court Rental',
-                      'Hydrotherapy & Spa',
-                      'Valet Parking',
-                      'Executive Lounge Access'
+                      { id: 'Heated Pool Access', label: 'Heated Pool Access (28°C)' },
+                      { id: '24/7 Gym Pass', label: '24/7 InBalance Gym' },
+                      { id: 'Tennis Court Rental', label: 'Tennis Court Rental' },
+                      { id: 'Hydrotherapy & Spa', label: 'Hydrotherapy & Spa' },
+                      { id: 'Valet Parking', label: 'Valet Parking' },
+                      { id: 'Executive Lounge Access', label: 'Executive Lounge Access' }
                     ].map((amenity) => {
-                      const isSelected = preferences.wellnessInterests.includes(amenity);
+                      const isSelected = preferences.wellnessInterests.includes(amenity.id) || preferences.wellnessInterests.includes(amenity.label);
                       return (
                         <button
-                          key={amenity}
+                          key={amenity.id}
                           onClick={() => {
                             const next = isSelected
-                              ? preferences.wellnessInterests.filter(a => a !== amenity)
-                              : [...preferences.wellnessInterests, amenity];
+                              ? preferences.wellnessInterests.filter(a => a !== amenity.id && a !== amenity.label)
+                              : [...preferences.wellnessInterests, amenity.id];
                             updatePreference('wellnessInterests', next);
                           }}
                           className={`px-3 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 ${
@@ -564,7 +570,7 @@ export default function GuestMiniApp() {
                           }`}
                         >
                           {isSelected && <Check className="w-3.5 h-3.5 text-[#C5A880]" />}
-                          {amenity}
+                          {amenity.label}
                         </button>
                       );
                     })}
@@ -837,6 +843,26 @@ export default function GuestMiniApp() {
               
               <button
                 onClick={() => {
+                  try {
+                    if (typeof window !== 'undefined' && 'vibrate' in navigator) {
+                      navigator.vibrate([40, 60, 40]);
+                    }
+                    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+                    if (AudioCtx) {
+                      const ctx = new AudioCtx();
+                      const osc = ctx.createOscillator();
+                      const gain = ctx.createGain();
+                      osc.type = 'sine';
+                      osc.frequency.setValueAtTime(880, ctx.currentTime);
+                      osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.15);
+                      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+                      osc.connect(gain);
+                      gain.connect(ctx.destination);
+                      osc.start();
+                      osc.stop(ctx.currentTime + 0.4);
+                    }
+                  } catch (e) {}
                   setNfcUnlocked(true);
                   showToast('Room 412 Door Unlocked via Digital NFC Pass');
                   setTimeout(() => setNfcUnlocked(false), 4000);
