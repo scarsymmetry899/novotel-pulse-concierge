@@ -56,16 +56,18 @@ function StayContent() {
         </div>
 
         {/* Quick Preference Card */}
-        <div className="bg-gradient-to-br from-[#171E52] to-[#0F1155] text-white p-5 rounded-2xl shadow-md space-y-3">
+        <div className="bg-gradient-to-br from-[#171E52] to-[#0F1155] text-white p-5 rounded-2xl shadow-md space-y-3 border border-[#C5A880]/30">
           <div className="flex items-center justify-between text-xs text-[#C5A880]">
-            <span className="font-semibold tracking-wider uppercase">Your Sanctuary Pre-Sets</span>
+            <span className="font-semibold tracking-wider uppercase">
+              ✦ {preferences.personaName || 'Curated Luxury Sanctuary'}
+            </span>
             <span className="px-2 py-0.5 rounded-full bg-white/10 text-[10px]">Auto-Synced</span>
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-xs pt-1">
             <div className="bg-white/10 p-2.5 rounded-xl">
               <span className="text-[10px] text-white/60 block">Bedding</span>
-              <span className="font-semibold">{preferences.pillowType}</span>
+              <span className="font-semibold truncate block">{preferences.pillowType}</span>
             </div>
             <div className="bg-white/10 p-2.5 rounded-xl">
               <span className="text-[10px] text-white/60 block">Towel Warming</span>
@@ -76,8 +78,8 @@ function StayContent() {
               <span className="font-semibold">{preferences.roomTemp}°C</span>
             </div>
             <div className="bg-white/10 p-2.5 rounded-xl">
-              <span className="text-[10px] text-white/60 block">Dietary</span>
-              <span className="font-semibold">{preferences.allergies.join(', ') || 'Standard'}</span>
+              <span className="text-[10px] text-white/60 block">Aromatherapy</span>
+              <span className="font-semibold truncate block">{preferences.aromatherapy?.split('&')[0] || 'Lavender'}</span>
             </div>
           </div>
         </div>

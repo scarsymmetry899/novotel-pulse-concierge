@@ -5,11 +5,12 @@ import {
   Building2, Users, Flame, Bell, Search, ShieldCheck, 
   Send, Sparkles, Filter, CheckCircle2, Clock, 
   Phone, Mail, ArrowUpRight, MessageSquare, QrCode, RefreshCw,
-  X, Printer, Copy
+  X, Printer, Copy, Check, Bed, Coffee, Droplets, Wind,
+  ChevronRight, Sparkle, FileText, Share2, Layers
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import { INITIAL_ROOMS, INITIAL_STAYS, INITIAL_PREFERENCES, INITIAL_REQUESTS } from '@/lib/mockData';
-import { Room, Stay, GuestPreferences, ServiceRequest, Department } from '@/types/hospitality';
+import { INITIAL_ROOMS, INITIAL_STAYS, INITIAL_PREFERENCES, INITIAL_REQUESTS, LUXURY_PERSONAS } from '@/lib/mockData';
+import { Room, Stay, GuestPreferences, ServiceRequest, Department, LuxuryPersona } from '@/types/hospitality';
 
 export default function StaffCommandPortal() {
   const [rooms, setRooms] = useState<Room[]>(INITIAL_ROOMS);
@@ -18,9 +19,12 @@ export default function StaffCommandPortal() {
   const [requests, setRequests] = useState<ServiceRequest[]>(INITIAL_REQUESTS);
   const [selectedDept, setSelectedDept] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activeShift, setActiveShift] = useState<string>('Morning Shift • Tower A');
+  const [activeShift, setActiveShift] = useState<string>('Morning Shift • Floor Butler Desk');
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [qrModalGuest, setQrModalGuest] = useState<Stay | null>(null);
+  
+  // Spec Sheet Modal State
+  const [specSheetStay, setSpecSheetStay] = useState<{ stay: Stay; room: Room; persona: LuxuryPersona } | null>(null);
 
   const showToast = (msg: string) => {
     setToastMsg(msg);
@@ -66,7 +70,7 @@ export default function StaffCommandPortal() {
   // Update request status and notify guest via WhatsApp simulator
   const updateRequestStatus = async (id: string, newStatus: 'pending' | 'in_progress' | 'completed') => {
     setRequests(prev => prev.map(r => r.id === id ? { ...r, status: newStatus } : r));
-    showToast(`✓ Request status updated to ${newStatus.toUpperCase()} (WhatsApp status dispatch fired)`);
+    showToast(`✓ Request status updated to ${newStatus.toUpperCase()} (WhatsApp dispatch triggered)`);
 
     try {
       await supabase
@@ -83,10 +87,41 @@ export default function StaffCommandPortal() {
     showToast(`✓ Magic link dispatched to ${guest.guestPhone} (${guest.guestName}) via Meta Graph API`);
   };
 
+  // Dispatch all department directives to active requests
+  const dispatchAllDirectives = (persona: LuxuryPersona, room: Room, stay: Stay) => {
+    const newReqs: ServiceRequest[] = persona.departmentDirectives.map((d, i) => ({
+      id: `req-${Date.now()}-${i}`,
+      stayId: stay.id,
+      roomId: room.id,
+      department: d.department,
+      serviceType: d.title,
+      details: d.actionItems.join(' • '),
+      scheduledTime: d.timing || 'Immediate',
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }));
+
+    setRequests(prev => [...newReqs, ...prev]);
+    showToast(`✓ Dispatched ${newReqs.length} Action Directives for ${persona.title} to department tablets!`);
+  };
+
   // Filter requests by department
   const filteredRequests = requests.filter(r => {
     if (selectedDept !== 'all' && r.department !== selectedDept) return false;
     return true;
+  });
+
+  // Filter rooms by search
+  const filteredRooms = rooms.filter(r => {
+    const stay = stays.find(s => s.roomId === r.id);
+    const q = searchQuery.toLowerCase();
+    if (!q) return true;
+    return (
+      r.roomNumber.toLowerCase().includes(q) ||
+      stay?.guestName.toLowerCase().includes(q) ||
+      r.category.toLowerCase().includes(q)
+    );
   });
 
   return (
@@ -109,7 +144,7 @@ export default function StaffCommandPortal() {
             <h1 className="font-serif font-bold text-base tracking-wider uppercase">
               Novotel Operations Command
             </h1>
-            <span className="text-[11px] text-white/60">Front Desk • Housekeeping • Wellness Coordinator</span>
+            <span className="text-[11px] text-white/60">Cross-Department Floor Butler & Anticipatory Dispatch</span>
           </div>
         </div>
 
@@ -119,7 +154,7 @@ export default function StaffCommandPortal() {
             <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-white/50" />
             <input
               type="text"
-              placeholder="Search guest or room..."
+              placeholder="Search guest or suite..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-8 pr-3 py-1.5 bg-white/10 border border-white/15 rounded-xl text-xs text-white placeholder-white/40 focus:outline-none focus:border-[#C5A880]"
@@ -142,27 +177,31 @@ export default function StaffCommandPortal() {
             <div>
               <h2 className="text-sm font-bold uppercase tracking-wider text-[#171E52] flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-[#1E22AA]" />
-                Master Residence Grid
+                Master Residence Grid (10 Luxury Suites)
               </h2>
-              <p className="text-xs text-[#5E6482]">Live room statuses, VIP profiles, and scheduled arrival pre-sets.</p>
+              <p className="text-xs text-[#5E6482]">Click any residence to inspect the full Butler Action Spec Sheet.</p>
             </div>
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">
-              4 Occupied • 1 Vacant
+              10 Active Residences • 100% Occupied
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-            {rooms.map((room) => {
+            {filteredRooms.map((room) => {
               const stay = stays.find(s => s.roomId === room.id);
               const pref = stay ? preferences[stay.id] : null;
               const isVip = room.category === 'Suite';
 
+              // Find matched persona
+              const persona = LUXURY_PERSONAS.find(p => p.id === pref?.personaId) || LUXURY_PERSONAS[0];
+
               return (
                 <div
                   key={room.id}
-                  className={`bg-white rounded-2xl p-4 shadow-sm transition-all border ${
+                  onClick={() => stay && setSpecSheetStay({ stay, room, persona })}
+                  className={`bg-white rounded-2xl p-4 shadow-sm transition-all border cursor-pointer hover:shadow-md ${
                     isVip
-                      ? 'border-[#C5A880] ring-1 ring-[#C5A880]/30'
+                      ? 'border-[#C5A880] ring-1 ring-[#C5A880]/30 hover:border-amber-400'
                       : 'border-[#E2E5F0] hover:border-slate-300'
                   }`}
                 >
@@ -170,7 +209,7 @@ export default function StaffCommandPortal() {
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="text-lg font-serif font-bold text-[#171E52]">
-                          Room {room.roomNumber}
+                          Suite {room.roomNumber}
                         </span>
                         {isVip && (
                           <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#C5A880]/15 text-[#C5A880] border border-[#C5A880]/40 flex items-center gap-1">
@@ -184,53 +223,54 @@ export default function StaffCommandPortal() {
                       </span>
                     </div>
 
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                      room.status === 'occupied' ? 'bg-blue-100 text-[#1E22AA]' : 'bg-slate-100 text-slate-600'
-                    }`}>
-                      {room.status.toUpperCase()}
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-[#1E22AA]">
+                      OCCUPIED
                     </span>
                   </div>
 
-                  {stay ? (
+                  {stay && (
                     <div className="space-y-2 pt-2 border-t border-slate-100">
                       <div className="flex items-center justify-between text-xs">
                         <span className="font-semibold text-[#171E52]">{stay.guestName}</span>
                         <button
-                          onClick={() => sendWhatsAppWelcome(stay)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            sendWhatsAppWelcome(stay);
+                          }}
                           className="text-[11px] text-[#1E22AA] hover:underline font-semibold flex items-center gap-1"
                         >
                           <MessageSquare className="w-3 h-3 text-emerald-600" />
-                          Send Magic Link
+                          Magic Link
                         </button>
+                      </div>
+
+                      {/* Active Persona Tag */}
+                      <div className="p-1.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-[#171E52] truncate max-w-[200px]">
+                          ✦ {persona.title}
+                        </span>
+                        <span className="text-[9px] text-[#C5A880] font-semibold">
+                          View Directives →
+                        </span>
                       </div>
 
                       {/* Preference Chips */}
                       <div className="flex flex-wrap gap-1.5 pt-1">
-                        {pref?.tennisSlot && (
-                          <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
-                            🎾 Tennis {pref.tennisSlot}
-                          </span>
-                        )}
-                        {pref?.towelWarmingTime && (
-                          <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200">
-                            🔥 Towels {pref.towelWarmingTime}
-                          </span>
-                        )}
-                        {pref?.roomTemp && (
-                          <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200">
-                            ❄️ {pref.roomTemp}°C
-                          </span>
-                        )}
+                        <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200">
+                          ❄️ {pref?.roomTemp || persona.sensoryProfile.roomTemp}°C
+                        </span>
+                        <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200">
+                          🔥 {pref?.towelWarmingTime || persona.preferences.towelWarmingTime}
+                        </span>
+                        <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200">
+                          🛏️ {(pref?.pillowType || persona.sensoryProfile.pillow).split(' ')[0]}
+                        </span>
                         {pref?.allergies && pref.allergies.length > 0 && (
                           <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-rose-50 text-rose-700 border border-rose-200">
-                            ⚠️ {pref.allergies.join(' / ')}
+                            ⚠️ {pref.allergies[0]}
                           </span>
                         )}
                       </div>
-                    </div>
-                  ) : (
-                    <div className="text-xs text-[#5E6482] pt-2 border-t border-slate-100">
-                      Ready for check-in handoff.
                     </div>
                   )}
                 </div>
@@ -248,7 +288,7 @@ export default function StaffCommandPortal() {
             </div>
             <div className="flex items-center gap-2">
               <button
-                onClick={() => showToast('Master Pool Temperature notice broadcast to all 4 occupied suites')}
+                onClick={() => showToast('Master Pool Temperature notice broadcast to all 10 occupied suites')}
                 className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold transition-all"
               >
                 Broadcast Notice
@@ -285,6 +325,7 @@ export default function StaffCommandPortal() {
               <option value="housekeeping">Housekeeping</option>
               <option value="wellness">Wellness</option>
               <option value="fnb">F&B</option>
+              <option value="front_desk">Front Desk</option>
             </select>
           </div>
 
@@ -318,7 +359,7 @@ export default function StaffCommandPortal() {
                 </div>
 
                 <div className="flex items-center justify-between text-xs text-[#5E6482] pt-2 border-t border-slate-100">
-                  <span className="font-semibold text-[#171E52]">Room {req.roomId.replace('room-', '')}</span>
+                  <span className="font-semibold text-[#171E52]">Suite {req.roomId.replace('room-', '')}</span>
                   <span>Target: {req.scheduledTime || 'Immediate'}</span>
                 </div>
 
@@ -353,6 +394,133 @@ export default function StaffCommandPortal() {
           </div>
 
         </div>
+
+      </div>
+
+      {/* ============================================================== */}
+      {/* LUXURY GUEST ACTION SPEC SHEET MODAL (Department Action Plan)  */}
+      {/* ============================================================== */}
+      {specSheetStay && (
+        <div className="fixed inset-0 z-50 bg-[#0F1155]/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-white text-[#171E52] rounded-[32px] p-6 max-w-2xl w-full border border-[#C5A880]/50 shadow-2xl relative space-y-5 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
+            
+            {/* Modal Header */}
+            <div className="flex items-start justify-between border-b border-slate-200 pb-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xl font-serif font-bold text-[#171E52]">
+                    Suite {specSheetStay.room.roomNumber} Action Spec Sheet
+                  </span>
+                  <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-[#C5A880]/20 text-[#171E52] border border-[#C5A880]">
+                    {specSheetStay.room.category}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 mt-1 text-xs text-[#5E6482]">
+                  <span className="font-semibold text-[#171E52]">{specSheetStay.stay.guestName}</span>
+                  <span>•</span>
+                  <span>{specSheetStay.stay.guestPhone}</span>
+                  <span>•</span>
+                  <span className="text-[#C5A880] font-bold">✦ {specSheetStay.persona.title}</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setSpecSheetStay(null)}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Persona Tagline Banner */}
+            <div className="bg-[#171E52] text-white p-3.5 rounded-2xl flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-bold tracking-widest text-[#C5A880] uppercase block">
+                  Persona Profile & Blueprint
+                </span>
+                <span className="text-xs font-semibold text-white">
+                  {specSheetStay.persona.subtitle}
+                </span>
+                <span className="text-[11px] text-white/70 block italic mt-0.5">
+                  "{specSheetStay.persona.tagline}"
+                </span>
+              </div>
+              <button
+                onClick={() => dispatchAllDirectives(specSheetStay.persona, specSheetStay.room, specSheetStay.stay)}
+                className="px-3 py-2 bg-[#C5A880] hover:bg-amber-500 text-[#171E52] text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-1.5 shrink-0"
+              >
+                <Flame className="w-3.5 h-3.5" />
+                Dispatch All to Staff
+              </button>
+            </div>
+
+            {/* Department Action Cards (Scrollable) */}
+            <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+              {specSheetStay.persona.departmentDirectives.map((dir, idx) => (
+                <div
+                  key={idx}
+                  className="p-4 rounded-2xl border border-slate-200 bg-[#F8F9FC] space-y-2.5"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#171E52] text-white">
+                        {dir.department.replace('_', ' ')}
+                      </span>
+                      <h4 className="text-sm font-bold text-[#171E52]">
+                        {dir.title}
+                      </h4>
+                    </div>
+                    <span className="text-[10px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-md">
+                      {dir.timing}
+                    </span>
+                  </div>
+
+                  <ul className="space-y-1.5 text-xs text-[#5E6482]">
+                    {dir.actionItems.map((item, itemIdx) => (
+                      <li key={itemIdx} className="flex items-start gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 mt-0.5 shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+
+            {/* Modal Actions */}
+            <div className="pt-3 border-t border-slate-200 flex items-center justify-between gap-3">
+              <button
+                onClick={() => {
+                  window.print();
+                }}
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-[#171E52] text-xs font-semibold rounded-xl flex items-center gap-1.5"
+              >
+                <Printer className="w-4 h-4" />
+                Print Butler Spec Sheet
+              </button>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    sendWhatsAppWelcome(specSheetStay.stay);
+                  }}
+                  className="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-xl border border-emerald-200 flex items-center gap-1.5"
+                >
+                  <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+                  WhatsApp Guest Update
+                </button>
+                <button
+                  onClick={() => setSpecSheetStay(null)}
+                  className="px-4 py-2 bg-[#171E52] text-white text-xs font-semibold rounded-xl"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
 
       {/* Luxury QR Welcome Card & Digital Key Handoff Modal (Google Stitch Screen 4) */}
       {qrModalGuest && (
@@ -450,15 +618,16 @@ export default function StaffCommandPortal() {
                 className="flex-1 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
               >
                 <Copy className="w-3.5 h-3.5" />
-                <span>Copy Magic Link</span>
+                Copy Magic Link
               </button>
-
               <button
-                onClick={() => window.print()}
-                className="flex-1 py-2.5 bg-[#C5A880] hover:bg-amber-600 text-[#171E52] rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-gold"
+                onClick={() => {
+                  window.print();
+                }}
+                className="px-4 py-2.5 bg-[#C5A880] hover:bg-amber-600 text-[#171E52] rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
               >
                 <Printer className="w-3.5 h-3.5" />
-                <span>Print Keycard</span>
+                Print Card
               </button>
             </div>
 
@@ -466,7 +635,6 @@ export default function StaffCommandPortal() {
         </div>
       )}
 
-      </div>
     </div>
   );
 }

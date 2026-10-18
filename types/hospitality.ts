@@ -30,16 +30,58 @@ export interface Stay {
 
 export interface GuestPreferences {
   stayId: string;
+  personaId?: string;
+  personaName?: string;
   wellnessInterests: string[];
   tennisSlot?: string;
-  pillowType: 'Ergonomic Memory Foam' | 'Organic Buckwheat' | 'Hungarian Goose Down' | 'Anti-Allergen Cotton' | string;
+  pillowType: 'Hungarian Goose Down' | 'Ergonomic Memory Foam' | 'Organic Buckwheat' | 'Cooling Bamboo Silk' | 'Anti-Allergen Cotton' | string;
   towelWarmingTime: string; // e.g. "20:30"
-  roomTemp: number; // e.g. 20.0 (in Celsius)
-  breakfastStyle: 'The Square Buffet (6:30 - 10:30 AM)' | 'In-Room Express Continental Tray' | string;
+  roomTemp: number; // e.g. 19.5 (in Celsius)
+  aromatherapy?: string; // e.g. "French Lavender & Chamomile"
+  soundscape?: string; // e.g. "Delta-Wave Sleep (432Hz)"
+  lightingMood?: string; // e.g. "Golden Amber 2200K"
+  bathRitual?: string; // e.g. "Magnesium Flakes & Epsom Bath Soak"
+  breakfastStyle: 'The Square Signature Buffet' | 'In-Room Continental Silver Tray' | 'High-Protein Recovery Scramble' | 'Plant-Based Wellness Bowl' | string;
   minibarItems: string[];
   allergies: string[];
   customNotes?: string;
   updatedAt?: string;
+}
+
+export interface DepartmentDirective {
+  department: Department;
+  title: string;
+  actionItems: string[];
+  timing?: string;
+  badge: string;
+}
+
+export interface LuxuryPersona {
+  id: string;
+  title: string;
+  subtitle: string;
+  tagline: string;
+  avatarIcon: string;
+  badgeColor: string;
+  category: RoomCategory;
+  guestName: string;
+  sensoryProfile: {
+    roomTemp: number;
+    aromatherapy: string;
+    soundscape: string;
+    lighting: string;
+    pillow: string;
+    bathRitual: string;
+  };
+  refreshments: {
+    breakfast: string;
+    coffeeRoast: string;
+    beverages: string[];
+    dietaryFlags: string[];
+  };
+  amenities: string[];
+  departmentDirectives: DepartmentDirective[];
+  preferences: Partial<GuestPreferences>;
 }
 
 export type Department = 'housekeeping' | 'wellness' | 'fnb' | 'front_desk';
