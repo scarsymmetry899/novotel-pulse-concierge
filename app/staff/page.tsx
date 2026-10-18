@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { 
   Building2, Users, Flame, Bell, Search, ShieldCheck, 
   Send, Sparkles, Filter, CheckCircle2, Clock, 
-  Phone, Mail, ArrowUpRight, MessageSquare, QrCode, RefreshCw
+  Phone, Mail, ArrowUpRight, MessageSquare, QrCode, RefreshCw,
+  X, Printer, Copy
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { INITIAL_ROOMS, INITIAL_STAYS, INITIAL_PREFERENCES, INITIAL_REQUESTS } from '@/lib/mockData';
@@ -19,6 +20,7 @@ export default function StaffCommandPortal() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeShift, setActiveShift] = useState<string>('Morning Shift • Tower A');
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+  const [qrModalGuest, setQrModalGuest] = useState<Stay | null>(null);
 
   const showToast = (msg: string) => {
     setToastMsg(msg);
@@ -252,8 +254,8 @@ export default function StaffCommandPortal() {
                 Broadcast Notice
               </button>
               <button
-                onClick={() => showToast('Generated contactless Room 412 VIP QR Welcome Badge')}
-                className="px-3 py-1.5 rounded-xl bg-[#C5A880] hover:bg-amber-600 text-[#171E52] text-xs font-bold transition-all flex items-center gap-1.5"
+                onClick={() => setQrModalGuest(stays[0])}
+                className="px-3 py-1.5 rounded-xl bg-[#C5A880] hover:bg-amber-600 text-[#171E52] text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
               >
                 <QrCode className="w-3.5 h-3.5" />
                 Generate QR Card
@@ -351,6 +353,118 @@ export default function StaffCommandPortal() {
           </div>
 
         </div>
+
+      {/* Luxury QR Welcome Card & Digital Key Handoff Modal (Google Stitch Screen 4) */}
+      {qrModalGuest && (
+        <div className="fixed inset-0 z-50 bg-[#0F1155]/70 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-[#171E52] via-[#0F1155] to-[#0A0D30] text-white rounded-[32px] p-6 max-w-md w-full border border-[#C5A880]/50 shadow-2xl relative space-y-5 animate-in fade-in zoom-in-95 duration-200">
+            
+            {/* Close Button */}
+            <button
+              onClick={() => setQrModalGuest(null)}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            {/* Header */}
+            <div className="text-center space-y-1">
+              <span className="text-[10px] font-semibold tracking-widest text-[#C5A880] uppercase">
+                Novotel Hotels & Resorts • Sanctuary Pass
+              </span>
+              <h3 className="text-xl font-serif font-bold text-white tracking-wide">
+                Scan to Unlock Your Stay
+              </h3>
+              <p className="text-xs text-white/70">
+                {qrModalGuest.guestName} • Room {qrModalGuest.roomId.replace('room-', '')}
+              </p>
+            </div>
+
+            {/* Central Hero QR Card */}
+            <div className="bg-white p-6 rounded-2xl flex flex-col items-center justify-center text-center shadow-lg border border-[#C5A880]/40 relative group">
+              <div className="w-44 h-44 bg-white p-2 flex items-center justify-center">
+                {/* SVG Rendered High-Contrast QR Code */}
+                <svg className="w-full h-full text-[#171E52]" viewBox="0 0 100 100" fill="currentColor">
+                  {/* Outer corner anchors */}
+                  <rect x="5" y="5" width="28" height="28" fill="#171E52" rx="4"/>
+                  <rect x="10" y="10" width="18" height="18" fill="white" rx="2"/>
+                  <rect x="14" y="14" width="10" height="10" fill="#171E52" rx="1"/>
+
+                  <rect x="67" y="5" width="28" height="28" fill="#171E52" rx="4"/>
+                  <rect x="72" y="10" width="18" height="18" fill="white" rx="2"/>
+                  <rect x="76" y="14" width="10" height="10" fill="#171E52" rx="1"/>
+
+                  <rect x="5" y="67" width="28" height="28" fill="#171E52" rx="4"/>
+                  <rect x="10" y="72" width="18" height="18" fill="white" rx="2"/>
+                  <rect x="14" y="76" width="10" height="10" fill="#171E52" rx="1"/>
+
+                  {/* Synthetic data dots */}
+                  <rect x="40" y="8" width="6" height="6" fill="#1E22AA" rx="1"/>
+                  <rect x="52" y="8" width="6" height="6" fill="#171E52" rx="1"/>
+                  <rect x="40" y="20" width="6" height="6" fill="#171E52" rx="1"/>
+                  <rect x="52" y="20" width="6" height="6" fill="#1E22AA" rx="1"/>
+                  <rect x="40" y="32" width="20" height="6" fill="#171E52" rx="1"/>
+                  <rect x="8" y="42" width="14" height="6" fill="#171E52" rx="1"/>
+                  <rect x="28" y="42" width="8" height="8" fill="#1E22AA" rx="1"/>
+                  <rect x="42" y="45" width="16" height="16" fill="#C5A880" rx="3"/>
+                  <rect x="65" y="42" width="10" height="6" fill="#171E52" rx="1"/>
+                  <rect x="82" y="42" width="10" height="8" fill="#1E22AA" rx="1"/>
+                  <rect x="40" y="68" width="8" height="8" fill="#171E52" rx="1"/>
+                  <rect x="54" y="68" width="14" height="6" fill="#1E22AA" rx="1"/>
+                  <rect x="74" y="68" width="8" height="8" fill="#171E52" rx="1"/>
+                  <rect x="88" y="68" width="6" height="14" fill="#171E52" rx="1"/>
+                  <rect x="40" y="82" width="18" height="6" fill="#171E52" rx="1"/>
+                  <rect x="64" y="82" width="8" height="10" fill="#1E22AA" rx="1"/>
+                </svg>
+              </div>
+
+              <span className="text-[10px] text-[#5E6482] font-semibold mt-2 tracking-wide">
+                Direct URL: https://novotel-pulse.vercel.app/stay
+              </span>
+            </div>
+
+            {/* Perks list */}
+            <div className="space-y-1.5 text-xs text-white/80 px-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[#C5A880]">✦</span>
+                <span>Instant Pool & Tennis Court Reservation</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[#C5A880]">✦</span>
+                <span>One-Tap Heated Towels & Turndown Service</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[#C5A880]">✦</span>
+                <span>Direct Butler Messaging via WhatsApp</span>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center gap-2 pt-2 border-t border-white/10">
+              <button
+                onClick={() => {
+                  const url = `https://novotel-pulse-concierge.vercel.app/stay?token=${qrModalGuest.accessTokenHash}`;
+                  navigator.clipboard.writeText(url);
+                  showToast('✓ Guest Magic Link copied to clipboard');
+                }}
+                className="flex-1 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <Copy className="w-3.5 h-3.5" />
+                <span>Copy Magic Link</span>
+              </button>
+
+              <button
+                onClick={() => window.print()}
+                className="flex-1 py-2.5 bg-[#C5A880] hover:bg-amber-600 text-[#171E52] rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-gold"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                <span>Print Keycard</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
 
       </div>
     </div>
