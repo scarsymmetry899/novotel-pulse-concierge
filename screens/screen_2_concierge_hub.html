@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"/>
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#171E52"/>
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1155"/>
+  <title>Novotel Pulse Concierge — Executive Hub</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: '#171E52',
+            primaryDeep: '#0F1155',
+            accentElectric: '#1E22AA',
+            accentLuxury: '#C5A880',
+            canvasLight: '#F8F9FC',
+            surfaceWhite: '#FFFFFF',
+            borderMuted: '#E2E5F0',
+            textPrimary: '#171E52',
+            textSecondary: '#5E6482',
+          },
+          fontFamily: {
+            serif: ["'Playfair Display'", "serif"],
+            sans: ["'Plus Jakarta Sans'", "-apple-system", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+      --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+      --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+    }
+
+    html {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-text-size-adjust: 100%;
+      overscroll-behavior: none;
+    }
+    button, [role="button"], .tappable {
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    /* Fast, Responsive Press Feedback */
+    .btn-press {
+      transition: transform 140ms var(--ease-out), background-color 140ms var(--ease-out), box-shadow 140ms var(--ease-out);
+    }
+    .btn-press:active {
+      transform: scale(0.96);
+    }
+
+    /* Carousel with Native Mobile Physics */
+    .carousel-track {
+      scroll-snap-type: x mandatory;
+      touch-action: pan-y;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .carousel-track::-webkit-scrollbar {
+      display: none;
+    }
+    .carousel-item {
+      scroll-snap-align: start;
+      scroll-snap-stop: normal;
+    }
+
+    /* Stepper pulse ring */
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(30, 34, 170, 0.6); }
+      70% { box-shadow: 0 0 0 8px rgba(30, 34, 170, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(30, 34, 170, 0); }
+    }
+    .step-active-pulse {
+      animation: pulseRing 1.8s infinite;
+    }
+
+    /* Translucent Frosted Glass Bottom Dock */
+    .dock-glass {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border-top: 1px solid rgba(226, 229, 240, 0.85);
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      vertical-align: middle;
+    }
+    .material-symbols-fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+  </style>
+</head>
+<body class="bg-[#F8F9FC] text-[#171E52] h-full flex flex-col justify-between font-sans antialiased overflow-x-hidden">
+
+  <!-- TOP APP BAR -->
+  <header class="bg-[#171E52] text-white px-5 pt-3 pb-4 sticky top-0 z-40 border-b border-[#0F1155] shadow-sm">
+    <div class="flex items-center justify-between mb-2">
+      <!-- Brand & Suite Label -->
+      <div class="flex items-center space-x-2.5">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#0F1155] to-[#1E22AA] border border-[#C5A880]/60 flex items-center justify-center shadow-inner">
+          <span class="font-serif font-bold text-xs text-[#C5A880] pl-0.5">N</span>
+        </div>
+        <div>
+          <div class="flex items-center space-x-1.5">
+            <h1 class="text-xs font-bold uppercase tracking-wider text-white">Suite 412</h1>
+            <span class="text-[#C5A880] text-xs">•</span>
+            <span class="text-[11px] text-[#C5A880] font-medium tracking-wide">Executive Residence</span>
+          </div>
+          <p class="text-[10px] text-[#E2E5F0]/70 font-mono">Novotel Pulse Concierge</p>
+        </div>
+      </div>
+
+      <!-- Live Bell & Staff Ring -->
+      <div class="flex items-center space-x-2">
+        <button onclick="triggerDigitalKey()" class="btn-press px-2.5 py-1 rounded-xl bg-[#0F1155] border border-[#C5A880]/40 text-[#C5A880] text-[11px] font-bold flex items-center space-x-1 shadow-2xs">
+          <span class="material-symbols-outlined text-sm">key</span>
+          <span>Digital Key</span>
+        </button>
+        <button onclick="showToast('Connecting directly with Head Concierge Julian...')" class="btn-press w-8 h-8 rounded-xl bg-white/10 hover:bg-white/15 flex items-center justify-center text-white relative">
+          <span class="material-symbols-outlined text-base">notifications</span>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-[#171E52]"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SCROLLABLE DASHBOARD CANVAS -->
+  <main class="flex-1 overflow-y-auto px-5 py-4 pb-28 space-y-6">
+
+    <!-- WELCOME & PLATINUM STATUS CARD -->
+    <section class="bg-gradient-to-br from-[#171E52] via-[#0F1155] to-[#171E52] text-white p-5 rounded-3xl border border-[#C5A880]/30 shadow-lg relative overflow-hidden">
+      <!-- Subtle Decorative Background Watermark -->
+      <div class="absolute -right-6 -bottom-6 w-36 h-36 rounded-full bg-[#C5A880]/5 blur-2xl pointer-events-none"></div>
+
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <span class="text-[10px] font-bold tracking-widest uppercase text-[#C5A880]">Welcome Back</span>
+          <h2 class="font-serif text-2xl font-bold text-white tracking-tight mt-0.5">Mr. Hastings</h2>
+        </div>
+        <!-- Accor Live Limitless Platinum Status Badge -->
+        <div class="px-2.5 py-1 rounded-full bg-[#C5A880]/15 border border-[#C5A880]/40 flex items-center space-x-1 text-[#C5A880]">
+          <span class="material-symbols-outlined text-xs">diamond</span>
+          <span class="text-[10px] font-bold tracking-wider uppercase font-mono">ALL Platinum</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 pt-2 border-t border-white/10 text-xs">
+        <div class="flex items-center space-x-2 text-[#E2E5F0]/80">
+          <span class="material-symbols-outlined text-sm text-emerald-400">check_circle</span>
+          <span class="text-[11px]">Room Preset: <strong class="text-white">20.0°C</strong></span>
+        </div>
+        <div class="flex items-center space-x-2 text-[#E2E5F0]/80">
+          <span class="material-symbols-outlined text-sm text-[#C5A880]">schedule</span>
+          <span class="text-[11px]">Towels: <strong class="text-white">20:30 (Prep)</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE ACTIVE DISPATCH TIMELINE PILL -->
+    <section class="bg-white p-4 rounded-3xl border border-[#E2E5F0] shadow-xs space-y-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <span class="w-2 h-2 rounded-full bg-[#1E22AA] animate-ping"></span>
+          <span class="text-xs font-bold uppercase tracking-wider text-[#171E52]">Live Service Dispatch</span>
+        </div>
+        <span class="text-[11px] font-mono font-bold text-[#1E22AA] bg-[#1E22AA]/10 px-2.5 py-0.5 rounded-full">
+          ETA ~8 mins
+        </span>
+      </div>
+
+      <div class="flex items-center justify-between bg-[#F8F9FC] p-3 rounded-2xl border border-[#E2E5F0]">
+        <div>
+          <h4 class="text-xs font-bold text-[#171E52]">2x Heated Bath Towels & Pillow Restock</h4>
+          <p class="text-[11px] text-[#5E6482]">Attendant: <strong class="text-[#171E52]">Elena S.</strong> · Floor 4 Butler Team</p>
+        </div>
+        <button onclick="advanceTimeline()" class="btn-press px-2.5 py-1 rounded-xl bg-white border border-[#E2E5F0] text-[10px] font-bold text-[#1E22AA] hover:bg-slate-50">
+          Simulate Step
+        </button>
+      </div>
+
+      <!-- 4-Stage Connected Dot Progress Bar -->
+      <div class="pt-2 px-1">
+        <div class="grid grid-cols-4 relative">
+          <!-- Continuous Connection Line -->
+          <div class="absolute top-3 left-6 right-6 h-0.5 bg-slate-200 -z-0"></div>
+          <div id="progress-fill" class="absolute top-3 left-6 w-2/3 h-0.5 bg-[#1E22AA] transition-all duration-300 -z-0"></div>
+
+          <!-- Step 1: Requested -->
+          <div class="flex flex-col items-center text-center relative z-10">
+            <div id="dot-1" class="w-6 h-6 rounded-full bg-[#171E52] text-white flex items-center justify-center text-[11px] font-bold">
+              ✓
+            </div>
+            <span class="text-[10px] font-semibold text-[#171E52] mt-1.5">Requested</span>
+          </div>
+
+          <!-- Step 2: Prepared -->
+          <div class="flex flex-col items-center text-center relative z-10">
+            <div id="dot-2" class="w-6 h-6 rounded-full bg-[#171E52] text-white flex items-center justify-center text-[11px] font-bold">
+              ✓
+            </div>
+            <span class="text-[10px] font-semibold text-[#171E52] mt-1.5">Prepared</span>
+          </div>
+
+          <!-- Step 3: En Route (Active) -->
+          <div class="flex flex-col items-center text-center relative z-10">
+            <div id="dot-3" class="w-6 h-6 rounded-full bg-[#1E22AA] text-white flex items-center justify-center text-[11px] font-bold step-active-pulse">
+              3
+            </div>
+            <span class="text-[10px] font-bold text-[#1E22AA] mt-1.5">En Route</span>
+          </div>
+
+          <!-- Step 4: Delivered -->
+          <div class="flex flex-col items-center text-center relative z-10">
+            <div id="dot-4" class="w-6 h-6 rounded-full bg-slate-200 text-[#5E6482] flex items-center justify-center text-[11px] font-bold">
+              4
+            </div>
+            <span class="text-[10px] font-medium text-[#5E6482] mt-1.5">Delivered</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE FACILITY STATUS DECK (HORIZONTAL SNAP CAROUSEL) -->
+    <section class="space-y-3">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="font-serif text-lg font-bold text-[#171E52]">Resort Facilities & Wellness</h3>
+          <p class="text-[11px] text-[#5E6482]">Live water telemetry & occupancy tracking</p>
+        </div>
+        <div class="flex items-center space-x-1">
+          <button onclick="scrollCarousel(-1)" class="btn-press w-7 h-7 rounded-full bg-white border border-[#E2E5F0] flex items-center justify-center text-xs text-[#171E52] shadow-2xs">‹</button>
+          <button onclick="scrollCarousel(1)" class="btn-press w-7 h-7 rounded-full bg-white border border-[#E2E5F0] flex items-center justify-center text-xs text-[#171E52] shadow-2xs">›</button>
+        </div>
+      </div>
+
+      <!-- Carousel Track -->
+      <div id="facility-carousel" class="carousel-track flex space-x-3.5 overflow-x-auto pb-2 -mx-5 px-5">
+
+        <!-- Card 1: Heated Infinity Pool -->
+        <div class="carousel-item flex-shrink-0 w-[270px] bg-white p-4 rounded-3xl border border-[#E2E5F0] shadow-xs flex flex-col justify-between h-[210px]">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 text-[10px] font-bold font-mono flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                28.5°C · Calm (30%)
+              </span>
+              <span class="material-symbols-outlined text-lg text-[#1E22AA]">pool</span>
+            </div>
+            <h4 class="font-bold text-sm text-[#171E52] leading-tight">Heated Infinity Pool</h4>
+            <p class="text-[11px] text-[#5E6482] mt-1">Open 6:00 – 22:00 · 25m Lap lanes & heated vitality loungers</p>
+          </div>
+          <button onclick="reserveCabana()" class="btn-press w-full py-2.5 px-3 rounded-xl bg-[#1E22AA] text-white font-bold text-xs flex items-center justify-center space-x-1.5 shadow-xs">
+            <span>Reserve Cabana</span>
+            <span class="material-symbols-outlined text-xs">arrow_forward</span>
+          </button>
+        </div>
+
+        <!-- Card 2: InBalance Fitness Centre -->
+        <div class="carousel-item flex-shrink-0 w-[270px] bg-white p-4 rounded-3xl border border-[#E2E5F0] shadow-xs flex flex-col justify-between h-[210px]">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-[#1E22AA]/10 text-[#1E22AA] text-[10px] font-bold font-mono">
+                24/7 Access · Trainer on Duty
+              </span>
+              <span class="material-symbols-outlined text-lg text-[#1E22AA]">fitness_center</span>
+            </div>
+            <h4 class="font-bold text-sm text-[#171E52] leading-tight">InBalance Fitness</h4>
+            <p class="text-[11px] text-[#5E6482] mt-1">Technogym Artis Cardio, free weights & chilled eucalyptus towels</p>
+          </div>
+          <button onclick="generateLockerPass()" class="btn-press w-full py-2.5 px-3 rounded-xl bg-[#171E52] text-white font-bold text-xs flex items-center justify-center space-x-1.5 shadow-xs">
+            <span>Smart Locker Pass</span>
+            <span class="material-symbols-outlined text-xs text-[#C5A880]">qr_code_2</span>
+          </button>
+        </div>
+
+        <!-- Card 3: Tennis & Padel Courts -->
+        <div class="carousel-item flex-shrink-0 w-[270px] bg-white p-4 rounded-3xl border border-[#E2E5F0] shadow-xs flex flex-col justify-between h-[210px]">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-700 text-[10px] font-bold font-mono">
+                Court 1 Open · 17:00 Slot
+              </span>
+              <span class="material-symbols-outlined text-lg text-[#1E22AA]">sports_tennis</span>
+            </div>
+            <h4 class="font-bold text-sm text-[#171E52] leading-tight">Tennis & Padel Courts</h4>
+            <p class="text-[11px] text-[#5E6482] mt-1">Championship clay surface · Babolat racket loan available</p>
+          </div>
+          <button onclick="bookCourt()" class="btn-press w-full py-2.5 px-3 rounded-xl bg-[#1E22AA] text-white font-bold text-xs flex items-center justify-center space-x-1.5 shadow-xs">
+            <span>Book 17:00 Court Slot</span>
+            <span class="material-symbols-outlined text-xs">calendar_today</span>
+          </button>
+        </div>
+
+        <!-- Card 4: Wellness Spa & Hydrotherapy -->
+        <div class="carousel-item flex-shrink-0 w-[270px] bg-white p-4 rounded-3xl border border-[#E2E5F0] shadow-xs flex flex-col justify-between h-[210px]">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-700 text-[10px] font-bold font-mono">
+                Hydrotherapy Open
+              </span>
+              <span class="material-symbols-outlined text-lg text-[#1E22AA]">spa</span>
+            </div>
+            <h4 class="font-bold text-sm text-[#171E52] leading-tight">Novotel Serenity Spa</h4>
+            <p class="text-[11px] text-[#5E6482] mt-1">Finnish sauna, mineral salt scrub & deep tissue restorative massage</p>
+          </div>
+          <button onclick="showToast('Loading bespoke treatment menu...')" class="btn-press w-full py-2.5 px-3 rounded-xl bg-white border border-[#E2E5F0] text-[#171E52] font-bold text-xs flex items-center justify-center space-x-1.5 shadow-xs">
+            <span>Treatment Menu</span>
+            <span class="material-symbols-outlined text-xs">menu_book</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- INSTANT BUTLER & HOUSEKEEPING QUICK-DISPATCH BAR (2x2 LUXURY GRID) -->
+    <section class="space-y-3">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="font-serif text-lg font-bold text-[#171E52]">One-Touch Residence Butler</h3>
+          <p class="text-[11px] text-[#5E6482]">Instant priority dispatch to Suite 412</p>
+        </div>
+        <span class="text-[10px] font-bold uppercase tracking-wider text-[#C5A880]">24/7 Dedicated</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5">
+        
+        <!-- Action 1: Warm My Towels -->
+        <button onclick="dispatchAction(this, 'Bath Towel Warmth', 'Scheduled 21:00 on heated rack')" class="btn-press text-left p-3.5 rounded-2xl bg-white border border-[#E2E5F0] hover:border-[#1E22AA]/40 shadow-xs flex flex-col justify-between h-28">
+          <div class="flex items-center justify-between w-full">
+            <span class="material-symbols-outlined text-xl text-[#C5A880]">dry</span>
+            <span class="text-[9px] font-bold font-mono px-1.5 py-0.5 rounded bg-[#171E52] text-white">21:00</span>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-[#171E52] leading-tight">Warm My Towels</div>
+            <div class="text-[10px] text-[#5E6482]">700 GSM Egyptian Cotton</div>
+          </div>
+        </button>
+
+        <!-- Action 2: Evening Turndown -->
+        <button onclick="dispatchAction(this, 'Evening Turndown', 'Pillow mist and ambient lighting preset dispatched')" class="btn-press text-left p-3.5 rounded-2xl bg-white border border-[#E2E5F0] hover:border-[#1E22AA]/40 shadow-xs flex flex-col justify-between h-28">
+          <div class="flex items-center justify-between w-full">
+            <span class="material-symbols-outlined text-xl text-[#1E22AA]">bedtime</span>
+            <span class="text-[9px] font-bold font-mono px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700">Ready</span>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-[#171E52] leading-tight">Evening Turndown</div>
+            <div class="text-[10px] text-[#5E6482]">Aromatherapy mist & slipper setup</div>
+          </div>
+        </button>
+
+        <!-- Action 3: Ice & Crystal Glassware -->
+        <button onclick="dispatchAction(this, 'Ice & Glassware', 'Artisanal clear ice dispatched to Suite 412 (~10m)')" class="btn-press text-left p-3.5 rounded-2xl bg-white border border-[#E2E5F0] hover:border-[#1E22AA]/40 shadow-xs flex flex-col justify-between h-28">
+          <div class="flex items-center justify-between w-full">
+            <span class="material-symbols-outlined text-xl text-[#1E22AA]">ac_unit</span>
+            <span class="text-[9px] font-bold font-mono px-1.5 py-0.5 rounded bg-slate-100 text-[#5E6482]">~10m</span>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-[#171E52] leading-tight">Ice & Glassware</div>
+            <div class="text-[10px] text-[#5E6482]">Crystal highball & rocks bucket</div>
+          </div>
+        </button>
+
+        <!-- Action 4: Nespresso & Water Refill -->
+        <button onclick="dispatchAction(this, 'Nespresso Refill', 'Roast capsules & San Pellegrino replenished')" class="btn-press text-left p-3.5 rounded-2xl bg-white border border-[#E2E5F0] hover:border-[#1E22AA]/40 shadow-xs flex flex-col justify-between h-28">
+          <div class="flex items-center justify-between w-full">
+            <span class="material-symbols-outlined text-xl text-[#C5A880]">coffee</span>
+            <span class="text-[9px] font-bold font-mono px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700">Complimentary</span>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-[#171E52] leading-tight">Nespresso & Water</div>
+            <div class="text-[10px] text-[#5E6482]">Artisanal pods & glass bottles</div>
+          </div>
+        </button>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FROSTED BOTTOM DOCK WITH 4 MINIMALIST TABS -->
+  <footer class="dock-glass fixed bottom-0 left-0 right-0 z-50 px-6 py-2.5 flex items-center justify-between max-w-lg mx-auto">
+    
+    <button onclick="setActiveTab(this, 'home')" class="nav-tab flex flex-col items-center space-y-1 text-[#1E22AA]">
+      <span class="material-symbols-outlined text-xl">home</span>
+      <span class="text-[10px] font-bold">Home</span>
+    </button>
+
+    <button onclick="setActiveTab(this, 'wellness')" class="nav-tab flex flex-col items-center space-y-1 text-[#5E6482] hover:text-[#171E52]">
+      <span class="material-symbols-outlined text-xl">pool</span>
+      <span class="text-[10px] font-medium">Wellness</span>
+    </button>
+
+    <button onclick="setActiveTab(this, 'dining')" class="nav-tab flex flex-col items-center space-y-1 text-[#5E6482] hover:text-[#171E52]">
+      <span class="material-symbols-outlined text-xl">restaurant</span>
+      <span class="text-[10px] font-medium">Dining</span>
+    </button>
+
+    <button onclick="setActiveTab(this, 'butler')" class="nav-tab flex flex-col items-center space-y-1 text-[#5E6482] hover:text-[#171E52] relative">
+      <span class="material-symbols-outlined text-xl">concierge</span>
+      <span class="text-[10px] font-medium">Butler Desk</span>
+      <span class="w-1.5 h-1.5 rounded-full bg-[#1E22AA] absolute top-0 right-3"></span>
+    </button>
+
+  </footer>
+
+  <!-- DIGITAL KEY MODAL -->
+  <div id="key-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-5 opacity-0 pointer-events-none transition-all duration-200">
+    <div class="bg-gradient-to-b from-[#171E52] to-[#0F1155] border border-[#C5A880]/50 rounded-3xl p-6 text-white max-w-xs w-full text-center shadow-2xl relative">
+      <button onclick="closeDigitalKey()" class="absolute top-4 right-4 text-white/70 hover:text-white">✕</button>
+      <div class="w-16 h-16 rounded-2xl bg-[#C5A880]/20 border border-[#C5A880] mx-auto flex items-center justify-center text-[#C5A880] mb-3">
+        <span class="material-symbols-outlined text-3xl animate-pulse">contactless</span>
+      </div>
+      <h3 class="font-serif text-lg font-bold text-white">NFC Digital Door Pass</h3>
+      <p class="text-xs text-[#C5A880] font-mono mt-0.5">Suite 412 · Active</p>
+      <p class="text-xs text-[#E2E5F0]/80 mt-2">Hold your mobile device against the door lock reader.</p>
+      <button onclick="simulateUnlock()" class="btn-press mt-4 w-full py-2.5 rounded-xl bg-[#C5A880] text-[#171E52] font-bold text-xs uppercase tracking-wider">
+        Simulate Door Unlock
+      </button>
+    </div>
+  </div>
+
+  <!-- SONNER TOAST -->
+  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-200 pointer-events-none opacity-0 scale-95 px-4 py-2 rounded-xl bg-[#0F1155] text-white text-xs font-semibold shadow-xl border border-[#C5A880]/40 flex items-center space-x-2">
+    <span class="material-symbols-outlined text-sm text-[#C5A880]">check_circle</span>
+    <span id="toast-text">Action Dispatched</span>
+  </div>
+
+  <script>
+    let timelineStage = 3;
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toast-text');
+      text.textContent = msg;
+      toast.classList.remove('opacity-0', 'scale-95');
+      toast.classList.add('opacity-100', 'scale-100');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'scale-95');
+        toast.classList.remove('opacity-100', 'scale-100');
+      }, 2400);
+    }
+
+    function scrollCarousel(dir) {
+      const el = document.getElementById('facility-carousel');
+      el.scrollBy({ left: dir * 280, behavior: 'smooth' });
+    }
+
+    function reserveCabana() {
+      showToast('Pool Cabana #4 Reserved (28.5°C Heated)');
+    }
+
+    function generateLockerPass() {
+      showToast('Smart Locker Pass #412 synced to Apple Wallet');
+    }
+
+    function bookCourt() {
+      showToast('Tennis Court 1 booked for 17:00');
+    }
+
+    function dispatchAction(btn, title, detail) {
+      showToast(`${title}: ${detail}`);
+    }
+
+    function advanceTimeline() {
+      timelineStage = (timelineStage % 4) + 1;
+      const progressFill = document.getElementById('progress-fill');
+      
+      for (let i = 1; i <= 4; i++) {
+        const dot = document.getElementById(`dot-${i}`);
+        dot.className = "w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold";
+        if (i < timelineStage) {
+          dot.classList.add('bg-[#171E52]', 'text-white');
+          dot.textContent = '✓';
+        } else if (i === timelineStage) {
+          dot.classList.add('bg-[#1E22AA]', 'text-white', 'step-active-pulse');
+          dot.textContent = i;
+        } else {
+          dot.classList.add('bg-slate-200', 'text-[#5E6482]');
+          dot.textContent = i;
+        }
+      }
+
+      const widths = ['0%', '33%', '66%', '100%'];
+      progressFill.style.width = widths[timelineStage - 1];
+
+      const labels = ['Order Registered', 'Attendant Assembling', 'Elena S. in Elevator', 'Delivered to Suite 412 Door'];
+      showToast(`Status: ${labels[timelineStage - 1]}`);
+    }
+
+    function triggerDigitalKey() {
+      const m = document.getElementById('key-modal');
+      m.classList.remove('opacity-0', 'pointer-events-none');
+      m.classList.add('opacity-100');
+    }
+
+    function closeDigitalKey() {
+      const m = document.getElementById('key-modal');
+      m.classList.add('opacity-0', 'pointer-events-none');
+      m.classList.remove('opacity-100');
+    }
+
+    function simulateUnlock() {
+      showToast('Door Unlocked! Welcome to Suite 412.');
+      closeDigitalKey();
+    }
+
+    function setActiveTab(el, name) {
+      document.querySelectorAll('.nav-tab').forEach(t => {
+        t.className = "nav-tab flex flex-col items-center space-y-1 text-[#5E6482] hover:text-[#171E52]";
+        t.querySelector('span:last-of-type').className = "text-[10px] font-medium";
+      });
+      el.className = "nav-tab flex flex-col items-center space-y-1 text-[#1E22AA]";
+      el.querySelector('span:last-of-type').className = "text-[10px] font-bold";
+      showToast(`Navigated to ${name.toUpperCase()}`);
+    }
+  </script>
+</body>
+</html>

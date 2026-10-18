@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for auth verification
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isStaff() {
+      return isAuthenticated() && 
+        request.auth.token.role in ['front_desk', 'wellness', 'housekeeping', 'fnb', 'admin'];
+    }
+
+    function isGuest() {
+      return isAuthenticated() && request.auth.token.role == 'guest';
+    }
+
+    function isGuestOfStay(stayId) {
+      return isGuest() && request.auth.token.stayId == stayId;
+    }
+
+    // 1. Rooms Collection: Public cannot view, staff has full access, guests can only read their assigned room
+    match /rooms/{roomId} {
+      allow read: if isStaff() || (isGuest() && request.auth.token.roomId == roomId);
+      allow write: if isStaff();
+    }
+
+    // 2. Stays Collection: Strict room-level isolation
+    match /stays/{stayId} {
+      allow read: if isStaff() || isGuestOfStay(stayId);
+      allow create, delete: if isStaff();
+      allow update: if isStaff() || (isGuestOfStay(stayId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['whatsappOptIn']));
+
+      // Subcollection: Preferences
+      match /preferences/{prefId} {
+        allow read, write: if isStaff() || isGuestOfStay(stayId);
+      }
+
+      // Subcollection: Service Requests
+      match /requests/{requestId} {
+        allow read: if isStaff() || isGuestOfStay(stayId);
+        allow create: if isStaff() || isGuestOfStay(stayId);
+        // Guests cannot tamper with request status once submitted; only staff can mark in_progress or completed
+        allow update: if isStaff() || (isGuestOfStay(stayId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['details', 'scheduledTime']));
+        allow delete: if isStaff();
+      }
+    }
+
+    // 3. Facilities Collection: Public / Guest read-only, staff can update occupancy & schedules
+    match /facilities/{facilityId} {
+      allow read: if true; // Guests can view pool temperature, gym status & tennis hours
+      allow write: if isStaff();
+    }
+
+    // 4. Facility Bookings: Guests can only create bookings for their own stay and view their bookings
+    match /facility_bookings/{bookingId} {
+      allow read: if isStaff() || (isGuest() && resource.data.stayId == request.auth.token.stayId);
+      allow create: if isStaff() || (isGuest() && request.resource.data.stayId == request.auth.token.stayId);
+      allow update, delete: if isStaff() || (isGuest() && resource.data.stayId == request.auth.token.stayId);
+    }
+
+    // Default catch-all: Completely block any unauthorized access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="theme-color" content="#0F1155"/>
+  <title>Novotel Welcome Experience — One-Scan Digital Key & Pass</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: '#171E52',
+            primaryDeep: '#0F1155',
+            accentElectric: '#1E22AA',
+            accentLuxury: '#C5A880',
+            canvasLight: '#F8F9FC',
+            surfaceWhite: '#FFFFFF',
+            borderMuted: '#E2E5F0',
+            textPrimary: '#171E52',
+            textSecondary: '#5E6482',
+          },
+          fontFamily: {
+            serif: ["'Playfair Display'", "serif"],
+            sans: ["'Plus Jakarta Sans'", "-apple-system", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    html, body {
+      overscroll-behavior: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-press {
+      transition: transform 140ms var(--ease-out), background-color 140ms, box-shadow 140ms;
+    }
+    .btn-press:active {
+      transform: scale(0.97);
+    }
+
+    /* Metallic Gold Filigree Shimmer */
+    .gold-filigree-border {
+      background: linear-gradient(135deg, rgba(197, 168, 128, 0.8) 0%, rgba(255, 245, 230, 0.95) 25%, rgba(197, 168, 128, 0.5) 50%, rgba(212, 175, 55, 0.8) 75%, rgba(197, 168, 128, 0.9) 100%);
+      padding: 1.5px;
+    }
+
+    /* QR Code Glowing Persian Blue Halo */
+    .qr-halo {
+      box-shadow: 0 0 0 1px rgba(30, 34, 170, 0.6), 0 12px 30px -4px rgba(30, 34, 170, 0.4);
+    }
+
+    /* Scan Laser Animation */
+    @keyframes scanLaser {
+      0% { top: 0%; opacity: 0; }
+      15% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+    .laser-line {
+      animation: scanLaser 2.4s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-[#0F1155] via-[#171E52] to-[#0a0d2c] text-white min-h-screen flex flex-col items-center justify-between p-4 sm:p-8 font-sans antialiased overflow-x-hidden select-none">
+
+  <!-- TOP BRAND HEADER WITH ASPECT TOGGLE -->
+  <header class="w-full max-w-4xl flex items-center justify-between mb-4 z-20">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-xl bg-[#171E52] border border-[#C5A880]/70 flex items-center justify-center shadow-lg">
+        <span class="font-serif font-bold text-base text-[#C5A880]">N</span>
+      </div>
+      <div>
+        <h1 class="text-xs font-bold uppercase tracking-widest text-white">Novotel Hotels & Resorts</h1>
+        <p class="text-[10px] text-[#C5A880] tracking-wider uppercase font-semibold">Executive Lounge Welcome Experience</p>
+      </div>
+    </div>
+
+    <!-- Aspect Ratio Mode Switcher -->
+    <div class="bg-black/30 backdrop-blur-md p-1 rounded-xl border border-white/10 flex items-center space-x-1 text-xs">
+      <button onclick="setCardRatio('card-16-9')" id="btn-16-9" class="px-3 py-1 rounded-lg font-bold bg-[#C5A880] text-[#171E52] shadow-xs">
+        16:9 Printable Card
+      </button>
+      <button onclick="setCardRatio('card-9-16')" id="btn-9-16" class="px-3 py-1 rounded-lg font-bold text-slate-300 hover:text-white">
+        9:16 Mobile Pass
+      </button>
+    </div>
+  </header>
+
+  <!-- CARD PRESENTATION CANVAS -->
+  <main class="w-full flex-1 flex items-center justify-center py-4">
+
+    <!-- THE LUXURY WELCOME CARD CHASSIS -->
+    <div id="welcome-card" class="gold-filigree-border rounded-[32px] shadow-2xl transition-all duration-300 w-full max-w-3xl">
+      
+      <!-- Inner Deep Space Cadet Card -->
+      <div class="bg-gradient-to-br from-[#171E52] via-[#0F1155] to-[#171E52] rounded-[30.5px] p-6 sm:p-10 relative overflow-hidden flex flex-col justify-between">
+        
+        <!-- Elegant Watermark Filigree Lines -->
+        <div class="absolute inset-0 bg-[radial-gradient(#C5A880_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none"></div>
+        <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-[#1E22AA]/15 blur-3xl pointer-events-none"></div>
+
+        <!-- Upper Section: Subtitle & Main Editorial Heading -->
+        <div class="relative z-10 space-y-2 mb-6">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] sm:text-xs font-mono font-bold tracking-[0.25em] uppercase text-[#C5A880]">
+              NOVOTEL HOTELS & RESORTS • YOUR SANCTUARY AWAITS
+            </span>
+            <span class="px-2.5 py-0.5 rounded-full bg-[#C5A880]/15 border border-[#C5A880]/40 text-[#C5A880] text-[10px] font-mono font-bold uppercase">
+              Suite 412 VIP
+            </span>
+          </div>
+
+          <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-tight">
+            Scan to Unlock Your Bespoke Stay
+          </h2>
+          <p class="text-xs sm:text-sm text-[#E2E5F0]/80 max-w-xl font-light leading-relaxed">
+            Instant digital access to your personalized residence settings, temperature controls, and dedicated butler communication.
+          </p>
+        </div>
+
+        <!-- Middle Content Split: Hero QR Code + Bulleted VIP Perks -->
+        <div class="relative z-10 grid grid-cols-1 sm:grid-cols-12 gap-8 items-center my-4">
+          
+          <!-- Hero QR Code (Framed in rounded card with 1px Persian Blue halo) -->
+          <div class="sm:col-span-5 flex flex-col items-center">
+            <div onclick="simulateScan()" class="qr-halo bg-white p-4 sm:p-5 rounded-3xl relative cursor-pointer group transition-transform duration-200 hover:scale-[1.02]">
+              <!-- Laser Scanner Line -->
+              <div class="laser-line absolute left-3 right-3 h-0.5 bg-gradient-to-r from-transparent via-[#1E22AA] to-transparent shadow-[0_0_8px_#1E22AA] z-20"></div>
+
+              <!-- High Contrast SVG QR Code -->
+              <svg class="w-44 h-44 sm:w-48 sm:h-48 text-[#171E52]" viewBox="0 0 200 200" fill="currentColor">
+                <!-- Outer Corners -->
+                <rect x="15" y="15" width="50" height="50" rx="8" fill="#171E52"/>
+                <rect x="25" y="25" width="30" height="30" rx="4" fill="#FFFFFF"/>
+                <rect x="33" y="33" width="14" height="14" rx="2" fill="#171E52"/>
+
+                <rect x="135" y="15" width="50" height="50" rx="8" fill="#171E52"/>
+                <rect x="145" y="25" width="30" height="30" rx="4" fill="#FFFFFF"/>
+                <rect x="153" y="33" width="14" height="14" rx="2" fill="#171E52"/>
+
+                <rect x="15" y="135" width="50" height="50" rx="8" fill="#171E52"/>
+                <rect x="25" y="145" width="30" height="30" rx="4" fill="#FFFFFF"/>
+                <rect x="33" y="153" width="14" height="14" rx="2" fill="#171E52"/>
+
+                <!-- QR Data Matrix Pixels -->
+                <rect x="80" y="20" width="12" height="12" rx="2"/>
+                <rect x="105" y="20" width="12" height="12" rx="2"/>
+                <rect x="90" y="45" width="20" height="12" rx="2"/>
+                <rect x="75" y="75" width="50" height="50" rx="8" fill="#0F1155"/>
+                <!-- Logo inside QR -->
+                <circle cx="100" cy="100" r="16" fill="#171E52"/>
+                <text x="100" y="105" fill="#C5A880" font-family="'Playfair Display', serif" font-weight="bold" font-size="14" text-anchor="middle">N</text>
+
+                <rect x="140" y="80" width="12" height="24" rx="2"/>
+                <rect x="165" y="90" width="18" height="12" rx="2"/>
+                <rect x="20" y="80" width="12" height="18" rx="2"/>
+                <rect x="45" y="95" width="18" height="14" rx="2"/>
+
+                <rect x="80" y="145" width="14" height="14" rx="2"/>
+                <rect x="110" y="145" width="25" height="12" rx="2"/>
+                <rect x="80" y="170" width="30" height="14" rx="2"/>
+                <rect x="125" y="165" width="14" height="20" rx="2"/>
+                <rect x="155" y="140" width="25" height="12" rx="2"/>
+                <rect x="160" y="165" width="15" height="18" rx="2"/>
+              </svg>
+
+              <!-- Tap Prompt Pill -->
+              <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-[#171E52] border border-[#C5A880]/50 text-[#C5A880] text-[9px] font-bold font-mono tracking-wider px-3 py-1 rounded-full whitespace-nowrap shadow-md">
+                TAP TO SIMULATE CAMERA SCAN
+              </div>
+            </div>
+
+            <p class="text-[10px] text-[#C5A880] font-mono tracking-wider mt-5 uppercase">
+              Encrypted Keycode: NVTL-412-HASTINGS
+            </p>
+          </div>
+
+          <!-- Bulleted VIP Perks -->
+          <div class="sm:col-span-7 space-y-3.5 pl-0 sm:pl-4">
+            <div class="flex items-start space-x-3 p-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+              <div class="w-8 h-8 rounded-xl bg-[#1E22AA] text-white flex items-center justify-center flex-shrink-0 shadow-xs">
+                <span class="material-symbols-outlined text-lg">pool</span>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-white tracking-wide">Instant Pool & Tennis Court Reservation</h4>
+                <p class="text-[11px] text-[#E2E5F0]/70 mt-0.5">Live 28.5°C heated pool cabana booking & Babolat clay court slots.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3 p-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+              <div class="w-8 h-8 rounded-xl bg-[#C5A880] text-[#171E52] flex items-center justify-center flex-shrink-0 shadow-xs">
+                <span class="material-symbols-outlined text-lg font-bold">dry</span>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-white tracking-wide">One-Tap Towel Warming & Turndown Service</h4>
+                <p class="text-[11px] text-[#E2E5F0]/70 mt-0.5">Scheduled evening warmth delivery at 20:30 & aromatherapy pillow setup.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3 p-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+              <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 shadow-xs">
+                <span class="material-symbols-outlined text-lg">chat</span>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-white tracking-wide">Direct Butler Messaging via WhatsApp</h4>
+                <p class="text-[11px] text-[#E2E5F0]/70 mt-0.5">Instant communication with Head Concierge Julian & Floor 4 Attendants.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Action Strip -->
+        <div class="relative z-10 pt-5 mt-4 border-t border-[#C5A880]/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p class="text-xs text-[#E2E5F0]/80 text-center sm:text-left leading-snug">
+            Prefer WhatsApp? Tap below to receive your private access link instantly via SMS or WhatsApp.
+          </p>
+
+          <!-- Two Discrete Branded Buttons -->
+          <div class="flex items-center space-x-2.5 flex-shrink-0">
+            <!-- [Send via WhatsApp] -->
+            <button onclick="sendViaWhatsApp()" class="btn-press px-4 py-2.5 rounded-xl bg-[#171E52] hover:bg-[#0F1155] border border-[#C5A880]/60 text-white text-xs font-bold flex items-center space-x-2 shadow-sm">
+              <span class="material-symbols-outlined text-sm text-emerald-400">chat</span>
+              <span>Send via WhatsApp</span>
+            </button>
+
+            <!-- [Open Direct Portal] -->
+            <a href="screen_2_concierge_hub.html" class="btn-press px-4 py-2.5 rounded-xl bg-[#1E22AA] hover:bg-[#1E22AA]/90 text-white text-xs font-bold flex items-center space-x-2 shadow-sm">
+              <span>Open Direct Portal</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- TOAST COMPONENT -->
+  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-200 pointer-events-none opacity-0 scale-95 px-4 py-2 rounded-xl bg-[#0F1155] text-white text-xs font-semibold shadow-2xl border border-[#C5A880]/40 flex items-center space-x-2">
+    <span class="material-symbols-outlined text-sm text-[#C5A880]">check_circle</span>
+    <span id="toast-text">Scanned Successfully</span>
+  </div>
+
+  <script>
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toast-text');
+      text.textContent = msg;
+      toast.classList.remove('opacity-0', 'scale-95');
+      toast.classList.add('opacity-100', 'scale-100');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'scale-95');
+        toast.classList.remove('opacity-100', 'scale-100');
+      }, 2500);
+    }
+
+    function setCardRatio(mode) {
+      const card = document.getElementById('welcome-card');
+      const btn169 = document.getElementById('btn-16-9');
+      const btn916 = document.getElementById('btn-9-16');
+
+      if (mode === 'card-9-16') {
+        card.className = "gold-filigree-border rounded-[32px] shadow-2xl transition-all duration-300 w-full max-w-[393px]";
+        btn916.className = "px-3 py-1 rounded-lg font-bold bg-[#C5A880] text-[#171E52] shadow-xs";
+        btn169.className = "px-3 py-1 rounded-lg font-bold text-slate-300 hover:text-white";
+        showToast('Switched to 9:16 Mobile Pass View');
+      } else {
+        card.className = "gold-filigree-border rounded-[32px] shadow-2xl transition-all duration-300 w-full max-w-3xl";
+        btn169.className = "px-3 py-1 rounded-lg font-bold bg-[#C5A880] text-[#171E52] shadow-xs";
+        btn916.className = "px-3 py-1 rounded-lg font-bold text-slate-300 hover:text-white";
+        showToast('Switched to 16:9 Printable Card View');
+      }
+    }
+
+    function simulateScan() {
+      showToast('QR Scanned! Authenticating Suite 412 Digital Pass...');
+      setTimeout(() => {
+        window.location.href = "screen_1_onboarding.html";
+      }, 1200);
+    }
+
+    function sendViaWhatsApp() {
+      showToast('Magic Key link sent to WhatsApp +44 7700 900412');
+    }
+  </script>
+</body>
+</html>

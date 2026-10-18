@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"/>
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F8F9FC"/>
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1155"/>
+  <title>Tailor Your Sanctuary — Novotel Hotels & Resorts</title>
+  
+  <!-- Fonts: Playfair Display (Luxury Editorial) & Plus Jakarta Sans (Precision UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: '#171E52',        // Novotel Space Cadet
+            primaryDeep: '#0F1155',    // Blue Zodiac
+            accentElectric: '#1E22AA', // Persian Blue
+            accentLuxury: '#C5A880',   // Brushed Champagne Gold
+            canvasLight: '#F8F9FC',    // Premium Porcelain Travertine
+            surfaceWhite: '#FFFFFF',
+            borderMuted: '#E2E5F0',
+            textPrimary: '#171E52',
+            textSecondary: '#5E6482',
+          },
+          fontFamily: {
+            serif: ["'Playfair Display'", "serif"],
+            sans: ["'Plus Jakarta Sans'", "-apple-system", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Emil Kowalski Design Engineering System Styles -->
+  <style>
+    :root {
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+      --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+      --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+      --gold-glow: 0 4px 20px -2px rgba(197, 168, 128, 0.28);
+      --persian-glow: 0 0 0 1.5px #1E22AA, 0 6px 20px -4px rgba(30, 34, 170, 0.35);
+    }
+
+    /* Mobile Native Baseline */
+    html {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-text-size-adjust: 100%;
+      overscroll-behavior: none;
+    }
+    body {
+      touch-action: manipulation;
+    }
+    button, [role="button"], .chip, .tappable {
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    /* Fast, Responsive Press Feedback (Emil Kowalski principle) */
+    .btn-press {
+      transition: transform 140ms var(--ease-out), background-color 140ms var(--ease-out), box-shadow 140ms var(--ease-out);
+    }
+    .btn-press:active {
+      transform: scale(0.97);
+    }
+
+    /* Chip Micro-Interaction */
+    .chip {
+      transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out), border-color 160ms var(--ease-out), color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+    }
+    .chip:active {
+      transform: scale(0.96);
+    }
+    .chip.selected {
+      background-color: #171E52 !important;
+      color: #FFFFFF !important;
+      box-shadow: var(--persian-glow);
+      border-color: #1E22AA !important;
+    }
+    .chip.selected .chip-icon {
+      color: #C5A880 !important;
+    }
+    .chip.selected .chip-badge {
+      background-color: rgba(30, 34, 170, 0.4);
+      color: #FFFFFF;
+    }
+
+    /* Staggered load animation */
+    @keyframes emilFadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .stagger-1 { animation: emilFadeInUp 240ms var(--ease-out) forwards 30ms; }
+    .stagger-2 { animation: emilFadeInUp 240ms var(--ease-out) forwards 70ms; }
+    .stagger-3 { animation: emilFadeInUp 240ms var(--ease-out) forwards 110ms; }
+    .stagger-4 { animation: emilFadeInUp 240ms var(--ease-out) forwards 150ms; }
+
+    /* Step content transitions */
+    .step-pane {
+      display: none;
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+      transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out);
+    }
+    .step-pane.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Glass dock */
+    .dock-glass {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-top: 1px solid rgba(226, 229, 240, 0.8);
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      vertical-align: middle;
+    }
+    .material-symbols-fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+  </style>
+</head>
+<body class="bg-[#F8F9FC] text-[#171E52] h-full flex flex-col justify-between font-sans antialiased overflow-x-hidden">
+
+  <!-- TOP BAR & STEP PROGRESS -->
+  <header class="sticky top-0 z-40 bg-[#F8F9FC]/95 backdrop-blur-md border-b border-[#E2E5F0]/70 px-5 pt-3 pb-3.5">
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center space-x-2">
+        <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#0F1155] to-[#171E52] border border-[#C5A880]/60 flex items-center justify-center shadow-xs">
+          <span class="font-serif font-bold text-xs text-[#C5A880]">N</span>
+        </div>
+        <div>
+          <span class="text-[10px] font-bold tracking-widest uppercase text-[#171E52]">Novotel</span>
+          <span class="text-[9px] font-medium tracking-wider uppercase text-[#C5A880] ml-1">Hotels & Resorts</span>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-1.5 bg-white border border-[#E2E5F0] px-2.5 py-1 rounded-full shadow-2xs">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span id="save-status" class="text-[10px] font-semibold text-[#5E6482]">Auto-saving</span>
+      </div>
+    </div>
+
+    <!-- Stepper Title & Subtitle -->
+    <div class="flex items-baseline justify-between mb-2">
+      <h1 class="font-serif text-xl font-bold tracking-tight text-[#171E52]" id="step-title">
+        Tailor Your Sanctuary
+      </h1>
+      <span class="text-xs font-mono font-bold text-[#1E22AA] bg-[#1E22AA]/10 px-2 py-0.5 rounded-full" id="step-indicator-text">
+        Step 1 of 3
+      </span>
+    </div>
+
+    <!-- Minimalist 3-Segment Progress Indicator (Filled with Persian Blue #1E22AA) -->
+    <div class="grid grid-cols-3 gap-1.5">
+      <div class="h-1.5 rounded-full transition-all duration-300 bg-[#1E22AA]" id="bar-1"></div>
+      <div class="h-1.5 rounded-full transition-all duration-300 bg-[#E2E5F0]" id="bar-2"></div>
+      <div class="h-1.5 rounded-full transition-all duration-300 bg-[#E2E5F0]" id="bar-3"></div>
+    </div>
+  </header>
+
+  <!-- SCROLLABLE STEP CONTENT CANVAS -->
+  <main class="flex-1 overflow-y-auto px-5 py-4 pb-28 space-y-6">
+
+    <!-- STEP 1: WELLNESS & ACTIVE RECREATION -->
+    <section id="step-1" class="step-pane active">
+      <div class="space-y-4">
+        <!-- Section Intro -->
+        <div class="stagger-1">
+          <p class="text-xs uppercase tracking-wider font-bold text-[#5E6482] mb-1">Step 1 · Recreation & Recovery</p>
+          <h2 class="font-serif text-2xl font-bold text-[#171E52] leading-tight">Wellness Amenities</h2>
+          <p class="text-xs text-[#5E6482] mt-1">Select privileges you wish our concierge team to prioritize for your arrival.</p>
+        </div>
+
+        <!-- Chips Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 stagger-2">
+          
+          <!-- Chip 1: Heated Outdoor Pool -->
+          <button onclick="toggleChip(this, 'pool')" class="chip selected w-full text-left p-3.5 rounded-2xl bg-white border border-[#E2E5F0] flex items-center justify-between shadow-xs">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined chip-icon text-xl text-[#1E22AA]">pool</span>
+              <div>
+                <div class="text-xs font-bold leading-tight">Heated Outdoor Pool</div>
+                <div class="text-[11px] opacity-75">Maintained at 28°C · Vitality Deck</div>
+              </div>
+            </div>
+            <span class="chip-badge text-[10px] font-mono px-2 py-0.5 rounded-md font-semibold bg-[#1E22AA]/10 text-[#1E22AA]">
+              28°C
+            </span>
+          </button>
+
+          <!-- Chip 2: InBalance Gym -->
+          <button onclick="toggleChip(this, 'gym')" class="chip selected w-full text-left p-3.5 rounded-2xl bg-white border border-[#E2E5F0] flex items-center justify-between shadow-xs">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined chip-icon text-xl text-[#1E22AA]">fitness_center</span>
+              <div>
+                <div class="text-xs font-bold leading-tight">InBalance Gym 24/7</div>
+                <div class="text-[11px] opacity-75">Technogym Artis · Smart Locker</div>
+              </div>
+            </div>
+            <span class="chip-badge text-[10px] font-mono px-2 py-0.5 rounded-md font-semibold bg-[#1E22AA]/10 text-[#1E22AA]">
+              24/7
+            </span>
+          </button>
+
+          <!-- Chip 3: Padel / Tennis -->
+          <button onclick="toggleChip(this, 'tennis')" class="chip w-full text-left p-3.5 rounded-2xl bg-white border border-[#E2E5F0] text-[#5E6482] flex items-center justify-between shadow-xs">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined chip-icon text-xl text-[#5E6482]">sports_tennis</span>
+              <div>
+                <div class="text-xs font-bold leading-tight text-[#171E52]">Padel / Tennis Court</div>
+                <div class="text-[11px] opacity-75">Floodlit Clay Courts · Racket Service</div>
+              </div>
+            </div>
+            <span class="chip-badge text-[10px] font-mono px-2 py-0.5 rounded-md font-semibold bg-slate-100 text-[#5E6482]">
+              Reserve
+            </span>
+          </button>
+
+          <!-- Chip 4: Sauna & Hydrotherapy -->
+          <button onclick="toggleChip(this, 'spa')" class="chip w-full text-left p-3.5 rounded-2xl bg-white border border-[#E2E5F0] text-[#5E6482] flex items-center justify-between shadow-xs">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined chip-icon text-xl text-[#5E6482]">hot_tub</span>
+              <div>
+                <div class="text-xs font-bold leading-tight text-[#171E52]">Sauna & Hydrotherapy</div>
+                <div class="text-[11px] opacity-75">Nordic Finnish Sauna · Cold Plunge</div>
+              </div>
+            </div>
+            <span class="chip-badge text-[10px] font-mono px-2 py-0.5 rounded-md font-semibold bg-slate-100 text-[#5E6482]">
+              Open
+            </span>
+          </button>
+
+        </div>
+
+        <!-- Executive Perks Note -->
+        <div class="stagger-3 bg-white p-3.5 rounded-2xl border border-[#E2E5F0] flex items-center space-x-3 shadow-2xs">
+          <div class="w-8 h-8 rounded-xl bg-[#C5A880]/15 flex items-center justify-center flex-shrink-0 text-[#C5A880]">
+            <span class="material-symbols-outlined text-lg">verified</span>
+          </div>
+          <p class="text-[11px] text-[#5E6482] leading-relaxed">
+            <strong class="text-[#171E52]">Accor Platinum Benefit:</strong> Priority lane access & complimentary towel locker pre-assigned to Suite 412.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: REST & SLEEP EXPERIENCE -->
+    <section id="step-2" class="step-pane">
+      <div class="space-y-4">
+        <div>
+          <p class="text-xs uppercase tracking-wider font-bold text-[#5E6482] mb-1">Step 2 · Rest & Sanctuary</p>
+          <h2 class="font-serif text-2xl font-bold text-[#171E52] leading-tight">Sleep & Bath Experience</h2>
+          <p class="text-xs text-[#5E6482] mt-1">Fine-tune your room environment for deep circadian recovery.</p>
+        </div>
+
+        <!-- Pillow Selection Pills -->
+        <div class="space-y-2">
+          <label class="text-xs font-bold uppercase tracking-wider text-[#171E52] flex items-center justify-between">
+            <span>Bespoke Pillow Menu</span>
+            <span class="text-[10px] font-normal text-[#5E6482]">Choose 1 or more</span>
+          </label>
+          <div class="grid grid-cols-1 gap-2">
+            
+            <button onclick="togglePillow(this, 'memory-foam')" class="chip selected w-full text-left p-3.5 rounded-2xl bg-white border border-[#E2E5F0] flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <span class="material-symbols-outlined chip-icon text-lg text-[#C5A880]">bed</span>
+                <div>
+                  <div class="text-xs font-bold">Ergonomic Memory Foam</div>
+                  <div class="text-[11px] opacity-75">Contoured cervical support & cooling gel</div>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-base text-[#1E22AA] chip-check">check_circle</span>
+            </button>
+
+            <button onclick="togglePillow(this, 'goose-down')" class="chip w-full text-left p-3.5 rounded-2xl bg-white border border-[#E2E5F0] text-[#5E6482] flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <span class="material-symbols-outlined chip-icon text-lg text-[#5E6482]">cloud</span>
+                <div>
+                  <div class="text-xs font-bold text-[#171E52]">Hungarian Goose Down</div>
+                  <div class="text-[11px] opacity-75">Cloud-soft 800 fill power ultra-plush</div>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-base text-slate-300 chip-check">radio_button_unchecked</span>
+            </button>
+
+            <button onclick="togglePillow(this, 'buckwheat')" class="chip w-full text-left p-3.5 rounded-2xl bg-white border border-[#E2E5F0] text-[#5E6482] flex items-center justify-between">
+              <div class="flex items-center space-x-3">
+                <span class="material-symbols-outlined chip-icon text-lg text-[#5E6482]">spa</span>
+                <div>
+                  <div class="text-xs font-bold text-[#171E52]">Organic Buckwheat Hull</div>
+                  <div class="text-[11px] opacity-75">Hypoallergenic natural airflow alignment</div>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-base text-slate-300 chip-check">radio_button_unchecked</span>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- Bath Warmth & Pre-warm Towels Card -->
+        <div class="bg-white p-4 rounded-2xl border border-[#E2E5F0] shadow-xs space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2.5">
+              <div class="w-8 h-8 rounded-xl bg-[#1E22AA]/10 text-[#1E22AA] flex items-center justify-center">
+                <span class="material-symbols-outlined text-lg">dry</span>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-[#171E52]">Pre-warm Bath Towels for Evening</h4>
+                <p class="text-[11px] text-[#5E6482]">Plush 700 GSM Egyptian Cotton on heated rail</p>
+              </div>
+            </div>
+            <!-- Toggle Switch -->
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="towel-toggle" checked class="sr-only peer" onchange="toggleTowelWarmth(this)">
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1E22AA]"></div>
+            </label>
+          </div>
+
+          <!-- Circular Time Pill Dial -->
+          <div id="towel-time-picker" class="pt-2 border-t border-[#E2E5F0] flex items-center justify-between">
+            <span class="text-xs text-[#5E6482]">Scheduled Warmth Delivery:</span>
+            <div class="flex items-center space-x-1.5">
+              <button onclick="adjustTime(-15)" class="w-7 h-7 rounded-lg bg-[#F8F9FC] border border-[#E2E5F0] flex items-center justify-center text-xs font-bold hover:bg-slate-100 active:scale-95 transition-transform">-</button>
+              <div id="towel-time-display" class="px-3 py-1 rounded-lg bg-[#171E52] text-[#C5A880] font-mono font-bold text-xs tracking-wider border border-[#C5A880]/30 shadow-inner">
+                20:30
+              </div>
+              <button onclick="adjustTime(15)" class="w-7 h-7 rounded-lg bg-[#F8F9FC] border border-[#E2E5F0] flex items-center justify-center text-xs font-bold hover:bg-slate-100 active:scale-95 transition-transform">+</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ambient Room Temperature Slider -->
+        <div class="bg-white p-4 rounded-2xl border border-[#E2E5F0] shadow-xs space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-xs font-bold text-[#171E52]">Pre-arrival Climate Control</h4>
+              <p class="text-[11px] text-[#5E6482]">Optimal sleep temperature recommendation: 19°C – 20°C</p>
+            </div>
+            <!-- Frosted Glass Temp Badge -->
+            <div class="px-3 py-1 rounded-xl bg-[#0F1155] text-white font-mono font-bold text-sm tracking-tight border border-[#1E22AA]/40 shadow-xs flex items-center space-x-1">
+              <span class="material-symbols-outlined text-xs text-[#C5A880]">thermostat</span>
+              <span id="temp-display">20.0°C</span>
+            </div>
+          </div>
+
+          <input type="range" id="temp-slider" min="18" max="24" step="0.5" value="20.0" oninput="updateTemp(this.value)" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#1E22AA]">
+          <div class="flex justify-between text-[10px] font-mono text-[#5E6482]">
+            <span>18°C (Crisp)</span>
+            <span class="font-bold text-[#171E52]">20°C (Default)</span>
+            <span>24°C (Warm)</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- STEP 3: DINING & REFRESHMENTS -->
+    <section id="step-3" class="step-pane">
+      <div class="space-y-4">
+        <div>
+          <p class="text-xs uppercase tracking-wider font-bold text-[#5E6482] mb-1">Step 3 · Gastronomy & Refreshment</p>
+          <h2 class="font-serif text-2xl font-bold text-[#171E52] leading-tight">Dining & In-Room Bar</h2>
+          <p class="text-xs text-[#5E6482] mt-1">Tailor your morning ritual and pantry refreshments.</p>
+        </div>
+
+        <!-- Breakfast Choice Chips -->
+        <div class="space-y-2">
+          <label class="text-xs font-bold uppercase tracking-wider text-[#171E52]">Breakfast Experience</label>
+          <div class="grid grid-cols-2 gap-2.5">
+            <button onclick="selectBreakfast(this, 'buffet')" class="breakfast-btn chip selected text-left p-3 rounded-2xl bg-white border border-[#E2E5F0] flex flex-col justify-between h-24">
+              <span class="material-symbols-outlined text-xl text-[#C5A880]">restaurant</span>
+              <div>
+                <div class="text-xs font-bold">The Square Buffet</div>
+                <div class="text-[10px] opacity-75">7:00 AM · Executive Terrace</div>
+              </div>
+            </button>
+
+            <button onclick="selectBreakfast(this, 'room-tray')" class="breakfast-btn chip text-left p-3 rounded-2xl bg-white border border-[#E2E5F0] text-[#5E6482] flex flex-col justify-between h-24">
+              <span class="material-symbols-outlined text-xl text-[#5E6482]">room_service</span>
+              <div>
+                <div class="text-xs font-bold text-[#171E52]">In-Room Continental</div>
+                <div class="text-[10px] opacity-75">Express Tray to Suite 412</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Minibar Toggles -->
+        <div class="space-y-2">
+          <label class="text-xs font-bold uppercase tracking-wider text-[#171E52]">Complimentary In-Room Bar Stock</label>
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="toggleMinibar(this)" class="minibar-chip chip selected p-2.5 rounded-xl bg-white border border-[#E2E5F0] text-center">
+              <span class="material-symbols-outlined text-lg block mb-1 text-[#C5A880]">local_bar</span>
+              <span class="text-[11px] font-bold block leading-tight">San Pellegrino</span>
+              <span class="text-[9px] opacity-75">Sparkling</span>
+            </button>
+
+            <button onclick="toggleMinibar(this)" class="minibar-chip chip selected p-2.5 rounded-xl bg-white border border-[#E2E5F0] text-center">
+              <span class="material-symbols-outlined text-lg block mb-1 text-[#C5A880]">nutrition</span>
+              <span class="text-[11px] font-bold block leading-tight">Barista Oat Milk</span>
+              <span class="text-[9px] opacity-75">Organic</span>
+            </button>
+
+            <button onclick="toggleMinibar(this)" class="minibar-chip chip selected p-2.5 rounded-xl bg-white border border-[#E2E5F0] text-center">
+              <span class="material-symbols-outlined text-lg block mb-1 text-[#C5A880]">coffee</span>
+              <span class="text-[11px] font-bold block leading-tight">Artisanal Roast</span>
+              <span class="text-[9px] opacity-75">Nespresso</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dietary & Allergen Tags -->
+        <div class="bg-white p-4 rounded-2xl border border-[#E2E5F0] shadow-xs space-y-2.5">
+          <label class="text-xs font-bold uppercase tracking-wider text-[#171E52] flex items-center justify-between">
+            <span>Kitchen Allergen Tags</span>
+            <span class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+              <span class="material-symbols-outlined text-[12px]">security</span>
+              Chef Notified
+            </span>
+          </label>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="toggleAllergen(this)" class="allergen-tag chip px-3 py-1.5 rounded-xl text-xs font-bold border border-[#E2E5F0] bg-[#F8F9FC] text-[#5E6482]">
+              🌾 Gluten-Free
+            </button>
+            <button onclick="toggleAllergen(this)" class="allergen-tag chip px-3 py-1.5 rounded-xl text-xs font-bold border border-[#E2E5F0] bg-[#F8F9FC] text-[#5E6482]">
+              🥜 Nut Allergy
+            </button>
+            <button onclick="toggleAllergen(this)" class="allergen-tag chip px-3 py-1.5 rounded-xl text-xs font-bold border border-[#E2E5F0] bg-[#F8F9FC] text-[#5E6482]">
+              🥛 Lactose-Free
+            </button>
+            <button onclick="toggleAllergen(this)" class="allergen-tag chip px-3 py-1.5 rounded-xl text-xs font-bold border border-[#E2E5F0] bg-[#F8F9FC] text-[#5E6482]">
+              🌱 Plant-Based
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FLOATING BOTTOM DOCK WITH EMIL KOWALSKI MICRO-INTERACTIONS -->
+  <footer class="dock-glass fixed bottom-0 left-0 right-0 z-50 px-5 py-3.5 flex items-center justify-between gap-3 max-w-lg mx-auto">
+    <button id="btn-back" onclick="previousStep()" class="btn-press opacity-0 pointer-events-none px-4 py-3 rounded-2xl border border-[#E2E5F0] bg-white text-xs font-bold text-[#171E52] flex items-center space-x-1.5">
+      <span class="material-symbols-outlined text-sm">arrow_back</span>
+      <span>Back</span>
+    </button>
+
+    <button id="btn-next" onclick="nextStep()" class="btn-press flex-1 py-3.5 px-6 rounded-2xl bg-[#171E52] hover:bg-[#0F1155] text-white font-bold text-xs tracking-wider uppercase flex items-center justify-center space-x-2 shadow-lg border border-[#C5A880]/30">
+      <span id="btn-next-label">Continue to Sleep & Rest</span>
+      <span class="material-symbols-outlined text-sm text-[#C5A880]">arrow_forward</span>
+    </button>
+  </footer>
+
+  <!-- TOAST COMPONENT (Emil Sonner Principle) -->
+  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-200 pointer-events-none opacity-0 scale-95 px-4 py-2 rounded-xl bg-[#0F1155] text-white text-xs font-semibold shadow-xl border border-[#C5A880]/40 flex items-center space-x-2">
+    <span class="material-symbols-outlined text-sm text-[#C5A880]">check_circle</span>
+    <span id="toast-text">Preferences Synced</span>
+  </div>
+
+  <script>
+    let currentStep = 1;
+    let towelMinutes = 20 * 60 + 30; // 20:30
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toast-text');
+      text.textContent = msg;
+      toast.classList.remove('opacity-0', 'scale-95');
+      toast.classList.add('opacity-100', 'scale-100');
+      
+      const saveStatus = document.getElementById('save-status');
+      saveStatus.textContent = "Saved";
+      setTimeout(() => {
+        saveStatus.textContent = "Auto-saving";
+      }, 1500);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'scale-95');
+        toast.classList.remove('opacity-100', 'scale-100');
+      }, 2200);
+    }
+
+    function toggleChip(el, key) {
+      el.classList.toggle('selected');
+      const isSel = el.classList.contains('selected');
+      const badge = el.querySelector('.chip-badge');
+      const icon = el.querySelector('.chip-icon');
+      
+      if (isSel) {
+        icon.classList.remove('text-[#5E6482]');
+        icon.classList.add('text-[#C5A880]');
+      } else {
+        icon.classList.add('text-[#5E6482]');
+        icon.classList.remove('text-[#C5A880]');
+      }
+      showToast('Facility preference updated');
+    }
+
+    function togglePillow(el, key) {
+      document.querySelectorAll('#step-2 .chip').forEach(c => {
+        if (c.contains(el) || c === el) {
+          c.classList.toggle('selected');
+          const check = c.querySelector('.chip-check');
+          if (c.classList.contains('selected')) {
+            check.textContent = 'check_circle';
+            check.className = 'material-symbols-outlined text-base text-[#1E22AA] chip-check';
+          } else {
+            check.textContent = 'radio_button_unchecked';
+            check.className = 'material-symbols-outlined text-base text-slate-300 chip-check';
+          }
+        }
+      });
+      showToast('Pillow menu selection saved');
+    }
+
+    function toggleTowelWarmth(input) {
+      const picker = document.getElementById('towel-time-picker');
+      if (input.checked) {
+        picker.classList.remove('opacity-40', 'pointer-events-none');
+        showToast('Towel pre-warming scheduled for 20:30');
+      } else {
+        picker.classList.add('opacity-40', 'pointer-events-none');
+        showToast('Towel warming disabled');
+      }
+    }
+
+    function adjustTime(deltaMins) {
+      towelMinutes += deltaMins;
+      if (towelMinutes < 18 * 60) towelMinutes = 18 * 60;
+      if (towelMinutes > 23 * 60 + 45) towelMinutes = 23 * 60 + 45;
+      
+      const h = Math.floor(towelMinutes / 60).toString().padStart(2, '0');
+      const m = (towelMinutes % 60).toString().padStart(2, '0');
+      document.getElementById('towel-time-display').textContent = `${h}:${m}`;
+      showToast(`Warmth scheduled for ${h}:${m}`);
+    }
+
+    function updateTemp(val) {
+      const formatted = parseFloat(val).toFixed(1);
+      document.getElementById('temp-display').textContent = `${formatted}°C`;
+      showToast(`Suite AC targeted at ${formatted}°C`);
+    }
+
+    function selectBreakfast(el, type) {
+      document.querySelectorAll('.breakfast-btn').forEach(btn => {
+        btn.classList.remove('selected');
+        btn.classList.add('text-[#5E6482]');
+        btn.querySelector('.material-symbols-outlined').className = "material-symbols-outlined text-xl text-[#5E6482]";
+      });
+      el.classList.add('selected');
+      el.classList.remove('text-[#5E6482]');
+      el.querySelector('.material-symbols-outlined').className = "material-symbols-outlined text-xl text-[#C5A880]";
+      showToast('Breakfast preference saved');
+    }
+
+    function toggleMinibar(el) {
+      el.classList.toggle('selected');
+      showToast('In-room pantry selection updated');
+    }
+
+    function toggleAllergen(el) {
+      el.classList.toggle('selected');
+      if (el.classList.contains('selected')) {
+        el.classList.add('bg-[#171E52]', 'text-white', 'border-[#1E22AA]');
+        el.classList.remove('bg-[#F8F9FC]', 'text-[#5E6482]');
+      } else {
+        el.classList.remove('bg-[#171E52]', 'text-white', 'border-[#1E22AA]');
+        el.classList.add('bg-[#F8F9FC]', 'text-[#5E6482]');
+      }
+      showToast('Dietary profile updated for chef');
+    }
+
+    function updateStepView() {
+      // Manage panes
+      for (let i = 1; i <= 3; i++) {
+        const pane = document.getElementById(`step-${i}`);
+        const bar = document.getElementById(`bar-${i}`);
+        if (i === currentStep) {
+          pane.classList.add('active');
+          bar.className = "h-1.5 rounded-full transition-all duration-300 bg-[#1E22AA]";
+        } else if (i < currentStep) {
+          pane.classList.remove('active');
+          bar.className = "h-1.5 rounded-full transition-all duration-300 bg-[#C5A880]";
+        } else {
+          pane.classList.remove('active');
+          bar.className = "h-1.5 rounded-full transition-all duration-300 bg-[#E2E5F0]";
+        }
+      }
+
+      const stepInd = document.getElementById('step-indicator-text');
+      const stepTitle = document.getElementById('step-title');
+      const btnBack = document.getElementById('btn-back');
+      const btnNextLabel = document.getElementById('btn-next-label');
+
+      stepInd.textContent = `Step ${currentStep} of 3`;
+
+      if (currentStep === 1) {
+        stepTitle.textContent = "Tailor Your Sanctuary";
+        btnBack.classList.add('opacity-0', 'pointer-events-none');
+        btnNextLabel.textContent = "Continue to Sleep & Rest";
+      } else if (currentStep === 2) {
+        stepTitle.textContent = "Sleep & Rest Experience";
+        btnBack.classList.remove('opacity-0', 'pointer-events-none');
+        btnNextLabel.textContent = "Continue to Gastronomy";
+      } else if (currentStep === 3) {
+        stepTitle.textContent = "Dining & Refreshments";
+        btnBack.classList.remove('opacity-0', 'pointer-events-none');
+        btnNextLabel.textContent = "Enter Your Residence";
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextStep() {
+      if (currentStep < 3) {
+        currentStep++;
+        updateStepView();
+      } else {
+        showToast("Welcome to Novotel Suite 412");
+        setTimeout(() => {
+          window.location.href = "screen_2_concierge_hub.html";
+        }, 1200);
+      }
+    }
+
+    function previousStep() {
+      if (currentStep > 1) {
+        currentStep--;
+        updateStepView();
+      }
+    }
+  </script>
+</body>
+</html>

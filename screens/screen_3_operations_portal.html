@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Novotel Command Center — Operations & Guest Dispatch</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: '#171E52',        // Novotel Space Cadet
+            primaryDeep: '#0F1155',    // Blue Zodiac
+            accentElectric: '#1E22AA', // Persian Blue
+            accentLuxury: '#C5A880',   // Brushed Champagne Gold
+            canvasLight: '#F4F6FB',    // Corporate Workspace Gray
+            surfaceWhite: '#FFFFFF',
+            borderMuted: '#E2E5F0',
+            textPrimary: '#171E52',
+            textSecondary: '#5E6482',
+          },
+          fontFamily: {
+            serif: ["'Playfair Display'", "serif"],
+            sans: ["'Plus Jakarta Sans'", "sans-serif"],
+            mono: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    body {
+      background-color: #F4F6FB;
+      color: #171E52;
+    }
+    .btn-press {
+      transition: transform 120ms var(--ease-out), background-color 120ms var(--ease-out);
+    }
+    .btn-press:active {
+      transform: scale(0.97);
+    }
+    .room-card {
+      transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out), border-color 160ms var(--ease-out);
+    }
+    .room-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(23, 30, 82, 0.08);
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #F4F6FB;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #C5A880;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col antialiased font-sans select-none overflow-hidden">
+
+  <!-- TOP APP BAR -->
+  <header class="bg-[#0F1155] text-white h-16 px-6 flex items-center justify-between border-b border-[#171E52] flex-shrink-0 z-30">
+    <!-- Left: Brand Crest & Shift -->
+    <div class="flex items-center space-x-6">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-[#171E52] border border-[#C5A880]/60 flex items-center justify-center shadow-inner">
+          <span class="font-serif font-bold text-base text-[#C5A880]">N</span>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="font-bold text-sm tracking-wide text-white uppercase">Novotel Command</span>
+            <span class="px-2 py-0.5 rounded-full bg-[#1E22AA] text-white text-[10px] font-mono font-bold">OPS v4.2</span>
+          </div>
+          <span class="text-[10px] text-[#C5A880] tracking-wider uppercase font-semibold">Front Desk · Housekeeping · Wellness</span>
+        </div>
+      </div>
+
+      <!-- Shift Badge -->
+      <div class="hidden lg:flex items-center space-x-2 bg-[#171E52] px-3 py-1 rounded-lg border border-[#E2E5F0]/20 text-xs">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="font-semibold text-[#E2E5F0]">Morning Shift • Tower A</span>
+        <span class="text-[#5E6482]">|</span>
+        <span class="text-[#C5A880] font-mono">11:08 UTC+5:30</span>
+      </div>
+    </div>
+
+    <!-- Center: Global Search -->
+    <div class="flex-1 max-w-md mx-6">
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-lg">search</span>
+        <input type="text" id="guest-search" oninput="filterRooms(this.value)" placeholder="Search guest name, room #412, or VIP tags..." class="w-full bg-[#171E52] border border-[#E2E5F0]/20 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#C5A880] font-sans">
+      </div>
+    </div>
+
+    <!-- Right: Stats & Alert Counter -->
+    <div class="flex items-center space-x-3">
+      <button onclick="showToast('Alerts: 1 pending urgent towel delivery')" class="btn-press px-3 py-1.5 rounded-xl bg-rose-500/15 border border-rose-500/40 text-rose-300 text-xs font-bold flex items-center space-x-1.5">
+        <span class="material-symbols-outlined text-sm text-rose-400">warning</span>
+        <span>1 Alert</span>
+      </button>
+
+      <div class="flex items-center space-x-2 pl-3 border-l border-white/10">
+        <div class="w-8 h-8 rounded-full bg-[#C5A880]/20 border border-[#C5A880] text-[#C5A880] font-bold text-xs flex items-center justify-center">
+          JH
+        </div>
+        <div class="hidden xl:block text-left leading-tight">
+          <div class="text-xs font-bold text-white">Julian Hayes</div>
+          <div class="text-[10px] text-slate-400">Head Concierge</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BODY CONTENT AREA (SIDEBAR + SPLIT VIEW) -->
+  <div class="flex-1 flex overflow-hidden">
+    
+    <!-- LEFT SIDEBAR NAVIGATION (Deep Novotel Space Cadet #171E52) -->
+    <aside class="w-64 bg-[#171E52] text-[#E2E5F0] border-r border-[#0F1155] flex flex-col justify-between p-4 flex-shrink-0">
+      <nav class="space-y-1">
+        <div class="text-[10px] uppercase tracking-wider text-[#C5A880] font-bold px-3 py-2">Department Dispatch</div>
+        
+        <button onclick="selectNav(this)" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold bg-[#1E22AA] text-white">
+          <div class="flex items-center space-x-2.5">
+            <span class="material-symbols-outlined text-lg">meeting_room</span>
+            <span>All Residences</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-white/20 text-[10px] font-mono">14 Active</span>
+        </button>
+
+        <button onclick="selectNav(this)" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-[#E2E5F0]/80 hover:bg-white/5 hover:text-white">
+          <div class="flex items-center space-x-2.5">
+            <span class="material-symbols-outlined text-lg">sports_tennis</span>
+            <span>Wellness & Tennis</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono">2 Booked</span>
+        </button>
+
+        <button onclick="selectNav(this)" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-[#E2E5F0]/80 hover:bg-white/5 hover:text-white">
+          <div class="flex items-center space-x-2.5">
+            <span class="material-symbols-outlined text-lg">dry</span>
+            <span>Housekeeping & Towels</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono">4 Queue</span>
+        </button>
+
+        <button onclick="selectNav(this)" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-[#E2E5F0]/80 hover:bg-white/5 hover:text-white">
+          <div class="flex items-center space-x-2.5">
+            <span class="material-symbols-outlined text-lg">restaurant_menu</span>
+            <span>F&B Breakfast Roster</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-white/10 text-[10px] font-mono">98 Pax</span>
+        </button>
+
+        <button onclick="selectNav(this)" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-[#E2E5F0]/80 hover:bg-white/5 hover:text-white">
+          <div class="flex items-center space-x-2.5">
+            <span class="material-symbols-outlined text-lg">chat</span>
+            <span>WhatsApp Messenger Logs</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-[#1E22AA]/40 text-cyan-300 text-[10px] font-mono">Live</span>
+        </button>
+      </nav>
+
+      <!-- Quick Room Keypad -->
+      <div class="bg-[#0F1155] p-3 rounded-2xl border border-white/5 text-xs space-y-2">
+        <div class="flex items-center justify-between text-[11px] text-[#C5A880] font-bold">
+          <span>Direct Room Ping</span>
+          <span class="font-mono">Tower A</span>
+        </div>
+        <div class="grid grid-cols-4 gap-1 text-center font-mono font-bold">
+          <button onclick="showRoom(301)" class="p-1.5 rounded-lg bg-[#171E52] hover:bg-[#1E22AA] text-white">301</button>
+          <button onclick="showRoom(302)" class="p-1.5 rounded-lg bg-[#171E52] hover:bg-[#1E22AA] text-white">302</button>
+          <button onclick="showRoom(408)" class="p-1.5 rounded-lg bg-[#171E52] hover:bg-[#1E22AA] text-white">408</button>
+          <button onclick="showRoom(412)" class="p-1.5 rounded-lg bg-[#C5A880] text-[#171E52]">412</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTRAL COMMAND AREA: TWO-COLUMN SPLIT VIEW -->
+    <main class="flex-1 flex overflow-hidden">
+
+      <!-- LEFT COLUMN: ROOM GRID & VIP INDICATORS (60% Width) -->
+      <section class="w-[60%] p-5 overflow-y-auto custom-scroll space-y-4 border-r border-[#E2E5F0]">
+        
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="font-serif text-xl font-bold text-[#171E52]">Residences Status Overview</h2>
+            <p class="text-xs text-[#5E6482]">Tower A Executive Floor · Real-time guest preferences & climate presets</p>
+          </div>
+          <span class="text-xs font-mono font-bold bg-white px-3 py-1.5 rounded-xl border border-[#E2E5F0] shadow-2xs">
+            4 Suites Monitored
+          </span>
+        </div>
+
+        <!-- Room Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5" id="rooms-container">
+
+          <!-- ROOM 412: HIGHLIGHTED VIP CARD (With Champagne Bronze Border) -->
+          <div class="room-card md:col-span-2 bg-white rounded-3xl p-5 border-2 border-[#C5A880] shadow-md relative overflow-hidden" id="card-412">
+            <!-- VIP Accent ribbon -->
+            <div class="absolute top-0 right-0 bg-[#C5A880] text-[#171E52] font-mono font-bold text-[10px] tracking-widest uppercase px-4 py-1 rounded-bl-xl shadow-xs">
+              ★ Accor Platinum VIP
+            </div>
+
+            <div class="flex items-start justify-between mb-3">
+              <div>
+                <div class="flex items-center space-x-2">
+                  <span class="text-lg font-bold font-mono text-[#171E52]">Suite 412</span>
+                  <span class="px-2 py-0.5 rounded-md bg-[#171E52] text-white text-[10px] font-bold">Executive Residence</span>
+                </div>
+                <h3 class="font-serif text-xl font-bold text-[#171E52] mt-1">Mr. Hastings</h3>
+                <p class="text-xs text-[#5E6482]">Arrival: 14:00 Today · Keyless NFC Enabled · 4 Nights</p>
+              </div>
+            </div>
+
+            <!-- Pre-Configured Color-Coded Pill Tags (from prompt requirements) -->
+            <div class="flex flex-wrap gap-2 pt-2 border-t border-[#E2E5F0]">
+              
+              <!-- [Tennis Booked: 17:00] (Emerald Green) -->
+              <span class="px-3 py-1 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center gap-1.5 shadow-2xs">
+                <span class="material-symbols-outlined text-sm text-emerald-600">sports_tennis</span>
+                Tennis Booked: 17:00
+              </span>
+
+              <!-- [Towels Warming: 21:00] (Amber Warm Tag) -->
+              <span class="px-3 py-1 rounded-xl bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold flex items-center gap-1.5 shadow-2xs">
+                <span class="material-symbols-outlined text-sm text-amber-600">dry</span>
+                Towels Warming: 21:00
+              </span>
+
+              <!-- [Dietary: Celiac / Nut Allergy] (Rose Warning Tag) -->
+              <span class="px-3 py-1 rounded-xl bg-rose-50 text-rose-800 border border-rose-200 text-xs font-bold flex items-center gap-1.5 shadow-2xs">
+                <span class="material-symbols-outlined text-sm text-rose-600">warning</span>
+                Dietary: Celiac / Nut Allergy
+              </span>
+
+              <!-- [Room Temp: 20°C Pre-Set] -->
+              <span class="px-3 py-1 rounded-xl bg-[#0F1155] text-white border border-[#1E22AA]/40 text-xs font-bold flex items-center gap-1.5 shadow-2xs font-mono">
+                <span class="material-symbols-outlined text-sm text-[#C5A880]">thermostat</span>
+                Room Temp: 20°C Pre-Set
+              </span>
+
+            </div>
+
+            <!-- Actions Row inside Card -->
+            <div class="flex items-center justify-between pt-3 mt-3 border-t border-[#E2E5F0]/60">
+              <span class="text-xs text-[#5E6482] flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                Butler Assigned: <strong>Elena S.</strong>
+              </span>
+              <button onclick="notifyWhatsApp('412')" class="btn-press px-3 py-1.5 rounded-xl bg-[#171E52] hover:bg-[#0F1155] text-white font-bold text-xs flex items-center space-x-1.5 shadow-xs">
+                <span class="material-symbols-outlined text-xs text-[#C5A880]">send</span>
+                <span>Send WhatsApp Stay Sync</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ROOM 301 -->
+          <div class="room-card bg-white rounded-3xl p-4 border border-[#E2E5F0] shadow-xs space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono font-bold text-sm text-[#171E52]">Room 301</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-[#5E6482]">Deluxe King</span>
+            </div>
+            <div class="text-xs font-bold text-[#171E52]">Dr. Marcus Vance</div>
+            <p class="text-[11px] text-[#5E6482]">Departing 12:00 · Express Checkout Requested</p>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <span class="px-2 py-0.5 rounded-lg bg-slate-100 text-[#5E6482] text-[10px] font-medium">Turndown: 20:00</span>
+              <span class="px-2 py-0.5 rounded-lg bg-slate-100 text-[#5E6482] text-[10px] font-medium">Temp: 21°C</span>
+            </div>
+          </div>
+
+          <!-- ROOM 302 -->
+          <div class="room-card bg-white rounded-3xl p-4 border border-[#E2E5F0] shadow-xs space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono font-bold text-sm text-[#171E52]">Room 302</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-[#5E6482]">Executive Suite</span>
+            </div>
+            <div class="text-xs font-bold text-[#171E52]">Lady Catherine Hall</div>
+            <p class="text-[11px] text-[#5E6482]">Spa Hydrotherapy 16:00 · In-Room Breakfast</p>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <span class="px-2 py-0.5 rounded-lg bg-purple-50 text-purple-700 text-[10px] font-medium">Spa: 16:00</span>
+              <span class="px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-700 text-[10px] font-medium">Gluten-Free</span>
+            </div>
+          </div>
+
+          <!-- ROOM 408 -->
+          <div class="room-card bg-white rounded-3xl p-4 border border-[#E2E5F0] shadow-xs space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="font-mono font-bold text-sm text-[#171E52]">Room 408</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800">VIP Silver</span>
+            </div>
+            <div class="text-xs font-bold text-[#171E52]">Alexander Zhao</div>
+            <p class="text-[11px] text-[#5E6482]">Gym Pass 24/7 · Artisanal Espresso Restock</p>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <span class="px-2 py-0.5 rounded-lg bg-slate-100 text-[#5E6482] text-[10px] font-medium">Locker Pass #408</span>
+              <span class="px-2 py-0.5 rounded-lg bg-slate-100 text-[#5E6482] text-[10px] font-medium">Temp: 19.5°C</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: LIVE DEPARTMENT DISPATCH KANBAN (40% Width) -->
+      <section class="w-[40%] bg-white p-5 overflow-y-auto custom-scroll flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="font-serif text-lg font-bold text-[#171E52]">Live Department Kanban</h2>
+              <p class="text-xs text-[#5E6482]">Real-time butler dispatch & fulfillment</p>
+            </div>
+            <span class="text-xs font-mono font-bold text-[#1E22AA] bg-[#1E22AA]/10 px-2.5 py-1 rounded-full">
+              4 Queues
+            </span>
+          </div>
+
+          <!-- 4 Kanban Columns Stacked or Grouped -->
+          <div class="space-y-3">
+            
+            <!-- Column 1: Incoming Requests -->
+            <div class="bg-[#F8F9FC] p-3 rounded-2xl border border-[#E2E5F0]">
+              <div class="flex items-center justify-between text-xs font-bold text-[#5E6482] uppercase tracking-wider mb-2">
+                <span>1. Incoming Requests</span>
+                <span class="w-5 h-5 rounded-full bg-slate-200 text-[#171E52] text-[10px] flex items-center justify-center font-mono">1</span>
+              </div>
+              <div class="bg-white p-2.5 rounded-xl border border-[#E2E5F0] shadow-2xs text-xs space-y-1">
+                <div class="font-bold text-[#171E52]">Room 302: Ice & Highball Glasses</div>
+                <div class="text-[10px] text-[#5E6482]">Instant Dispatch · Unassigned</div>
+              </div>
+            </div>
+
+            <!-- Column 2: In Preparation -->
+            <div class="bg-[#F8F9FC] p-3 rounded-2xl border border-[#E2E5F0]">
+              <div class="flex items-center justify-between text-xs font-bold text-amber-700 uppercase tracking-wider mb-2">
+                <span>2. In Preparation</span>
+                <span class="w-5 h-5 rounded-full bg-amber-100 text-amber-800 text-[10px] flex items-center justify-center font-mono">2</span>
+              </div>
+              <div class="space-y-2">
+                <div class="bg-white p-2.5 rounded-xl border border-amber-200 shadow-2xs text-xs space-y-1">
+                  <div class="font-bold text-[#171E52]">Room 408: Nespresso Pod Restock</div>
+                  <div class="text-[10px] text-[#5E6482]">Pantry Team · 5 mins remaining</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 3: Butler En Route (Featured Card: Room 412) -->
+            <div class="bg-[#F8F9FC] p-3 rounded-2xl border-2 border-[#1E22AA]/30">
+              <div class="flex items-center justify-between text-xs font-bold text-[#1E22AA] uppercase tracking-wider mb-2">
+                <span>3. Butler En Route</span>
+                <span class="w-5 h-5 rounded-full bg-[#1E22AA] text-white text-[10px] flex items-center justify-center font-mono animate-pulse">1</span>
+              </div>
+
+              <!-- RICH INTERACTIVE CARD (Room 412: 2x Bath Towels Warmed & Delivered) -->
+              <div class="bg-white p-3.5 rounded-2xl border-2 border-[#1E22AA] shadow-sm space-y-2.5">
+                <div class="flex items-start justify-between">
+                  <div>
+                    <span class="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-[#171E52] text-white">Suite 412</span>
+                    <h4 class="font-bold text-xs text-[#171E52] mt-1">2x Bath Towels Warmed & Delivered</h4>
+                  </div>
+                  <span class="text-[10px] font-mono font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                    12 mins remaining
+                  </span>
+                </div>
+
+                <!-- Assigned Staff Avatar & Timer -->
+                <div class="flex items-center justify-between text-xs pt-1 border-t border-[#E2E5F0]">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 rounded-full bg-[#1E22AA] text-white text-[10px] font-bold flex items-center justify-center">
+                      ES
+                    </div>
+                    <span class="text-[11px] font-medium text-[#171E52]">Elena S. (Floor 4)</span>
+                  </div>
+                  <span class="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
+                    <span class="material-symbols-outlined text-xs">elevator</span> In Elevator
+                  </span>
+                </div>
+
+                <!-- 1-Click Action: Notify Guest via WhatsApp -->
+                <button onclick="notifyWhatsApp('412')" class="btn-press w-full py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center space-x-1.5 shadow-2xs">
+                  <span class="material-symbols-outlined text-sm">chat</span>
+                  <span>Notify Guest via WhatsApp</span>
+                </button>
+              </div>
+
+            </div>
+
+            <!-- Column 4: Completed -->
+            <div class="bg-[#F8F9FC] p-3 rounded-2xl border border-[#E2E5F0]">
+              <div class="flex items-center justify-between text-xs font-bold text-emerald-700 uppercase tracking-wider mb-2">
+                <span>4. Completed</span>
+                <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] flex items-center justify-center font-mono">18</span>
+              </div>
+              <div class="bg-white p-2.5 rounded-xl border border-[#E2E5F0] text-xs text-[#5E6482]">
+                ✓ Room 301 Luggage Tagged & Stored (10:45)
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- BOTTOM ACTION DRAWER (Fast-action Toolbar) -->
+  <footer class="bg-white border-t border-[#E2E5F0] px-6 py-3 flex items-center justify-between flex-shrink-0 z-30 shadow-lg">
+    <div class="flex items-center space-x-3 text-xs text-[#5E6482]">
+      <span class="font-bold text-[#171E52]">Fast Action Toolbar:</span>
+      <span>Select a quick dispatch action to trigger across Tower A</span>
+    </div>
+
+    <div class="flex items-center space-x-2.5">
+      <!-- Action 1: Generate Guest QR Card -->
+      <a href="screen_4_qr_welcome_card.html" target="_blank" class="btn-press px-4 py-2 rounded-xl bg-white border border-[#E2E5F0] hover:bg-slate-50 text-xs font-bold text-[#171E52] flex items-center space-x-1.5 shadow-2xs">
+        <span class="material-symbols-outlined text-sm text-[#1E22AA]">qr_code</span>
+        <span>Generate Guest QR Card</span>
+      </a>
+
+      <!-- Action 2: Send Magic WhatsApp Welcome Link -->
+      <button onclick="sendMagicLink()" class="btn-press px-4 py-2 rounded-xl bg-[#171E52] hover:bg-[#0F1155] text-xs font-bold text-white flex items-center space-x-1.5 shadow-xs">
+        <span class="material-symbols-outlined text-sm text-[#C5A880]">link</span>
+        <span>Send Magic WhatsApp Welcome Link</span>
+      </button>
+
+      <!-- Action 3: Broadcast Pool Notice -->
+      <button onclick="broadcastNotice()" class="btn-press px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-800 hover:bg-amber-500/20 text-xs font-bold flex items-center space-x-1.5">
+        <span class="material-symbols-outlined text-sm text-amber-600">campaign</span>
+        <span>Broadcast Pool Notice</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-200 pointer-events-none opacity-0 scale-95 px-4 py-2.5 rounded-xl bg-[#0F1155] text-white text-xs font-semibold shadow-2xl border border-[#C5A880]/40 flex items-center space-x-2">
+    <span class="material-symbols-outlined text-sm text-[#C5A880]">check_circle</span>
+    <span id="toast-text">Action Executed</span>
+  </div>
+
+  <script>
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toast-text');
+      text.textContent = msg;
+      toast.classList.remove('opacity-0', 'scale-95');
+      toast.classList.add('opacity-100', 'scale-100');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'scale-95');
+        toast.classList.remove('opacity-100', 'scale-100');
+      }, 2600);
+    }
+
+    function selectNav(btn) {
+      document.querySelectorAll('aside nav button').forEach(b => {
+        b.className = "w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-[#E2E5F0]/80 hover:bg-white/5 hover:text-white";
+      });
+      btn.className = "w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold bg-[#1E22AA] text-white";
+      showToast('Switched Department Roster View');
+    }
+
+    function notifyWhatsApp(room) {
+      showToast(`WhatsApp sent to Suite ${room} Guest: "Elena S. is en route with your heated towels."`);
+    }
+
+    function sendMagicLink() {
+      showToast('Magic Onboarding WhatsApp link dispatched to Mr. Hastings (Suite 412)');
+    }
+
+    function broadcastNotice() {
+      showToast('Notice sent: "Heated Infinity Pool calm (28.5°C) — Evening Cabana booking open."');
+    }
+
+    function showRoom(num) {
+      showToast(`Focusing telemetry on Room ${num}`);
+      const card = document.getElementById(`card-${num}`);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.classList.add('ring-4', 'ring-[#1E22AA]');
+        setTimeout(() => card.classList.remove('ring-4', 'ring-[#1E22AA]'), 1500);
+      }
+    }
+
+    function filterRooms(q) {
+      const lower = q.toLowerCase();
+      document.querySelectorAll('#rooms-container > div').forEach(card => {
+        if (card.textContent.toLowerCase().includes(lower)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
