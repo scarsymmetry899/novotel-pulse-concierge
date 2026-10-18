@@ -24,7 +24,7 @@ export default function WhatsAppPreviewPage() {
             
             {/* Avatar with Verified Green Badge */}
             <div className="relative">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#171E52] to-[#0F1155] border border-[#C5A880]/50 flex items-center justify-center font-serif font-bold text-[#C5A880] text-sm">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#171E52] to-[#0F1155] border border-[#C5A880]/50 flex items-center justify-center font-bold text-[#C5A880] text-sm">
                 N
               </div>
               <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#00A884] border-2 border-[#202C33] flex items-center justify-center text-[9px] text-white font-bold">

@@ -11,8 +11,10 @@ import {
 import { supabase } from '@/lib/supabase';
 import { INITIAL_ROOMS, INITIAL_STAYS, INITIAL_PREFERENCES, INITIAL_REQUESTS, LUXURY_PERSONAS } from '@/lib/mockData';
 import { Room, Stay, GuestPreferences, ServiceRequest, Department, LuxuryPersona } from '@/types/hospitality';
+import { useBranch } from '@/context/BranchContext';
 
 export default function StaffCommandPortal() {
+  const { activeBranch } = useBranch();
   const [rooms, setRooms] = useState<Room[]>(INITIAL_ROOMS);
   const [stays, setStays] = useState<Stay[]>(INITIAL_STAYS);
   const [preferences, setPreferences] = useState<Record<string, GuestPreferences>>(INITIAL_PREFERENCES);
@@ -137,14 +139,25 @@ export default function StaffCommandPortal() {
       {/* Top Header Bar (Blue Zodiac #0F1155) */}
       <div className="bg-[#0F1155] text-white px-6 py-3.5 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 shadow-md">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-[#C5A880]/20 border border-[#C5A880]/40 flex items-center justify-center text-[#C5A880] font-serif font-bold text-sm">
+          <div className="w-8 h-8 rounded-xl bg-[#C5A880]/20 border border-[#C5A880]/40 flex items-center justify-center text-[#C5A880] font-bold text-sm">
             N
           </div>
           <div>
-            <h1 className="font-serif font-bold text-base tracking-wider uppercase">
-              Novotel Operations Command
-            </h1>
-            <span className="text-[11px] text-white/60">Cross-Department Floor Butler & Anticipatory Dispatch</span>
+            <div className="flex items-center gap-2">
+              <h1 className="font-bold text-base tracking-wider uppercase">
+                {activeBranch.name} • Operations Command
+              </h1>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#C5A880]/20 text-[#C5A880] border border-[#C5A880]/40">
+                {activeBranch.code}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-[11px] text-white/60">
+              <span>{activeBranch.city}, {activeBranch.country}</span>
+              <span>•</span>
+              <span>{activeBranch.services.hasPool ? `InBalance Pool: ${activeBranch.services.poolTemp || '28°C'}` : 'Urban Fitness Flagship'}</span>
+              <span>•</span>
+              <span>{activeBranch.services.gymName} (24/7)</span>
+            </div>
           </div>
         </div>
 
@@ -206,7 +219,7 @@ export default function StaffCommandPortal() {
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-lg font-serif font-bold text-[#171E52]">
+                        <span className="text-lg font-bold text-[#171E52]">
                           Suite {room.roomNumber}
                         </span>
                         {isVip && (
@@ -405,7 +418,7 @@ export default function StaffCommandPortal() {
             <div className="p-6 border-b border-slate-200 flex items-start justify-between bg-[#F8F9FC]">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-xl font-serif font-bold text-[#171E52]">
+                  <h3 className="text-xl font-bold text-[#171E52]">
                     Suite {specSheetStay.room.roomNumber} Butler Spec Sheet
                   </h3>
                   <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-[#C5A880]/20 text-[#171E52] border border-[#C5A880]">
@@ -416,6 +429,8 @@ export default function StaffCommandPortal() {
                   <span className="font-semibold text-[#171E52]">{specSheetStay.stay.guestName}</span>
                   <span>•</span>
                   <span>{specSheetStay.stay.guestPhone}</span>
+                  <span>•</span>
+                  <span className="text-[#1E22AA] font-bold">{activeBranch.name}</span>
                   <span>•</span>
                   <span className="text-[#C5A880] font-bold">✦ {specSheetStay.persona.title}</span>
                 </div>
@@ -531,9 +546,9 @@ export default function StaffCommandPortal() {
             {/* Header */}
             <div className="text-center space-y-1">
               <span className="text-[10px] font-semibold tracking-widest text-[#C5A880] uppercase">
-                Novotel Hotels & Resorts • Sanctuary Pass
+                {activeBranch.name} • Sanctuary Pass
               </span>
-              <h3 className="text-xl font-serif font-bold text-white tracking-wide">
+              <h3 className="text-xl font-bold text-white tracking-wide">
                 Scan to Unlock Your Stay
               </h3>
               <p className="text-xs text-white/70">

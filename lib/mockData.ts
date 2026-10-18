@@ -1,4 +1,4 @@
-import { Room, Stay, GuestPreferences, ServiceRequest, Facility, LuxuryPersona } from '@/types/hospitality';
+import { Room, Stay, GuestPreferences, ServiceRequest, Facility, LuxuryPersona, HotelBranch } from '@/types/hospitality';
 
 export const INITIAL_ROOMS: Room[] = [
   { id: 'room-412', roomNumber: '412', category: 'Suite', floor: 4, status: 'occupied' },
@@ -1119,4 +1119,375 @@ export const INITIAL_REQUESTS: ServiceRequest[] = [
     updatedAt: new Date(Date.now() - 600000).toISOString(),
   },
 ];
+
+export const NOVOTEL_BRANCHES: HotelBranch[] = [
+  {
+    id: 'paris-les-halles',
+    name: 'Novotel Paris Les Halles',
+    city: 'Paris',
+    country: 'France',
+    code: 'CDG-PLH',
+    tagline: 'Modern Parisian sanctuary in the historic heart of Paris',
+    address: '8 Place Marguerite de Navarre, 75001 Paris, France',
+    phone: '+33 1 42 21 31 31',
+    services: {
+      hasPool: false,
+      poolName: 'No Pool on Site (Partner Day Pass)',
+      poolHours: 'N/A',
+      hasGym: true,
+      gymName: 'InBalance Fitness Centre by Novotel',
+      gymHours: '24/7 Access',
+      hasSpa: false,
+      hasTennisOrPadel: false,
+      diningConcepts: [
+        {
+          name: 'Gourmet Bar by Novotel',
+          concept: 'Gourmet Bar & Social Hub',
+          hours: '11:00 - 00:00',
+          description: 'Contemporary French seasonal tapas, local craft beers, and signature cocktails on the garden patio.'
+        },
+        {
+          name: 'The Square Breakfast Room',
+          concept: 'All-Day Buffet',
+          hours: '06:30 - 10:30',
+          description: 'Artisanal Parisian croissants, fresh baguettes, organic cheeses, and Fair-Trade coffee.'
+        }
+      ],
+      hasLiveNDreamBedding: true,
+      hasActingHereEcoProgram: true,
+      hasALLDigitalKey: true,
+      hasFamilyNovotelProgram: true,
+    },
+    facilities: [
+      {
+        id: 'gym',
+        name: 'InBalance Fitness Centre',
+        hours: '24/7 Access',
+        currentOccupancy: 'Open • Card Access',
+        rules: 'Towels and chilled filtered water carafes available.',
+        slots: ['Open 24 Hours'],
+        temperature: '20.0°C',
+        status: 'Open',
+      },
+      {
+        id: 'gourmet-bar',
+        name: 'Gourmet Bar & Garden Patio',
+        hours: '11:00 - 00:00',
+        currentOccupancy: 'Tables Available',
+        rules: 'Signature cocktails & sharing boards.',
+        slots: ['12:30', '19:00', '20:30'],
+        status: 'Open',
+      }
+    ]
+  },
+  {
+    id: 'london-canary-wharf',
+    name: 'Novotel London Canary Wharf',
+    city: 'London',
+    country: 'United Kingdom',
+    code: 'LHR-LCW',
+    tagline: 'Sleek 39-story architectural landmark with panoramic Thames views',
+    address: '40 Marsh Wall, London E14 9TP, United Kingdom',
+    phone: '+44 20 3530 0500',
+    services: {
+      hasPool: true,
+      poolName: '39th-Floor Indoor Heated InBalance Pool',
+      poolHours: '06:00 - 22:00',
+      poolTemp: '29.0°C',
+      hasGym: true,
+      gymName: 'InBalance Fitness with Skyline Views',
+      gymHours: '24/7 Access',
+      hasSpa: true,
+      spaName: 'InBalance Sauna & Steam Room',
+      hasTennisOrPadel: false,
+      diningConcepts: [
+        {
+          name: 'Bokan 37 Restaurant & Gourmet Bar',
+          concept: 'Gourmet Bar & Social Hub',
+          hours: '12:00 - 23:00',
+          description: 'European artisanal dishes and craft gins overlooking Canary Wharf skyline.'
+        },
+        {
+          name: 'In-Room Express Continental Tray',
+          concept: 'In-Room Dining',
+          hours: '06:00 - 11:00',
+          description: 'Delivered directly to residence under silver cloche.'
+        }
+      ],
+      hasLiveNDreamBedding: true,
+      hasActingHereEcoProgram: true,
+      hasALLDigitalKey: true,
+      hasFamilyNovotelProgram: true,
+    },
+    facilities: [
+      {
+        id: 'pool',
+        name: '39th-Floor Heated InBalance Pool',
+        hours: '06:00 - 22:00',
+        currentOccupancy: 'Calm (25% Occupancy)',
+        rules: 'Adults lap swimming 06:00-09:00. Families welcome 09:00-20:00.',
+        slots: ['07:00 (Sky Lap)', '08:30', '10:00', '14:00', '17:00', '19:30'],
+        temperature: '29.0°C',
+        status: 'Open',
+      },
+      {
+        id: 'gym',
+        name: 'InBalance Skyline Fitness',
+        hours: '24/7 Access',
+        currentOccupancy: 'Trainer on Duty',
+        rules: 'Technogym equipment and weights overlooking London skyline.',
+        slots: ['Open 24 Hours'],
+        temperature: '20.5°C',
+        status: 'Open',
+      },
+      {
+        id: 'sauna',
+        name: 'InBalance Thermal Sauna',
+        hours: '08:00 - 21:00',
+        currentOccupancy: 'Available',
+        rules: 'Herbal infusion aromatics and relaxation zone.',
+        slots: ['10:00', '15:00', '18:00', '20:00'],
+        temperature: '85.0°C',
+        status: 'Open',
+      }
+    ]
+  },
+  {
+    id: 'singapore-on-stevens',
+    name: 'Novotel Singapore on Stevens',
+    city: 'Singapore',
+    country: 'Singapore',
+    code: 'SIN-SOS',
+    tagline: 'Tranquil urban resort close to Orchard Road with dual infinity pools & tennis',
+    address: '28 Stevens Road, Singapore 257878',
+    phone: '+65 6491 6100',
+    services: {
+      hasPool: true,
+      poolName: 'Dual InBalance Pools (35m Lap Pool & Infinity Leisure Pool)',
+      poolHours: '06:00 - 22:00',
+      poolTemp: '28.0°C',
+      hasGym: true,
+      gymName: 'InBalance Fitness Pavilion',
+      gymHours: '24/7 Access',
+      hasSpa: true,
+      spaName: 'InBalance Hydrotherapy Suite',
+      hasTennisOrPadel: true,
+      tennisName: 'Novotel Outdoor Tennis & Padel Court',
+      diningConcepts: [
+        {
+          name: 'Food Exchange by Novotel',
+          concept: 'All-Day Buffet',
+          hours: '06:30 - 22:00',
+          description: 'International live culinary stations with Asian and Western specialties.'
+        },
+        {
+          name: 'Gourmet Bar at Stevens',
+          concept: 'Gourmet Bar & Social Hub',
+          hours: '11:00 - 23:00',
+          description: 'Alfresco craft beers, Singaporean tapas, and specialty cold-brews.'
+        }
+      ],
+      hasLiveNDreamBedding: true,
+      hasActingHereEcoProgram: true,
+      hasALLDigitalKey: true,
+      hasFamilyNovotelProgram: true,
+    },
+    facilities: [
+      {
+        id: 'pool',
+        name: 'InBalance 35m Lap Pool',
+        hours: '06:00 - 22:00',
+        currentOccupancy: 'Calm (30% Occupied)',
+        rules: 'Adults lap swimming 06:00-09:00. Families welcome 09:00-20:00.',
+        slots: ['06:30 (Lap)', '08:00', '10:00', '14:00', '17:00', '19:00'],
+        temperature: '28.0°C',
+        status: 'Open',
+      },
+      {
+        id: 'gym',
+        name: 'InBalance Fitness Pavilion',
+        hours: '24/7 Access',
+        currentOccupancy: 'Trainer on Duty',
+        rules: 'Towels, chilled mineral water, and foam rollers available.',
+        slots: ['Open 24 Hours'],
+        temperature: '21.0°C',
+        status: 'Open',
+      },
+      {
+        id: 'tennis',
+        name: 'Tennis & Padel Court',
+        hours: '07:00 - 21:00',
+        currentOccupancy: 'Court 1 Available • 17:00 Slot Open',
+        rules: 'Yonex rackets and Wilson balls provided at pavilion desk.',
+        slots: ['15:00', '16:00', '17:00', '18:00', '19:00'],
+        status: 'Open',
+      },
+      {
+        id: 'spa',
+        name: 'InBalance Hydrotherapy Suite',
+        hours: '09:00 - 21:00',
+        currentOccupancy: 'Open',
+        rules: 'Herbal tea served 15 mins prior to appointment.',
+        slots: ['11:00', '14:30', '16:00', '17:30', '18:30'],
+        temperature: '34.0°C',
+        status: 'Open',
+      }
+    ]
+  },
+  {
+    id: 'hyderabad-airport',
+    name: 'Novotel Hyderabad Airport',
+    city: 'Hyderabad',
+    country: 'India',
+    code: 'HYD-NHA',
+    tagline: 'Sprawling 5-star airport resort surrounded by lush verdant gardens & sports arena',
+    address: 'Rajiv Gandhi Intl Airport, Hyderabad 500108, India',
+    phone: '+91 40 6625 5555',
+    services: {
+      hasPool: true,
+      poolName: 'Heated Outdoor InBalance Pool & Kids Splash Oasis',
+      poolHours: '06:00 - 22:00',
+      poolTemp: '28.5°C',
+      hasGym: true,
+      gymName: 'InBalance 24/7 Fitness Center',
+      gymHours: '24/7 Access',
+      hasSpa: true,
+      spaName: 'O2 InBalance Spa & Hydrotherapy',
+      hasTennisOrPadel: true,
+      tennisName: 'Sports Arena (Floodlit Tennis & Basketball)',
+      diningConcepts: [
+        {
+          name: 'The Square 24/7',
+          concept: 'All-Day Buffet',
+          hours: '24 Hours',
+          description: 'Global buffet with live tandoor, Asian wok, and European confectionery.'
+        },
+        {
+          name: 'Gourmet Bar & Lounge',
+          concept: 'Gourmet Bar & Social Hub',
+          hours: '11:00 - 01:00',
+          description: 'Hand-crafted mocktails, local artisanal spirits, and finger foods.'
+        }
+      ],
+      hasLiveNDreamBedding: true,
+      hasActingHereEcoProgram: true,
+      hasALLDigitalKey: true,
+      hasFamilyNovotelProgram: true,
+    },
+    facilities: [
+      {
+        id: 'pool',
+        name: 'Heated Outdoor InBalance Pool',
+        hours: '06:00 - 22:00',
+        currentOccupancy: 'Open (35% Occupancy)',
+        rules: 'Separate kids splash pool and adult deep section.',
+        slots: ['06:30', '08:00', '10:00', '16:00', '17:30', '19:00'],
+        temperature: '28.5°C',
+        status: 'Open',
+      },
+      {
+        id: 'gym',
+        name: 'InBalance Fitness Centre',
+        hours: '24/7 Access',
+        currentOccupancy: 'Trainer on Duty',
+        rules: 'Cardio, resistance, and dedicated yoga zone.',
+        slots: ['Open 24 Hours'],
+        temperature: '21.0°C',
+        status: 'Open',
+      },
+      {
+        id: 'tennis',
+        name: 'Sports Arena Tennis Court',
+        hours: '06:00 - 21:00',
+        currentOccupancy: 'Court Available',
+        rules: 'Floodlit evening play available upon advance booking.',
+        slots: ['16:00', '17:00', '18:00', '19:00', '20:00'],
+        status: 'Open',
+      },
+      {
+        id: 'spa',
+        name: 'O2 InBalance Spa',
+        hours: '09:00 - 21:00',
+        currentOccupancy: 'Appointments Open',
+        rules: 'Ayurvedic & Western therapeutic treatments.',
+        slots: ['10:00', '12:00', '15:00', '18:00', '20:00'],
+        temperature: '32.0°C',
+        status: 'Open',
+      }
+    ]
+  },
+  {
+    id: 'phuket-resort',
+    name: 'Novotel Phuket Resort',
+    city: 'Phuket',
+    country: 'Thailand',
+    code: 'HKT-NPR',
+    tagline: 'Cliffside tropical haven overlooking the Andaman Sea with 3-tier cascade pools',
+    address: '282 Phrabaramee Road, Patong, Phuket 83150, Thailand',
+    phone: '+66 76 342 777',
+    services: {
+      hasPool: true,
+      poolName: '3-Tier Cascading Waterfall Pool',
+      poolHours: '07:00 - 20:00',
+      poolTemp: '29.5°C',
+      hasGym: true,
+      gymName: 'InBalance Sea-View Fitness',
+      gymHours: '06:00 - 22:00',
+      hasSpa: true,
+      spaName: 'InBalance Royal Thai Spa Sanctuary',
+      hasTennisOrPadel: false,
+      diningConcepts: [
+        {
+          name: 'The Square Ocean Terrace',
+          concept: 'All-Day Buffet',
+          hours: '06:30 - 22:00',
+          description: 'Fresh Andaman seafood BBQ and authentic Royal Thai cuisine.'
+        },
+        {
+          name: 'Le Mirage Pool Bar',
+          concept: 'Gourmet Bar & Social Hub',
+          hours: '10:00 - 22:00',
+          description: 'Swim-up cocktail bar with tropical fruit juices and woodfired pizza.'
+        }
+      ],
+      hasLiveNDreamBedding: true,
+      hasActingHereEcoProgram: true,
+      hasALLDigitalKey: true,
+      hasFamilyNovotelProgram: true,
+    },
+    facilities: [
+      {
+        id: 'pool',
+        name: '3-Tier Cascading Lagoon Pool',
+        hours: '07:00 - 20:00',
+        currentOccupancy: 'Open • Swim-up Bar Active',
+        rules: 'Towel cabana available on deck.',
+        slots: ['08:00', '10:30', '14:00', '16:30', '18:30'],
+        temperature: '29.5°C',
+        status: 'Open',
+      },
+      {
+        id: 'gym',
+        name: 'InBalance Sea-View Fitness',
+        hours: '06:00 - 22:00',
+        currentOccupancy: 'Open',
+        rules: 'Panoramic Andaman Sea view cardio station.',
+        slots: ['Open All Day'],
+        temperature: '22.0°C',
+        status: 'Open',
+      },
+      {
+        id: 'spa',
+        name: 'InBalance Royal Thai Spa',
+        hours: '10:00 - 20:00',
+        currentOccupancy: 'Thai Masseuses on Duty',
+        rules: 'Traditional Thai herbal compress & coconut body wraps.',
+        slots: ['11:00', '13:30', '15:30', '17:30', '19:00'],
+        temperature: '30.0°C',
+        status: 'Open',
+      }
+    ]
+  }
+];
+
 

@@ -22,8 +22,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        serif: ["'Playfair Display'", "Georgia", "serif"],
-        sans: ["'Plus Jakarta Sans'", "Inter", "sans-serif"],
+        serif: ["'Montserrat'", "'Plus Jakarta Sans'", "sans-serif"], // Novotel Official Brand Typography
+        sans: ["'Montserrat'", "'Plus Jakarta Sans'", "sans-serif"],
+        brand: ["'Montserrat'", "sans-serif"],
       },
       boxShadow: {
         luxury: "0 10px 30px -10px rgba(23, 30, 82, 0.12), 0 4px 6px -2px rgba(23, 30, 82, 0.04)",

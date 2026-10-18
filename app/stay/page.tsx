@@ -11,11 +11,13 @@ import {
 import { INITIAL_STAYS, INITIAL_PREFERENCES, LUXURY_PERSONAS } from '@/lib/mockData';
 import { Stay, GuestPreferences, LuxuryPersona } from '@/types/hospitality';
 import { supabase } from '@/lib/supabase';
+import { useBranch } from '@/context/BranchContext';
 
 function StayContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get('token') || 'magic_token_412_vip';
+  const { activeBranch } = useBranch();
 
   const [loading, setLoading] = useState<boolean>(true);
   const [stay, setStay] = useState<Stay | null>(null);
@@ -150,7 +152,7 @@ function StayContent() {
       <div className="flex-1 flex items-center justify-center p-6 text-center">
         <div className="space-y-3">
           <div className="w-10 h-10 border-4 border-[#171E52] border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-sm font-serif font-bold text-[#171E52]">Verifying Novotel Secure Token...</p>
+          <p className="text-sm font-bold text-[#171E52]">Verifying Novotel Secure Token...</p>
         </div>
       </div>
     );
@@ -173,7 +175,7 @@ function StayContent() {
         <div className="bg-[#171E52] px-6 pt-3.5 pb-2.5 text-white/80 flex items-center justify-between text-xs font-medium select-none">
           <span>9:41</span>
           <div className="flex items-center gap-2 text-[10px] tracking-wider text-[#C5A880]">
-            <span>NOVOTEL PULSE</span>
+            <span className="font-bold">{activeBranch.code} PULSE</span>
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           </div>
           <span>5G • 100%</span>
@@ -184,9 +186,9 @@ function StayContent() {
           <div className="flex items-center justify-between">
             <div>
               <span className="text-[10px] font-semibold tracking-widest text-[#C5A880] uppercase block">
-                Digital Concierge Entry
+                {activeBranch.name} • {activeBranch.city}
               </span>
-              <h1 className="text-xl font-serif font-bold text-white tracking-wide">
+              <h1 className="text-xl font-bold text-white tracking-wide">
                 Welcome, {stay.guestName.split(' ')[0]}
               </h1>
             </div>
@@ -210,7 +212,7 @@ function StayContent() {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-[#C5A880]">
                   Frictionless Personalization
                 </span>
-                <h2 className="text-lg font-serif font-bold text-[#171E52]">
+                <h2 className="text-lg font-bold text-[#171E52]">
                   How would you like to prepare your stay?
                 </h2>
                 <p className="text-xs text-[#5E6482]">
@@ -255,7 +257,7 @@ function StayContent() {
                       <Sparkles className="w-4 h-4" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-serif font-bold text-white group-hover:text-[#C5A880] transition-colors">
+                      <h3 className="text-sm font-bold text-white group-hover:text-[#C5A880] transition-colors">
                         1-Tap Curated Personas
                       </h3>
                       <span className="text-[11px] text-white/70">10 Instant VIP Blueprints</span>
@@ -282,7 +284,7 @@ function StayContent() {
                 <div className="flex items-center justify-between text-xs">
                   <div>
                     <span className="font-semibold text-[#171E52] block">{selectedPersona.title}</span>
-                    <span className="text-[11px] text-[#5E6482]">19°C • Goose Down • 06:15 Double Ristretto</span>
+                    <span className="text-[11px] text-[#5E6482]">19°C • Live N' Dream Pillow • 06:15 Double Ristretto</span>
                   </div>
                   <button
                     onClick={() => applyPersonaBlueprint(selectedPersona)}
@@ -315,7 +317,7 @@ function StayContent() {
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#C5A880] block">
                     Step {guidedStep} of 3
                   </span>
-                  <h2 className="text-base font-serif font-bold text-[#171E52]">
+                  <h2 className="text-base font-bold text-[#171E52]">
                     {guidedStep === 1 && 'Ambient Sensory & Climate'}
                     {guidedStep === 2 && 'Restorative Sleep & Bath Warmth'}
                     {guidedStep === 3 && 'Artisanal Gastronomy & Barista'}
@@ -437,14 +439,14 @@ function StayContent() {
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-[#171E52] flex items-center gap-1.5">
                     <Bed className="w-3.5 h-3.5 text-[#1E22AA]" />
-                    Pillow Sommelier Selection
+                    Live N' Dream Pillow Menu
                   </label>
                   <div className="space-y-1.5">
                     {[
-                      { name: 'Hungarian Goose Down', fill: '800-fill power cloud loft with sateen shell' },
-                      { name: 'Ergonomic Memory Foam', fill: 'Contoured orthopedic cervical spine alignment' },
-                      { name: 'Organic Buckwheat', fill: 'Therapeutic cooling support with buckwheat hulls' },
-                      { name: 'Cooling Bamboo Silk', fill: 'Breathable thermo-regulating spun bamboo' },
+                      { name: "Live N' Dream Smart Pillow (Dual-Comfort Soft/Firm)", fill: 'Official Novotel dual-comfort: firm ergonomic support & plush microfiber' },
+                      { name: "Live N' Dream Ergonomic Memory Foam", fill: 'Contoured cervical spine thermo-adapting contour' },
+                      { name: "Live N' Dream Anti-Allergen Cotton", fill: 'Hypoallergenic organic cotton percale casing' },
+                      { name: 'Hungarian White Goose Down', fill: 'Accor VIP 800-fill cloud loft luxury down' },
                     ].map((p) => (
                       <button
                         key={p.name}
@@ -492,7 +494,7 @@ function StayContent() {
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-[#171E52] flex items-center gap-1.5">
                     <Droplets className="w-3.5 h-3.5 text-cyan-600" />
-                    In-Residence Bath Soak Ritual
+                    InBalance Bath Ritual
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     {[
@@ -526,29 +528,29 @@ function StayContent() {
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-[#171E52] flex items-center gap-1.5">
                     <UtensilsCrossed className="w-3.5 h-3.5 text-[#1E22AA]" />
-                    Breakfast Experience
+                    Dining & Breakfast Experience ({activeBranch.name})
                   </label>
                   <div className="space-y-1.5">
-                    {[
-                      { title: 'In-Room Continental Silver Tray', sub: 'Delivered to your door under cloche' },
-                      { title: 'The Square Signature Buffet', sub: 'Live chef stations & French bakery' },
-                      { title: 'High-Protein Recovery Scramble', sub: '35g+ protein with avocado & greens' },
-                      { title: 'Plant-Based Wellness Bowl', sub: 'Chia seed pudding & organic berries' },
-                    ].map((b) => (
+                    {activeBranch.services.diningConcepts.map((b) => (
                       <button
-                        key={b.title}
-                        onClick={() => updatePref('breakfastStyle', b.title)}
+                        key={b.name}
+                        onClick={() => updatePref('breakfastStyle', b.name)}
                         className={`w-full p-2.5 rounded-xl text-left border transition-all flex items-center justify-between clickable-card ${
-                          preferences.breakfastStyle === b.title
+                          preferences.breakfastStyle === b.name
                             ? 'border-[#171E52] bg-blue-50/50 text-[#171E52]'
                             : 'border-[#E2E5F0] bg-white text-[#5E6482]'
                         }`}
                       >
                         <div>
-                          <span className="text-xs font-bold block text-[#171E52]">{b.title}</span>
-                          <span className="text-[10px] text-[#5E6482]">{b.sub}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold block text-[#171E52]">{b.name}</span>
+                            <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-blue-50 text-[#1E22AA] border border-blue-200">
+                              {b.concept}
+                            </span>
+                          </div>
+                          <span className="text-[10px] text-[#5E6482]">{b.description} • {b.hours}</span>
                         </div>
-                        {preferences.breakfastStyle === b.title && <Check className="w-4 h-4 text-[#1E22AA]" />}
+                        {preferences.breakfastStyle === b.name && <Check className="w-4 h-4 text-[#1E22AA]" />}
                       </button>
                     ))}
                   </div>
@@ -644,7 +646,7 @@ function StayContent() {
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#C5A880] block">
                     Accor VIP Blueprints
                   </span>
-                  <h2 className="text-base font-serif font-bold text-[#171E52]">
+                  <h2 className="text-base font-bold text-[#171E52]">
                     Select Your Luxury Persona
                   </h2>
                 </div>
@@ -677,7 +679,7 @@ function StayContent() {
                     <div className="flex items-start justify-between">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className={`font-serif font-bold text-sm ${isSelected ? 'text-white' : 'text-[#171E52]'}`}>
+                          <span className={`font-bold text-sm ${isSelected ? 'text-white' : 'text-[#171E52]'}`}>
                             {p.title}
                           </span>
                           <span className={`text-[9px] font-semibold px-2 py-0.5 rounded-full ${
@@ -729,9 +731,9 @@ function StayContent() {
 
             <div className="space-y-2">
               <span className="text-[10px] font-bold uppercase tracking-widest text-[#C5A880] block">
-                Sanctuary Calibrated & Active
+                Sanctuary Calibrated & Active • {activeBranch.name}
               </span>
-              <h2 className="text-2xl font-serif font-bold text-[#171E52]">
+              <h2 className="text-2xl font-bold text-[#171E52]">
                 Suite 412 is Ready
               </h2>
               <p className="text-xs text-[#5E6482] max-w-xs mx-auto">

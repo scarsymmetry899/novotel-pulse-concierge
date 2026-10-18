@@ -8,13 +8,17 @@ import {
   HeartHandshake, ChevronLeft, Volume2, ArrowRight,
   Sliders, User, Moon, Sun, Wind, Droplets, Leaf,
   Briefcase, Heart, Baby, Eye, X, CheckCircle2, ChevronDown,
-  Sparkle, Award, Compass, Music, FlameKindling, Radio, ChevronUp
+  Sparkle, Award, Compass, Music, FlameKindling, Radio, ChevronUp,
+  MapPin, Utensils
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { INITIAL_FACILITIES, INITIAL_REQUESTS, INITIAL_PREFERENCES, LUXURY_PERSONAS } from '@/lib/mockData';
 import { GuestPreferences, ServiceRequest, Facility, LuxuryPersona } from '@/types/hospitality';
+import { useBranch } from '@/context/BranchContext';
 
 export default function GuestMiniApp() {
+  const { activeBranch } = useBranch();
+
   // Navigation tabs
   const [activeTab, setActiveTab] = useState<'hub' | 'sanctuary' | 'facilities' | 'keycard'>('hub');
   
@@ -22,13 +26,18 @@ export default function GuestMiniApp() {
   const [currentPersona, setCurrentPersona] = useState<LuxuryPersona>(LUXURY_PERSONAS[0]);
   const [preferences, setPreferences] = useState<GuestPreferences>(INITIAL_PREFERENCES['stay-412']);
   const [requests, setRequests] = useState<ServiceRequest[]>(INITIAL_REQUESTS);
-  const [facilities, setFacilities] = useState<Facility[]>(INITIAL_FACILITIES);
+  const [facilities, setFacilities] = useState<Facility[]>(activeBranch.facilities);
   const [saveStatus, setSaveStatus] = useState<string>('Synced');
   const [nfcUnlocked, setNfcUnlocked] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showPersonaDrawer, setShowPersonaDrawer] = useState<boolean>(false);
 
-  // Web Audio Harmonic Chime Synthesis (Emil Kowalski Physical Sound)
+  // Sync facilities when property branch changes
+  useEffect(() => {
+    setFacilities(activeBranch.facilities);
+  }, [activeBranch]);
+
+  // Web Audio Harmonic Chime Synthesis
   const playLuxuryChime = (freq: number = 528) => {
     if (typeof window === 'undefined') return;
     try {
@@ -73,16 +82,16 @@ export default function GuestMiniApp() {
             stayId: prefData.stay_id,
             personaId: prefData.persona_id || 'jet-lag-exec',
             personaName: prefData.persona_name || 'The Jet-Lagged Global Executive',
-            wellnessInterests: prefData.wellness_interests || ['Heated Pool Access', '24/7 Gym Pass'],
+            wellnessInterests: prefData.wellness_interests || ['InBalance Pool Access', 'InBalance Fitness Pass'],
             tennisSlot: prefData.tennis_slot,
-            pillowType: prefData.pillow_type || 'Hungarian Goose Down',
+            pillowType: prefData.pillow_type || 'Live N Dream Smart Pillow',
             towelWarmingTime: prefData.towel_warming_time || '21:30',
             roomTemp: Number(prefData.room_temp) || 19.0,
             aromatherapy: prefData.aromatherapy || 'French Lavender & Roman Chamomile',
             soundscape: prefData.soundscape || 'Delta-Wave Binaural (432Hz)',
             lightingMood: prefData.lighting_mood || 'Deep Twilight (1800K)',
-            bathRitual: prefData.bath_ritual || 'Magnesium Flakes & Epsom Bath Soak',
-            breakfastStyle: prefData.breakfast_style || 'In-Room Continental Silver Tray',
+            bathRitual: prefData.bath_ritual || 'InBalance Thermal Mineral Soak',
+            breakfastStyle: prefData.breakfast_style || 'The Square Signature Buffet',
             minibarItems: prefData.minibar_items || ['San Pellegrino Sparkling'],
             allergies: prefData.allergies || ['Gluten-Free', 'Nut Allergy'],
             customNotes: prefData.custom_notes || '',
@@ -193,9 +202,9 @@ export default function GuestMiniApp() {
       stayId: 'stay-412',
       personaId: persona.id,
       personaName: persona.title,
-      wellnessInterests: persona.preferences.wellnessInterests || ['Heated Pool Access', '24/7 Gym Pass'],
+      wellnessInterests: persona.preferences.wellnessInterests || ['InBalance Pool Access', 'InBalance Fitness Pass'],
       tennisSlot: persona.preferences.tennisSlot || '17:00',
-      pillowType: (persona.sensoryProfile.pillow as any) || 'Hungarian Goose Down',
+      pillowType: (persona.sensoryProfile.pillow as any) || 'Live N Dream Smart Pillow',
       towelWarmingTime: persona.preferences.towelWarmingTime || '21:00',
       roomTemp: persona.sensoryProfile.roomTemp,
       aromatherapy: persona.sensoryProfile.aromatherapy,
@@ -275,7 +284,7 @@ export default function GuestMiniApp() {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-start p-2 sm:p-4 md:p-6 bg-[#F8F9FC] min-h-[100dvh]">
-      {/* Toast Notification (Sonner Style Stack) */}
+      {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-12 z-50 bg-[#171E52] text-white px-5 py-2.5 rounded-full text-xs font-semibold shadow-2xl border border-[#C5A880]/50 flex items-center gap-2 animate-modal">
           <Sparkles className="w-4 h-4 text-[#C5A880]" />
@@ -284,12 +293,12 @@ export default function GuestMiniApp() {
       )}
 
       {/* Mobile Device Frame Container (393px width iOS standard) */}
-      <div className="w-full max-w-[420px] bg-white rounded-[36px] shadow-2xl border border-[#E2E5F0] overflow-hidden flex flex-col min-h-[850px] relative card-luxury">
+      <div className="w-full max-w-[420px] bg-white rounded-[36px] shadow-2xl border border-[#E2E5F0] overflow-hidden flex flex-col min-h-[850px] relative card-luxury font-sans">
         
         {/* Device Notch & Status Bar */}
         <div className="bg-[#171E52] px-6 pt-3.5 pb-2 text-white/80 flex items-center justify-between text-xs font-medium select-none">
           <span>9:41</span>
-          <div className="flex items-center gap-2 text-[10px] tracking-wider text-[#C5A880]">
+          <div className="flex items-center gap-2 text-[10px] tracking-wider text-[#C5A880] font-bold">
             <span>NOVOTEL PULSE</span>
             <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           </div>
@@ -300,15 +309,16 @@ export default function GuestMiniApp() {
         <div className="bg-gradient-to-b from-[#171E52] to-[#0F1155] text-white px-5 pt-3.5 pb-4 rounded-b-[28px] shadow-md">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <span className="text-[10px] font-semibold tracking-widest text-[#C5A880] uppercase">
-                Executive Residence
-              </span>
-              <h1 className="text-xl font-serif font-bold text-white tracking-wide">
-                Suite 412
+              <div className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest text-[#C5A880] uppercase">
+                <MapPin className="w-3 h-3 text-[#C5A880]" />
+                <span className="truncate max-w-[190px]">{activeBranch.name}</span>
+              </div>
+              <h1 className="text-xl font-bold text-white tracking-wide mt-0.5">
+                Executive Suite 412
               </h1>
             </div>
 
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C5A880]/15 border border-[#C5A880]/40 text-[#C5A880] text-[10px] font-semibold tracking-wider">
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C5A880]/15 border border-[#C5A880]/40 text-[#C5A880] text-[10px] font-bold tracking-wider">
               <Sparkles className="w-3 h-3 text-[#C5A880]" />
               ALL PLATINUM
             </div>
@@ -344,7 +354,7 @@ export default function GuestMiniApp() {
           <div className="flex items-center justify-between text-xs text-white/70 pt-2.5 border-t border-white/10 mt-2.5">
             <span>{currentPersona.guestName}</span>
             <div className="flex items-center gap-2">
-              <span className="text-emerald-400 font-medium">Digital Key Active</span>
+              <span className="text-emerald-400 font-medium">ALL Digital Key</span>
               <button 
                 onClick={() => setActiveTab('keycard')}
                 className="text-[11px] text-[#C5A880] underline font-medium"
@@ -355,7 +365,7 @@ export default function GuestMiniApp() {
           </div>
         </div>
 
-        {/* View Switcher Chips (Origin-aware tactile tabs) */}
+        {/* View Switcher Chips */}
         <div className="px-4 py-2.5 bg-[#F8F9FC] border-b border-[#E2E5F0] grid grid-cols-4 gap-1 text-xs font-medium">
           <button
             onClick={() => { setActiveTab('hub'); triggerHaptic(10); }}
@@ -389,96 +399,121 @@ export default function GuestMiniApp() {
         {activeTab === 'hub' && (
           <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-24">
             
-            {/* Live Facility Status Deck (Horizontal Snap Carousel) */}
+            {/* Live Facility Telemetry Deck (Dynamically Custom to Active Branch) */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-[#5E6482]">
-                  Live Facility Telemetry
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#5E6482]">
+                  {activeBranch.city} Property Telemetry
                 </h3>
-                <span className="text-[11px] text-[#1E22AA] font-medium">Swipe for more</span>
+                <span className="text-[11px] text-[#1E22AA] font-semibold">Live Status</span>
               </div>
 
               <div className="flex gap-3 overflow-x-auto no-scrollbar py-1 snap-x">
-                {/* Pool Card */}
-                <div className="min-w-[240px] bg-gradient-to-br from-[#0F1155] to-[#171E52] text-white p-3.5 rounded-2xl shadow-sm border border-white/10 snap-start flex flex-col justify-between">
-                  <div className="flex items-start justify-between">
-                    <div className="p-2 rounded-xl bg-blue-500/20 text-blue-300">
-                      <Waves className="w-4 h-4" />
+                {/* Branch Pool Card (If Present) */}
+                {activeBranch.services.hasPool ? (
+                  <div className="min-w-[240px] bg-gradient-to-br from-[#0F1155] to-[#171E52] text-white p-3.5 rounded-2xl shadow-sm border border-white/10 snap-start flex flex-col justify-between">
+                    <div className="flex items-start justify-between">
+                      <div className="p-2 rounded-xl bg-blue-500/20 text-blue-300">
+                        <Waves className="w-4 h-4" />
+                      </div>
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        {activeBranch.services.poolTemp || '28.5°C'} • Open
+                      </span>
                     </div>
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                      28.5°C • Calm
-                    </span>
+                    <div className="mt-2">
+                      <h4 className="font-bold text-sm truncate">{activeBranch.services.poolName}</h4>
+                      <p className="text-[11px] text-white/70">{activeBranch.services.poolHours}</p>
+                    </div>
+                    <button 
+                      onClick={() => createServiceRequest('Poolside Cabana Booking', 'wellness', `${activeBranch.services.poolName} Cabana Reservation`)}
+                      className="mt-3 w-full py-1.5 bg-[#1E22AA] hover:bg-blue-700 text-white text-[11px] font-bold rounded-xl transition-all shadow-sm clickable-card"
+                    >
+                      Reserve Poolside Lounger
+                    </button>
                   </div>
-                  <div className="mt-2">
-                    <h4 className="font-semibold text-sm">Heated Infinity Pool</h4>
-                    <p className="text-[11px] text-white/70">6:00 - 22:00 • Adults Lap 06:30</p>
+                ) : (
+                  <div className="min-w-[240px] bg-gradient-to-br from-[#0F1155] to-[#171E52] text-white p-3.5 rounded-2xl shadow-sm border border-white/10 snap-start flex flex-col justify-between">
+                    <div className="flex items-start justify-between">
+                      <div className="p-2 rounded-xl bg-amber-500/20 text-amber-300">
+                        <Utensils className="w-4 h-4" />
+                      </div>
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                        City Sanctuary
+                      </span>
+                    </div>
+                    <div className="mt-2">
+                      <h4 className="font-bold text-sm">Gourmet Bar Patio</h4>
+                      <p className="text-[11px] text-white/70">11:00 - 00:00 • French Tapas & Drinks</p>
+                    </div>
+                    <button 
+                      onClick={() => createServiceRequest('Gourmet Bar Table', 'fnb', 'Patio table reservation at Gourmet Bar')}
+                      className="mt-3 w-full py-1.5 bg-[#C5A880] text-[#171E52] text-[11px] font-bold rounded-xl transition-all shadow-sm clickable-card"
+                    >
+                      Reserve Patio Table
+                    </button>
                   </div>
-                  <button 
-                    onClick={() => createServiceRequest('Poolside Cabana Reservation', 'wellness', 'Cabana #4 reserved with chilled water')}
-                    className="mt-3 w-full py-1.5 bg-[#1E22AA] hover:bg-blue-700 text-white text-[11px] font-semibold rounded-xl transition-all shadow-sm clickable-card"
-                  >
-                    1-Tap Reserve Cabana
-                  </button>
-                </div>
+                )}
 
-                {/* Fitness Card */}
+                {/* Fitness Card (InBalance by Novotel) */}
                 <div className="min-w-[240px] bg-white border border-[#E2E5F0] p-3.5 rounded-2xl shadow-sm snap-start flex flex-col justify-between">
                   <div className="flex items-start justify-between">
                     <div className="p-2 rounded-xl bg-[#171E52]/10 text-[#171E52]">
                       <Dumbbell className="w-4 h-4" />
                     </div>
                     <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-[#1E22AA]">
-                      24/7 Access
+                      {activeBranch.services.gymHours}
                     </span>
                   </div>
                   <div className="mt-2">
-                    <h4 className="font-semibold text-sm text-[#171E52]">InBalance Fitness</h4>
-                    <p className="text-[11px] text-[#5E6482]">Trainer on Duty • Peak 18:00</p>
+                    <h4 className="font-bold text-sm text-[#171E52] truncate">{activeBranch.services.gymName}</h4>
+                    <p className="text-[11px] text-[#5E6482]">Technogym • Weights & Cardio</p>
                   </div>
                   <button 
-                    onClick={() => showToast('Fitness locker pass added to room NFC keycard')}
+                    onClick={() => showToast('Fitness locker pass added to digital room pass')}
                     className="mt-3 w-full py-1.5 bg-[#F8F9FC] hover:bg-slate-200 text-[#171E52] text-[11px] font-semibold rounded-xl border border-[#E2E5F0] transition-all clickable-card"
                   >
                     Instant Locker Pass
                   </button>
                 </div>
 
-                {/* Tennis Card */}
-                <div className="min-w-[240px] bg-white border border-[#E2E5F0] p-3.5 rounded-2xl shadow-sm snap-start flex flex-col justify-between">
-                  <div className="flex items-start justify-between">
-                    <div className="p-2 rounded-xl bg-amber-500/10 text-amber-600">
-                      <Calendar className="w-4 h-4" />
+                {/* Tennis / Padel Court (If Branch Supports It) */}
+                {activeBranch.services.hasTennisOrPadel && (
+                  <div className="min-w-[240px] bg-white border border-[#E2E5F0] p-3.5 rounded-2xl shadow-sm snap-start flex flex-col justify-between">
+                    <div className="flex items-start justify-between">
+                      <div className="p-2 rounded-xl bg-amber-500/10 text-amber-600">
+                        <Calendar className="w-4 h-4" />
+                      </div>
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
+                        Court Open
+                      </span>
                     </div>
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
-                      Court 1 Open
-                    </span>
+                    <div className="mt-2">
+                      <h4 className="font-bold text-sm text-[#171E52] truncate">{activeBranch.services.tennisName}</h4>
+                      <p className="text-[11px] text-[#5E6482]">Next Slot: 17:00 • Rackets Included</p>
+                    </div>
+                    <button 
+                      onClick={() => createServiceRequest('Court Reservation', 'wellness', 'Outdoor Court at 17:00')}
+                      className="mt-3 w-full py-1.5 bg-[#171E52] hover:bg-[#0F1155] text-white text-[11px] font-semibold rounded-xl transition-all clickable-card"
+                    >
+                      Book 17:00 Slot
+                    </button>
                   </div>
-                  <div className="mt-2">
-                    <h4 className="font-semibold text-sm text-[#171E52]">Tennis & Padel</h4>
-                    <p className="text-[11px] text-[#5E6482]">Next Slot: 17:00 • Clay Court</p>
-                  </div>
-                  <button 
-                    onClick={() => createServiceRequest('Tennis Court Rental', 'wellness', 'Court 1 at 17:00')}
-                    className="mt-3 w-full py-1.5 bg-[#171E52] hover:bg-[#0F1155] text-white text-[11px] font-semibold rounded-xl transition-all clickable-card"
-                  >
-                    Book 17:00 Slot
-                  </button>
-                </div>
+                )}
               </div>
             </div>
 
-            {/* Instant Butler & Housekeeping Quick-Dispatch Grid */}
+            {/* Official Novotel In-Stay Butler Quick-Dispatch Grid */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-[#5E6482]">
-                  Instant Butler & Housekeeping
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#5E6482]">
+                  Novotel In-Stay Butler Directives
                 </h3>
-                <span className="text-[10px] text-emerald-600 font-medium">Avg dispatch: 6 mins</span>
+                <span className="text-[10px] text-emerald-600 font-semibold">Avg dispatch: 6 mins</span>
               </div>
 
               <div className="grid grid-cols-2 gap-2.5">
                 <button
-                  onClick={() => createServiceRequest('Pre-Warm Egyptian Bath Sheets', 'housekeeping', 'Pre-warm 2x 800gsm Egyptian cotton sheets', preferences.towelWarmingTime || '21:30')}
+                  onClick={() => createServiceRequest('Pre-Warm Bath Sheets', 'housekeeping', 'Pre-warm 2x Egyptian bath sheets', preferences.towelWarmingTime || '21:30')}
                   className="p-3 bg-white hover:bg-blue-50/50 border border-[#E2E5F0] rounded-2xl text-left transition-all shadow-sm flex flex-col justify-between h-[88px] group clickable-card"
                 >
                   <div className="flex items-center justify-between text-[#1E22AA]">
@@ -488,56 +523,56 @@ export default function GuestMiniApp() {
                     </span>
                   </div>
                   <div>
-                    <span className="text-xs font-semibold text-[#171E52] block group-hover:text-[#1E22AA]">Warm Bath Sheets</span>
-                    <span className="text-[10px] text-[#5E6482]">Egyptian 800gsm warmed</span>
+                    <span className="text-xs font-bold text-[#171E52] block group-hover:text-[#1E22AA]">Warm Bath Sheets</span>
+                    <span className="text-[10px] text-[#5E6482]">Evening heating cycle</span>
                   </div>
                 </button>
 
                 <button
-                  onClick={() => createServiceRequest('Magnesium Sleep Bath Setup', 'wellness', 'Stage pure magnesium flakes and chamomile soak')}
+                  onClick={() => createServiceRequest('Live N Dream Pillow Refresh', 'housekeeping', 'Deliver extra Live N Dream Smart Pillows')}
                   className="p-3 bg-white hover:bg-blue-50/50 border border-[#E2E5F0] rounded-2xl text-left transition-all shadow-sm flex flex-col justify-between h-[88px] group clickable-card"
                 >
                   <div className="flex items-center justify-between text-[#171E52]">
-                    <Droplets className="w-4 h-4 text-cyan-600" />
-                    <span className="text-[10px] bg-cyan-50 text-cyan-700 font-semibold px-1.5 py-0.5 rounded">Soak</span>
+                    <Bed className="w-4 h-4 text-indigo-600" />
+                    <span className="text-[10px] bg-indigo-50 text-indigo-700 font-semibold px-1.5 py-0.5 rounded">Live N' Dream</span>
                   </div>
                   <div>
-                    <span className="text-xs font-semibold text-[#171E52] block group-hover:text-[#1E22AA]">Magnesium Soak</span>
-                    <span className="text-[10px] text-[#5E6482]">Deep sleep bath kit</span>
+                    <span className="text-xs font-bold text-[#171E52] block group-hover:text-[#1E22AA]">Live N' Dream Pillows</span>
+                    <span className="text-[10px] text-[#5E6482]">Dual-comfort support</span>
                   </div>
                 </button>
 
                 <button
-                  onClick={() => createServiceRequest('Double Ristretto & Sparkling', 'fnb', 'Double-shot Italian ristretto with chilled San Pellegrino')}
+                  onClick={() => createServiceRequest('Double Ristretto 06:15 Wake', 'fnb', 'Double-shot Italian ristretto with San Pellegrino at 06:15')}
                   className="p-3 bg-white hover:bg-blue-50/50 border border-[#E2E5F0] rounded-2xl text-left transition-all shadow-sm flex flex-col justify-between h-[88px] group clickable-card"
                 >
                   <div className="flex items-center justify-between text-[#C5A880]">
                     <Coffee className="w-4 h-4" />
-                    <span className="text-[10px] bg-slate-100 text-[#5E6482] font-semibold px-1.5 py-0.5 rounded">06:15</span>
+                    <span className="text-[10px] bg-slate-100 text-[#5E6482] font-semibold px-1.5 py-0.5 rounded">06:15 Prompt</span>
                   </div>
                   <div>
-                    <span className="text-xs font-semibold text-[#171E52] block group-hover:text-[#1E22AA]">Double Ristretto</span>
+                    <span className="text-xs font-bold text-[#171E52] block group-hover:text-[#1E22AA]">Double Ristretto</span>
                     <span className="text-[10px] text-[#5E6482]">Wake barista delivery</span>
                   </div>
                 </button>
 
                 <button
-                  onClick={() => createServiceRequest('Rose Petal Turndown', 'housekeeping', 'Evening turndown with rose petals & sleep mist')}
+                  onClick={() => createServiceRequest('InBalance Recovery Soak', 'wellness', 'Deliver InBalance thermal mineral salts for bath')}
                   className="p-3 bg-white hover:bg-blue-50/50 border border-[#E2E5F0] rounded-2xl text-left transition-all shadow-sm flex flex-col justify-between h-[88px] group clickable-card"
                 >
                   <div className="flex items-center justify-between text-[#171E52]">
-                    <Bed className="w-4 h-4 text-rose-500" />
-                    <span className="text-[10px] bg-rose-50 text-rose-700 font-semibold px-1.5 py-0.5 rounded">Turndown</span>
+                    <Droplets className="w-4 h-4 text-cyan-600" />
+                    <span className="text-[10px] bg-cyan-50 text-cyan-700 font-semibold px-1.5 py-0.5 rounded">InBalance</span>
                   </div>
                   <div>
-                    <span className="text-xs font-semibold text-[#171E52] block group-hover:text-[#1E22AA]">Rose Turndown</span>
-                    <span className="text-[10px] text-[#5E6482]">Pillows fluffed & mist</span>
+                    <span className="text-xs font-bold text-[#171E52] block group-hover:text-[#1E22AA]">InBalance Soak</span>
+                    <span className="text-[10px] text-[#5E6482]">Thermal mineral bath</span>
                   </div>
                 </button>
               </div>
             </div>
 
-            {/* 4-Stage Live Dispatch Pipeline (Emil Kowalski Animated Fluid Tracker) */}
+            {/* 4-Stage Live Dispatch Pipeline */}
             <div className="bg-white border border-[#E2E5F0] rounded-2xl p-4 shadow-sm space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -546,21 +581,19 @@ export default function GuestMiniApp() {
                     Live Dispatch Pipeline
                   </span>
                 </div>
-                <span className="text-[10px] text-[#5E6482]">Suite 412 Live</span>
+                <span className="text-[10px] text-[#5E6482] font-medium">{activeBranch.code} • Suite 412</span>
               </div>
 
               {requests.slice(0, 2).map((req) => (
                 <div key={req.id} className="pb-3 border-b border-slate-100 last:border-b-0 last:pb-0">
                   <div className="flex items-center justify-between text-xs mb-2">
-                    <span className="font-semibold text-[#171E52]">{req.serviceType}</span>
+                    <span className="font-bold text-[#171E52]">{req.serviceType}</span>
                     <span className="text-[11px] text-[#1E22AA] font-bold">{req.scheduledTime || 'In Progress'}</span>
                   </div>
 
-                  {/* Progressive Connecting Fill Track */}
                   <div className="flex items-center justify-between relative px-2 mt-2">
                     <div className="absolute left-6 right-6 top-1/2 -translate-y-1/2 h-1 bg-slate-100 z-0 rounded-full" />
                     
-                    {/* Stage 1: Received */}
                     <div className="flex flex-col items-center z-10">
                       <div className="w-6 h-6 rounded-full bg-[#171E52] text-white flex items-center justify-center text-[10px] font-bold shadow-sm">
                         ✓
@@ -568,7 +601,6 @@ export default function GuestMiniApp() {
                       <span className="text-[9px] text-[#5E6482] mt-1 font-medium">Received</span>
                     </div>
 
-                    {/* Stage 2: Assigned */}
                     <div className="flex flex-col items-center z-10">
                       <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shadow-sm ${
                         req.status === 'in_progress' || req.status === 'completed'
@@ -580,7 +612,6 @@ export default function GuestMiniApp() {
                       <span className="text-[9px] text-[#5E6482] mt-1 font-medium">Assigned</span>
                     </div>
 
-                    {/* Stage 3: En Route */}
                     <div className="flex flex-col items-center z-10">
                       <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shadow-sm ${
                         req.status === 'in_progress'
@@ -594,7 +625,6 @@ export default function GuestMiniApp() {
                       <span className="text-[9px] text-[#5E6482] mt-1 font-medium">En Route</span>
                     </div>
 
-                    {/* Stage 4: Delivered */}
                     <div className="flex flex-col items-center z-10">
                       <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shadow-sm ${
                         req.status === 'completed'
@@ -645,14 +675,52 @@ export default function GuestMiniApp() {
           <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-24">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-base font-serif font-bold text-[#171E52]">
-                  Residence Sanctuary Tuning
+                <h2 className="text-base font-bold text-[#171E52]">
+                  Live N' Dream Sanctuary Tuning
                 </h2>
-                <p className="text-[11px] text-[#5E6482]">Active ambient settings auto-saved to cloud.</p>
+                <p className="text-[11px] text-[#5E6482]">Official Novotel sleep & ambient comfort settings.</p>
               </div>
-              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full font-semibold border border-emerald-200">
+              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full font-bold border border-emerald-200">
                 {saveStatus}
               </span>
+            </div>
+
+            {/* Pillows: Official Novotel Live N' Dream Concept */}
+            <div className="bg-white border border-[#E2E5F0] rounded-2xl p-4 shadow-sm space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold uppercase tracking-wider text-[#171E52] flex items-center gap-1.5">
+                  <Bed className="w-3.5 h-3.5 text-[#1E22AA]" />
+                  Live N' Dream Pillow Menu
+                </label>
+                <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700">
+                  Novotel Signature
+                </span>
+              </div>
+
+              <div className="space-y-1.5">
+                {[
+                  { name: 'Live N Dream Smart Pillow', desc: 'Foldable dual-comfort: Firm neck support on one side, plush loft on the other' },
+                  { name: 'Live N Dream Ergonomic Memory Foam', desc: 'Contoured cervical spine relief for side and back sleepers' },
+                  { name: 'Live N Dream Organic Cotton Percale', desc: 'Breathable 100% natural cotton percale with cooling airflow' },
+                  { name: 'Live N Dream Anti-Allergen Contour', desc: 'Microfiber cluster filling engineered for sensitive skin' }
+                ].map((p) => (
+                  <button
+                    key={p.name}
+                    onClick={() => updatePreference('pillowType', p.name)}
+                    className={`w-full p-2.5 rounded-xl text-left border transition-all flex items-center justify-between clickable-card ${
+                      preferences.pillowType === p.name
+                        ? 'border-[#171E52] bg-blue-50/50 text-[#171E52] font-bold'
+                        : 'border-[#E2E5F0] bg-white text-[#5E6482]'
+                    }`}
+                  >
+                    <div>
+                      <span className="text-xs font-bold block text-[#171E52]">{p.name}</span>
+                      <span className="text-[10px] text-[#5E6482]">{p.desc}</span>
+                    </div>
+                    {preferences.pillowType === p.name && <Check className="w-4 h-4 text-[#1E22AA]" />}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Aromatherapy */}
@@ -673,7 +741,7 @@ export default function GuestMiniApp() {
                     onClick={() => updatePreference('aromatherapy', a.name)}
                     className={`w-full p-2.5 rounded-xl text-left border transition-all flex items-center justify-between clickable-card ${
                       preferences.aromatherapy === a.name
-                        ? 'border-[#171E52] bg-blue-50/50 text-[#171E52] font-semibold'
+                        ? 'border-[#171E52] bg-blue-50/50 text-[#171E52] font-bold'
                         : 'border-[#E2E5F0] bg-white text-[#5E6482]'
                     }`}
                   >
@@ -682,35 +750,6 @@ export default function GuestMiniApp() {
                       <span className="text-[10px] text-[#5E6482]">{a.tag}</span>
                     </div>
                     {preferences.aromatherapy === a.name && <Check className="w-4 h-4 text-[#1E22AA]" />}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Pillows */}
-            <div className="bg-white border border-[#E2E5F0] rounded-2xl p-4 shadow-sm space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-[#171E52] flex items-center gap-1.5">
-                <Bed className="w-3.5 h-3.5 text-[#1E22AA]" />
-                Pillow Sommelier Choice
-              </label>
-              <div className="space-y-1.5">
-                {[
-                  'Hungarian Goose Down',
-                  'Ergonomic Memory Foam',
-                  'Organic Buckwheat',
-                  'Cooling Bamboo Silk'
-                ].map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => updatePreference('pillowType', p)}
-                    className={`w-full p-2.5 rounded-xl text-left border transition-all flex items-center justify-between clickable-card ${
-                      preferences.pillowType === p
-                        ? 'border-[#171E52] bg-blue-50/50 text-[#171E52] font-semibold'
-                        : 'border-[#E2E5F0] bg-white text-[#5E6482]'
-                    }`}
-                  >
-                    <span className="text-xs font-bold text-[#171E52]">{p}</span>
-                    {preferences.pillowType === p && <Check className="w-4 h-4 text-[#1E22AA]" />}
                   </button>
                 ))}
               </div>
@@ -728,7 +767,7 @@ export default function GuestMiniApp() {
               <select
                 value={preferences.towelWarmingTime}
                 onChange={(e) => updatePreference('towelWarmingTime', e.target.value)}
-                className="px-3 py-1.5 text-xs font-semibold bg-blue-50 text-[#171E52] rounded-xl border border-blue-200 outline-none"
+                className="px-3 py-1.5 text-xs font-bold bg-blue-50 text-[#171E52] rounded-xl border border-blue-200 outline-none"
               >
                 <option value="19:30">19:30 PM</option>
                 <option value="20:00">20:00 PM</option>
@@ -742,15 +781,15 @@ export default function GuestMiniApp() {
         )}
 
         {/* ============================================================== */}
-        {/* TAB 3: HOTEL FACILITIES & SLOTS                               */}
+        {/* TAB 3: HOTEL FACILITIES & SLOTS (Dynamic to Branch)            */}
         {/* ============================================================== */}
         {activeTab === 'facilities' && (
           <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-24">
             <div>
-              <h2 className="text-base font-serif font-bold text-[#171E52]">
-                Property Facilities & Wellness
+              <h2 className="text-base font-bold text-[#171E52]">
+                {activeBranch.name} Facilities
               </h2>
-              <p className="text-[11px] text-[#5E6482]">Live schedules, temperatures, and 1-tap slot reservations.</p>
+              <p className="text-[11px] text-[#5E6482]">Official schedules, temperatures, and 1-tap slot reservations.</p>
             </div>
 
             <div className="space-y-3">
@@ -762,7 +801,7 @@ export default function GuestMiniApp() {
                       <p className="text-[11px] text-[#5E6482]">{facility.hours}</p>
                     </div>
                     {facility.temperature && (
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-[#1E22AA] border border-blue-200">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-[#1E22AA] border border-blue-200">
                         {facility.temperature}
                       </span>
                     )}
@@ -783,7 +822,7 @@ export default function GuestMiniApp() {
                           onClick={() => {
                             createServiceRequest(`${facility.name} Booking`, 'wellness', `Slot confirmed for ${slot}`, slot);
                           }}
-                          className="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 hover:bg-[#171E52] hover:text-white transition-colors clickable-card"
+                          className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-[#171E52] hover:text-white transition-colors clickable-card"
                         >
                           {slot}
                         </button>
@@ -797,21 +836,21 @@ export default function GuestMiniApp() {
         )}
 
         {/* ============================================================== */}
-        {/* TAB 4: 3D DIGITAL RFID NFC KEY PASS                           */}
+        {/* TAB 4: ALL DIGITAL KEY (ACCOR KEY SOLUTION)                    */}
         {/* ============================================================== */}
         {activeTab === 'keycard' && (
           <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-24 flex flex-col items-center justify-between text-center">
             <div className="space-y-1 w-full">
-              <span className="text-[10px] font-semibold tracking-widest text-[#C5A880] uppercase">
-                Zero-Download NFC Keycard
+              <span className="text-[10px] font-bold tracking-widest text-[#C5A880] uppercase">
+                ALL Digital Key • Accor Key
               </span>
-              <h2 className="text-lg font-serif font-bold text-[#171E52]">
-                Residence Suite 412
+              <h2 className="text-lg font-bold text-[#171E52]">
+                Suite 412 Keycard Pass
               </h2>
               <p className="text-xs text-[#5E6482]">Hold phone near room lock reader to unlock.</p>
             </div>
 
-            {/* Skeuomorphic 3D Luxury RFID Keycard */}
+            {/* Official Accor ALL Digital Key Card */}
             <div 
               onClick={() => {
                 setNfcUnlocked(true);
@@ -824,10 +863,10 @@ export default function GuestMiniApp() {
               <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#C5A880_1px,transparent_1px)] [background-size:16px_16px]" />
 
               <div className="flex items-center justify-between z-10">
-                <span className="font-serif font-bold tracking-widest text-sm text-[#C5A880]">
+                <span className="font-bold tracking-widest text-sm text-[#C5A880] font-brand">
                   NOVOTEL
                 </span>
-                <span className="text-[10px] tracking-wider text-white/60">ALL PLATINUM</span>
+                <span className="text-[10px] tracking-wider text-white/70 font-bold">ALL PLATINUM</span>
               </div>
 
               {/* NFC Sensor Pulse Area */}
@@ -839,18 +878,18 @@ export default function GuestMiniApp() {
                 }`}>
                   <Key className={`w-8 h-8 ${nfcUnlocked ? 'animate-bounce text-emerald-300' : 'text-[#C5A880]'}`} />
                 </div>
-                <span className="text-xs font-semibold tracking-wide">
+                <span className="text-xs font-bold tracking-wide">
                   {nfcUnlocked ? 'DOOR UNLOCKED • WELCOME' : 'TAP TO TRANSMIT NFC'}
                 </span>
               </div>
 
               <div className="flex items-end justify-between z-10 border-t border-white/10 pt-3">
                 <div className="text-left">
-                  <span className="text-[9px] text-white/50 block">SUITE</span>
-                  <span className="font-serif font-bold text-lg text-white">412</span>
+                  <span className="text-[9px] text-white/50 block font-bold">SUITE</span>
+                  <span className="font-bold text-lg text-white">412</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[9px] text-white/50 block">GUEST</span>
+                  <span className="text-[9px] text-white/50 block font-bold">GUEST</span>
                   <span className="text-xs font-semibold text-white/90">Arthur Hastings</span>
                 </div>
               </div>
@@ -864,14 +903,14 @@ export default function GuestMiniApp() {
                   triggerHaptic(50);
                   setTimeout(() => setNfcUnlocked(false), 3000);
                 }}
-                className="w-full py-3 bg-[#171E52] hover:bg-[#0F1155] text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 clickable-card"
+                className="w-full py-3 bg-[#171E52] hover:bg-[#0F1155] text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 clickable-card"
               >
                 <Key className="w-4 h-4 text-[#C5A880]" />
                 <span>Simulate NFC Door Tap</span>
               </button>
 
               <span className="text-[10px] text-[#5E6482] block">
-                Encrypted via Google Cloud KMS Token (Valid through Check-Out)
+                Official Accor Key Protocol (Valid through Check-Out)
               </span>
             </div>
           </div>
@@ -879,11 +918,11 @@ export default function GuestMiniApp() {
 
         {/* Bottom Global Status Bar */}
         <div className="bg-[#171E52] text-white/70 px-4 py-2 text-[10px] flex items-center justify-between border-t border-white/10 select-none pb-safe">
-          <span className="flex items-center gap-1.5">
+          <span className="flex items-center gap-1.5 font-medium">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            Concierge Online • Floor 4 Butler
+            {activeBranch.city} Floor Butler Online
           </span>
-          <span className="text-[#C5A880]">Novotel Pulse v2.0</span>
+          <span className="text-[#C5A880] font-bold">Novotel Pulse v2.0</span>
         </div>
 
       </div>
@@ -892,19 +931,17 @@ export default function GuestMiniApp() {
       {/* EMIL KOWALSKI iOS-STYLE BOTTOM SHEET DRAWER (10 Personas)       */}
       {/* ============================================================== */}
       {showPersonaDrawer && (
-        <div className="fixed inset-0 z-50 bg-[#0F1155]/70 backdrop-blur-sm flex items-end justify-center">
+        <div className="fixed inset-0 z-50 bg-[#0F1155]/70 backdrop-blur-sm flex items-end justify-center font-sans">
           <div className="w-full max-w-lg bg-gradient-to-b from-[#171E52] to-[#0A0D30] text-white rounded-t-[32px] p-5 shadow-2xl border-t border-[#C5A880]/50 max-h-[85vh] flex flex-col animate-drawer relative">
             
-            {/* Drag Handle Indicator */}
             <div className="w-12 h-1 rounded-full bg-white/30 mx-auto mb-3" />
 
-            {/* Drawer Header */}
             <div className="flex items-start justify-between border-b border-white/10 pb-3">
               <div>
                 <span className="text-[10px] font-bold tracking-widest text-[#C5A880] uppercase block">
-                  10 Curated Luxury Blueprints
+                  Accor ALL VIP Blueprints
                 </span>
-                <h3 className="text-lg font-serif font-bold text-white tracking-wide">
+                <h3 className="text-lg font-bold text-white tracking-wide">
                   Select Guest Persona
                 </h3>
               </div>
@@ -916,7 +953,6 @@ export default function GuestMiniApp() {
               </button>
             </div>
 
-            {/* Scrollable Personas List */}
             <div className="flex-1 overflow-y-auto space-y-2.5 my-3 pr-1">
               {LUXURY_PERSONAS.map((p) => {
                 const isSelected = currentPersona.id === p.id;
@@ -933,14 +969,14 @@ export default function GuestMiniApp() {
                     <div className="flex items-start justify-between">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-serif font-bold text-sm text-white">
+                          <span className="font-bold text-sm text-white">
                             {p.title}
                           </span>
-                          {isSelected && (
-                            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#C5A880] text-[#171E52]">
-                              ACTIVE
-                            </span>
-                          )}
+                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
+                            isSelected ? 'bg-[#C5A880] text-[#171E52]' : 'bg-slate-100 text-[#5E6482]'
+                          }`}>
+                            {p.category}
+                          </span>
                         </div>
                         <p className="text-[11px] text-[#C5A880] font-medium mt-0.5">
                           {p.subtitle}
@@ -955,22 +991,21 @@ export default function GuestMiniApp() {
                       "{p.tagline}"
                     </p>
 
-                    <div className="flex flex-wrap gap-1.5 pt-2 mt-2 border-t border-white/10 text-[10px] text-white/80">
+                    <div className="flex flex-wrap gap-1.5 pt-2 mt-2 border-t border-white/10 text-[10px] text-white/80 font-medium">
                       <span className="px-2 py-0.5 rounded bg-white/10">❄️ {p.sensoryProfile.roomTemp}°C</span>
-                      <span className="px-2 py-0.5 rounded bg-white/10">🛏️ {p.sensoryProfile.pillow.split(' ')[0]}</span>
-                      <span className="px-2 py-0.5 rounded bg-white/10">☕ {p.refreshments.coffeeRoast.split(' ')[0]}</span>
+                      <span className="px-2 py-0.5 rounded bg-white/10">🛏️ Live N' Dream Pillow</span>
+                      <span className="px-2 py-0.5 rounded bg-white/10">☕ {p.refreshments.coffeeRoast.split('(')[0]}</span>
                     </div>
                   </div>
                 );
               })}
             </div>
 
-            {/* Drawer Footer */}
             <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-white/60">
-              <span>Automatically updates Housekeeping & Butler tablets.</span>
+              <span>Synchronized with {activeBranch.name} Front Desk.</span>
               <button
                 onClick={() => setShowPersonaDrawer(false)}
-                className="px-4 py-1.5 bg-white/15 hover:bg-white/20 text-white rounded-xl font-semibold clickable-card"
+                className="px-4 py-1.5 bg-white/15 hover:bg-white/20 text-white rounded-xl font-bold clickable-card"
               >
                 Done
               </button>

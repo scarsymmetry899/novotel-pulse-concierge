@@ -34,18 +34,57 @@ export interface GuestPreferences {
   personaName?: string;
   wellnessInterests: string[];
   tennisSlot?: string;
-  pillowType: 'Hungarian Goose Down' | 'Ergonomic Memory Foam' | 'Organic Buckwheat' | 'Cooling Bamboo Silk' | 'Anti-Allergen Cotton' | string;
+  pillowType: 'Live N Dream Smart Pillow' | 'Live N Dream Ergonomic Memory Foam' | 'Live N Dream Organic Cotton Percale' | 'Live N Dream Anti-Allergen Contour' | string;
   towelWarmingTime: string; // e.g. "20:30"
   roomTemp: number; // e.g. 19.5 (in Celsius)
   aromatherapy?: string; // e.g. "French Lavender & Chamomile"
   soundscape?: string; // e.g. "Delta-Wave Sleep (432Hz)"
   lightingMood?: string; // e.g. "Golden Amber 2200K"
-  bathRitual?: string; // e.g. "Magnesium Flakes & Epsom Bath Soak"
-  breakfastStyle: 'The Square Signature Buffet' | 'In-Room Continental Silver Tray' | 'High-Protein Recovery Scramble' | 'Plant-Based Wellness Bowl' | string;
+  bathRitual?: string; // e.g. "InBalance Thermal Mineral Soak"
+  breakfastStyle: 'The Square Signature Buffet' | 'Gourmet Bar Express Breakfast' | 'In-Room Continental Silver Tray' | 'High-Protein Recovery Scramble' | 'Plant-Based Wellness Bowl' | string;
   minibarItems: string[];
   allergies: string[];
   customNotes?: string;
   updatedAt?: string;
+}
+
+export interface PropertyDiningConcept {
+  name: string;
+  concept: 'All-Day Buffet' | 'Gourmet Bar & Social Hub' | 'Artisanal Cafe' | 'In-Room Dining';
+  hours: string;
+  description: string;
+}
+
+export interface PropertyServiceCatalog {
+  hasPool: boolean;
+  poolName: string;
+  poolHours: string;
+  poolTemp?: string;
+  hasGym: boolean;
+  gymName: string;
+  gymHours: string;
+  hasSpa: boolean;
+  spaName?: string;
+  hasTennisOrPadel: boolean;
+  tennisName?: string;
+  diningConcepts: PropertyDiningConcept[];
+  hasLiveNDreamBedding: boolean;
+  hasActingHereEcoProgram: boolean;
+  hasALLDigitalKey: boolean;
+  hasFamilyNovotelProgram: boolean;
+}
+
+export interface HotelBranch {
+  id: string;
+  name: string;
+  city: string;
+  country: string;
+  code: string;
+  tagline: string;
+  address: string;
+  phone: string;
+  services: PropertyServiceCatalog;
+  facilities: Facility[];
 }
 
 export interface DepartmentDirective {
