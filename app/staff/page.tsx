@@ -6,7 +6,7 @@ import {
   Send, Sparkles, Filter, CheckCircle2, Clock, 
   Phone, Mail, ArrowUpRight, MessageSquare, QrCode, RefreshCw,
   X, Printer, Copy, Check, Bed, Coffee, Droplets, Wind,
-  ChevronRight, Sparkle, FileText, Share2, Layers
+  ChevronRight, Sparkle, FileText, Share2, Layers, CheckSquare
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { INITIAL_ROOMS, INITIAL_STAYS, INITIAL_PREFERENCES, INITIAL_REQUESTS, LUXURY_PERSONAS } from '@/lib/mockData';
@@ -23,7 +23,7 @@ export default function StaffCommandPortal() {
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [qrModalGuest, setQrModalGuest] = useState<Stay | null>(null);
   
-  // Spec Sheet Modal State
+  // Right-Anchored Spec Sheet Drawer State
   const [specSheetStay, setSpecSheetStay] = useState<{ stay: Stay; room: Room; persona: LuxuryPersona } | null>(null);
 
   const showToast = (msg: string) => {
@@ -128,7 +128,7 @@ export default function StaffCommandPortal() {
     <div className="flex-1 flex flex-col bg-[#F4F6FB] min-h-screen text-[#171E52]">
       {/* Toast Alert */}
       {toastMsg && (
-        <div className="fixed top-14 right-6 z-50 bg-[#171E52] text-white px-4 py-3 rounded-2xl shadow-2xl border border-[#C5A880]/50 text-xs font-semibold flex items-center gap-2">
+        <div className="fixed top-14 right-6 z-50 bg-[#171E52] text-white px-5 py-3 rounded-2xl shadow-2xl border border-[#C5A880]/50 text-xs font-semibold flex items-center gap-2 animate-modal">
           <Sparkles className="w-4 h-4 text-[#C5A880]" />
           {toastMsg}
         </div>
@@ -191,15 +191,13 @@ export default function StaffCommandPortal() {
               const stay = stays.find(s => s.roomId === room.id);
               const pref = stay ? preferences[stay.id] : null;
               const isVip = room.category === 'Suite';
-
-              // Find matched persona
               const persona = LUXURY_PERSONAS.find(p => p.id === pref?.personaId) || LUXURY_PERSONAS[0];
 
               return (
                 <div
                   key={room.id}
                   onClick={() => stay && setSpecSheetStay({ stay, room, persona })}
-                  className={`bg-white rounded-2xl p-4 shadow-sm transition-all border cursor-pointer hover:shadow-md ${
+                  className={`bg-white rounded-2xl p-4 shadow-sm transition-all border cursor-pointer hover:shadow-md clickable-card ${
                     isVip
                       ? 'border-[#C5A880] ring-1 ring-[#C5A880]/30 hover:border-amber-400'
                       : 'border-[#E2E5F0] hover:border-slate-300'
@@ -237,7 +235,7 @@ export default function StaffCommandPortal() {
                             e.stopPropagation();
                             sendWhatsAppWelcome(stay);
                           }}
-                          className="text-[11px] text-[#1E22AA] hover:underline font-semibold flex items-center gap-1"
+                          className="text-[11px] text-[#1E22AA] hover:underline font-semibold flex items-center gap-1 clickable-card"
                         >
                           <MessageSquare className="w-3 h-3 text-emerald-600" />
                           Magic Link
@@ -250,7 +248,7 @@ export default function StaffCommandPortal() {
                           ✦ {persona.title}
                         </span>
                         <span className="text-[9px] text-[#C5A880] font-semibold">
-                          View Directives →
+                          Directives →
                         </span>
                       </div>
 
@@ -289,13 +287,13 @@ export default function StaffCommandPortal() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => showToast('Master Pool Temperature notice broadcast to all 10 occupied suites')}
-                className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold transition-all"
+                className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold transition-all clickable-card"
               >
                 Broadcast Notice
               </button>
               <button
                 onClick={() => setQrModalGuest(stays[0])}
-                className="px-3 py-1.5 rounded-xl bg-[#C5A880] hover:bg-amber-600 text-[#171E52] text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
+                className="px-3 py-1.5 rounded-xl bg-[#C5A880] hover:bg-amber-600 text-[#171E52] text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm clickable-card"
               >
                 <QrCode className="w-3.5 h-3.5" />
                 Generate QR Card
@@ -315,7 +313,6 @@ export default function StaffCommandPortal() {
               <p className="text-xs text-[#5E6482]">Instant butler and housekeeping tasks synced in real-time.</p>
             </div>
 
-            {/* Department Filter Pills */}
             <select
               value={selectedDept}
               onChange={(e) => setSelectedDept(e.target.value)}
@@ -368,7 +365,7 @@ export default function StaffCommandPortal() {
                   {req.status !== 'in_progress' && req.status !== 'completed' && (
                     <button
                       onClick={() => updateRequestStatus(req.id, 'in_progress')}
-                      className="flex-1 py-1.5 bg-[#1E22AA] hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition-all"
+                      className="flex-1 py-1.5 bg-[#1E22AA] hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition-all clickable-card"
                     >
                       Dispatch En Route
                     </button>
@@ -376,14 +373,14 @@ export default function StaffCommandPortal() {
                   {req.status === 'in_progress' && (
                     <button
                       onClick={() => updateRequestStatus(req.id, 'completed')}
-                      className="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition-all"
+                      className="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition-all clickable-card"
                     >
                       Mark Delivered (WhatsApp Alert)
                     </button>
                   )}
                   <button
                     onClick={() => showToast(`Pushed custom WhatsApp notification for request ${req.id}`)}
-                    className="p-1.5 rounded-xl border border-[#E2E5F0] hover:bg-slate-100 text-emerald-600"
+                    className="p-1.5 rounded-xl border border-[#E2E5F0] hover:bg-slate-100 text-emerald-600 clickable-card"
                     title="Send WhatsApp update"
                   >
                     <MessageSquare className="w-4 h-4" />
@@ -398,19 +395,19 @@ export default function StaffCommandPortal() {
       </div>
 
       {/* ============================================================== */}
-      {/* LUXURY GUEST ACTION SPEC SHEET MODAL (Department Action Plan)  */}
+      {/* EMIL KOWALSKI RIGHT-ANCHORED SLIDE-OVER SPEC SHEET DRAWER      */}
       {/* ============================================================== */}
       {specSheetStay && (
-        <div className="fixed inset-0 z-50 bg-[#0F1155]/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white text-[#171E52] rounded-[32px] p-6 max-w-2xl w-full border border-[#C5A880]/50 shadow-2xl relative space-y-5 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 bg-[#0F1155]/60 backdrop-blur-sm flex justify-end">
+          <div className="w-full max-w-xl bg-white text-[#171E52] h-full shadow-2xl border-l border-[#C5A880]/40 flex flex-col justify-between animate-drawer">
             
-            {/* Modal Header */}
-            <div className="flex items-start justify-between border-b border-slate-200 pb-4">
+            {/* Drawer Top Header */}
+            <div className="p-6 border-b border-slate-200 flex items-start justify-between bg-[#F8F9FC]">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xl font-serif font-bold text-[#171E52]">
-                    Suite {specSheetStay.room.roomNumber} Action Spec Sheet
-                  </span>
+                  <h3 className="text-xl font-serif font-bold text-[#171E52]">
+                    Suite {specSheetStay.room.roomNumber} Butler Spec Sheet
+                  </h3>
                   <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-[#C5A880]/20 text-[#171E52] border border-[#C5A880]">
                     {specSheetStay.room.category}
                   </span>
@@ -426,17 +423,17 @@ export default function StaffCommandPortal() {
 
               <button
                 onClick={() => setSpecSheetStay(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 transition-colors"
+                className="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center text-slate-700 transition-colors clickable-card"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Persona Tagline Banner */}
-            <div className="bg-[#171E52] text-white p-3.5 rounded-2xl flex items-center justify-between">
+            {/* Persona Blueprint Summary Banner */}
+            <div className="p-4 bg-[#171E52] text-white mx-6 mt-4 rounded-2xl flex items-center justify-between shadow-md">
               <div>
                 <span className="text-[10px] font-bold tracking-widest text-[#C5A880] uppercase block">
-                  Persona Profile & Blueprint
+                  Persona Blueprint Active
                 </span>
                 <span className="text-xs font-semibold text-white">
                   {specSheetStay.persona.subtitle}
@@ -447,15 +444,15 @@ export default function StaffCommandPortal() {
               </div>
               <button
                 onClick={() => dispatchAllDirectives(specSheetStay.persona, specSheetStay.room, specSheetStay.stay)}
-                className="px-3 py-2 bg-[#C5A880] hover:bg-amber-500 text-[#171E52] text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-1.5 shrink-0"
+                className="px-3 py-2 bg-[#C5A880] hover:bg-amber-500 text-[#171E52] text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-1.5 shrink-0 clickable-card"
               >
                 <Flame className="w-3.5 h-3.5" />
-                Dispatch All to Staff
+                Dispatch All
               </button>
             </div>
 
             {/* Department Action Cards (Scrollable) */}
-            <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3.5">
               {specSheetStay.persona.departmentDirectives.map((dir, idx) => (
                 <div
                   key={idx}
@@ -487,31 +484,27 @@ export default function StaffCommandPortal() {
               ))}
             </div>
 
-            {/* Modal Actions */}
-            <div className="pt-3 border-t border-slate-200 flex items-center justify-between gap-3">
+            {/* Drawer Bottom Actions */}
+            <div className="p-6 border-t border-slate-200 bg-[#F8F9FC] flex items-center justify-between gap-3">
               <button
-                onClick={() => {
-                  window.print();
-                }}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-[#171E52] text-xs font-semibold rounded-xl flex items-center gap-1.5"
+                onClick={() => window.print()}
+                className="px-4 py-2 bg-white hover:bg-slate-100 text-[#171E52] border border-slate-200 text-xs font-semibold rounded-xl flex items-center gap-1.5 clickable-card"
               >
                 <Printer className="w-4 h-4" />
-                Print Butler Spec Sheet
+                Print Spec Sheet
               </button>
 
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => {
-                    sendWhatsAppWelcome(specSheetStay.stay);
-                  }}
-                  className="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-xl border border-emerald-200 flex items-center gap-1.5"
+                  onClick={() => sendWhatsAppWelcome(specSheetStay.stay)}
+                  className="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-xl border border-emerald-200 flex items-center gap-1.5 clickable-card"
                 >
                   <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
-                  WhatsApp Guest Update
+                  WhatsApp Guest
                 </button>
                 <button
                   onClick={() => setSpecSheetStay(null)}
-                  className="px-4 py-2 bg-[#171E52] text-white text-xs font-semibold rounded-xl"
+                  className="px-4 py-2 bg-[#171E52] text-white text-xs font-semibold rounded-xl clickable-card"
                 >
                   Close
                 </button>
@@ -525,12 +518,12 @@ export default function StaffCommandPortal() {
       {/* Luxury QR Welcome Card & Digital Key Handoff Modal (Google Stitch Screen 4) */}
       {qrModalGuest && (
         <div className="fixed inset-0 z-50 bg-[#0F1155]/70 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-gradient-to-br from-[#171E52] via-[#0F1155] to-[#0A0D30] text-white rounded-[32px] p-6 max-w-md w-full border border-[#C5A880]/50 shadow-2xl relative space-y-5 animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-gradient-to-br from-[#171E52] via-[#0F1155] to-[#0A0D30] text-white rounded-[32px] p-6 max-w-md w-full border border-[#C5A880]/50 shadow-2xl relative space-y-5 animate-modal">
             
             {/* Close Button */}
             <button
               onClick={() => setQrModalGuest(null)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors"
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors clickable-card"
             >
               <X className="w-4 h-4" />
             </button>
@@ -551,9 +544,7 @@ export default function StaffCommandPortal() {
             {/* Central Hero QR Card */}
             <div className="bg-white p-6 rounded-2xl flex flex-col items-center justify-center text-center shadow-lg border border-[#C5A880]/40 relative group">
               <div className="w-44 h-44 bg-white p-2 flex items-center justify-center">
-                {/* SVG Rendered High-Contrast QR Code */}
                 <svg className="w-full h-full text-[#171E52]" viewBox="0 0 100 100" fill="currentColor">
-                  {/* Outer corner anchors */}
                   <rect x="5" y="5" width="28" height="28" fill="#171E52" rx="4"/>
                   <rect x="10" y="10" width="18" height="18" fill="white" rx="2"/>
                   <rect x="14" y="14" width="10" height="10" fill="#171E52" rx="1"/>
@@ -566,7 +557,6 @@ export default function StaffCommandPortal() {
                   <rect x="10" y="72" width="18" height="18" fill="white" rx="2"/>
                   <rect x="14" y="76" width="10" height="10" fill="#171E52" rx="1"/>
 
-                  {/* Synthetic data dots */}
                   <rect x="40" y="8" width="6" height="6" fill="#1E22AA" rx="1"/>
                   <rect x="52" y="8" width="6" height="6" fill="#171E52" rx="1"/>
                   <rect x="40" y="20" width="6" height="6" fill="#171E52" rx="1"/>
@@ -615,16 +605,14 @@ export default function StaffCommandPortal() {
                   navigator.clipboard.writeText(url);
                   showToast('✓ Guest Magic Link copied to clipboard');
                 }}
-                className="flex-1 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                className="flex-1 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors clickable-card"
               >
                 <Copy className="w-3.5 h-3.5" />
                 Copy Magic Link
               </button>
               <button
-                onClick={() => {
-                  window.print();
-                }}
-                className="px-4 py-2.5 bg-[#C5A880] hover:bg-amber-600 text-[#171E52] rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+                onClick={() => window.print()}
+                className="px-4 py-2.5 bg-[#C5A880] hover:bg-amber-600 text-[#171E52] rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors clickable-card"
               >
                 <Printer className="w-3.5 h-3.5" />
                 Print Card

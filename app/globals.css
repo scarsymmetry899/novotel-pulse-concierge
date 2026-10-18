@@ -5,11 +5,23 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #171E52;
-  --color-deep: #0F1155;
-  --color-electric: #1E22AA;
-  --color-luxury: #C5A880;
-  --color-canvas: #F8F9FC;
+  --color-primary: #171E52;        /* Space Cadet */
+  --color-deep: #0F1155;           /* Blue Zodiac */
+  --color-electric: #1E22AA;       /* Persian Blue */
+  --color-luxury: #C5A880;         /* Champagne Gold */
+  --color-canvas: #F8F9FC;         /* Porcelain */
+  --color-emerald-vip: #059669;
+  --color-rose-alert: #E11D48;
+
+  /* Emil Kowalski Custom Easing Curves */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Animation Durations */
+  --duration-press: 140ms;
+  --duration-popover: 180ms;
+  --duration-drawer: 240ms;
 }
 
 * {
@@ -25,14 +37,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Emil Kowalski Tactile Feedback System */
-button, a, [role="button"], input[type="button"] {
+/* Emil Kowalski Tactile Button & Pressable Feedback */
+button, a, [role="button"], input[type="button"], .clickable-card {
   touch-action: manipulation;
   user-select: none;
-  transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+  transition: transform var(--duration-press) var(--ease-out), background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, opacity 150ms ease;
 }
 
-button:active, a:active, [role="button"]:active {
+button:active, a:active, [role="button"]:active, .clickable-card:active {
   transform: scale(0.97);
 }
 
@@ -54,7 +66,7 @@ button:active, a:active, [role="button"]:active {
   scrollbar-width: none;
 }
 
-/* Glassmorphism */
+/* Glassmorphism & Elevation */
 .glass-nav {
   background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(16px);
@@ -63,8 +75,49 @@ button:active, a:active, [role="button"]:active {
 }
 
 .glass-nav-dark {
-  background: rgba(15, 17, 85, 0.85);
+  background: rgba(15, 17, 85, 0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(197, 168, 128, 0.25);
+}
+
+/* Modern Card Depth */
+.card-subtle {
+  box-shadow: 0 1px 3px 0 rgba(23, 30, 82, 0.04), 0 1px 2px -1px rgba(23, 30, 82, 0.04);
+}
+
+.card-luxury {
+  box-shadow: 0 10px 30px -10px rgba(23, 30, 82, 0.08), 0 4px 6px -2px rgba(23, 30, 82, 0.03);
+}
+
+/* Bottom Sheet Animation */
+@keyframes slideUpDrawer {
+  from {
+    transform: translateY(100%);
+    opacity: 0.9;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-drawer {
+  animation: slideUpDrawer var(--duration-drawer) var(--ease-drawer) forwards;
+}
+
+/* Modal Center Scaling (Starting from scale 0.95, never 0) */
+@keyframes modalScaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-modal {
+  animation: modalScaleIn var(--duration-popover) var(--ease-out) forwards;
 }
