@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Hotel, ShieldCheck, MessageSquare, Key, Sparkles } from "lucide-react";
 import { BranchProvider } from "@/context/BranchContext";
 import BranchSelector from "@/components/BranchSelector";
+import SmoothScroll from "@/components/SmoothScroll";
 
 export const metadata: Metadata = {
   title: "Novotel Pulse Concierge | Accor Executive Leisure",
@@ -77,10 +78,12 @@ export default function RootLayout({
             </nav>
           </header>
 
-          {/* Main Content Area */}
-          <main className="flex-1 flex flex-col">
-            {children}
-          </main>
+          {/* Main Content Area with Lenis Smooth Scroll */}
+          <SmoothScroll>
+            <main className="flex-1 flex flex-col">
+              {children}
+            </main>
+          </SmoothScroll>
         </BranchProvider>
       </body>
     </html>

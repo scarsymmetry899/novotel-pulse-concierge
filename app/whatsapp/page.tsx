@@ -46,7 +46,7 @@ export default function WhatsAppPreviewPage() {
         </div>
 
         {/* Chat Message Scrollable Area */}
-        <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-[#0B141B]">
+        <div data-lenis-prevent className="flex-1 p-4 space-y-4 overflow-y-auto bg-[#0B141B]">
           
           <div className="text-center my-2">
             <span className="px-3 py-1 rounded-lg bg-[#182229] text-[10px] text-white/50 uppercase tracking-widest font-semibold">

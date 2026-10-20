@@ -397,7 +397,7 @@ export default function GuestMiniApp() {
         {/* TAB 1: IN-STAY CONCIERGE HUB & LIVE DISPATCH                   */}
         {/* ============================================================== */}
         {activeTab === 'hub' && (
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-24">
+          <div data-lenis-prevent className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-24">
             
             {/* Live Facility Telemetry Deck (Dynamically Custom to Active Branch) */}
             <div>
@@ -672,7 +672,7 @@ export default function GuestMiniApp() {
         {/* TAB 2: LIVE SANCTUARY AMBIENT TUNING                          */}
         {/* ============================================================== */}
         {activeTab === 'sanctuary' && (
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-24">
+          <div data-lenis-prevent className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-24">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-base font-bold text-[#171E52]">
@@ -784,7 +784,7 @@ export default function GuestMiniApp() {
         {/* TAB 3: HOTEL FACILITIES & SLOTS (Dynamic to Branch)            */}
         {/* ============================================================== */}
         {activeTab === 'facilities' && (
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-24">
+          <div data-lenis-prevent className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-24">
             <div>
               <h2 className="text-base font-bold text-[#171E52]">
                 {activeBranch.name} Facilities
@@ -839,7 +839,7 @@ export default function GuestMiniApp() {
         {/* TAB 4: ALL DIGITAL KEY (ACCOR KEY SOLUTION)                    */}
         {/* ============================================================== */}
         {activeTab === 'keycard' && (
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-24 flex flex-col items-center justify-between text-center">
+          <div data-lenis-prevent className="flex-1 overflow-y-auto px-4 py-4 space-y-4 pb-24 flex flex-col items-center justify-between text-center">
             <div className="space-y-1 w-full">
               <span className="text-[10px] font-bold tracking-widest text-[#C5A880] uppercase">
                 ALL Digital Key • Accor Key
@@ -953,7 +953,7 @@ export default function GuestMiniApp() {
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto space-y-2.5 my-3 pr-1">
+            <div data-lenis-prevent className="flex-1 overflow-y-auto space-y-2.5 my-3 pr-1">
               {LUXURY_PERSONAS.map((p) => {
                 const isSelected = currentPersona.id === p.id;
                 return (

@@ -308,7 +308,7 @@ function StayContent() {
         {/* VIEW 2: 3-STEP GUIDED SENSORY CALIBRATION                      */}
         {/* ============================================================== */}
         {viewMode === 'guided' && (
-          <div className="flex-1 p-4 space-y-4 flex flex-col justify-between overflow-y-auto pb-6">
+          <div data-lenis-prevent className="flex-1 p-4 space-y-4 flex flex-col justify-between overflow-y-auto pb-6">
             
             {/* Header & Step Dots */}
             <div className="space-y-2">
@@ -639,7 +639,7 @@ function StayContent() {
         {/* VIEW 3: 1-TAP LUXURY PERSONAS SELECTOR                         */}
         {/* ============================================================== */}
         {viewMode === 'persona' && (
-          <div className="flex-1 p-4 space-y-3.5 flex flex-col justify-between overflow-y-auto pb-6">
+          <div data-lenis-prevent className="flex-1 p-4 space-y-3.5 flex flex-col justify-between overflow-y-auto pb-6">
             <div className="space-y-1">
               <div className="flex items-center justify-between">
                 <div>

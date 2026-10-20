@@ -467,7 +467,7 @@ export default function StaffCommandPortal() {
             </div>
 
             {/* Department Action Cards (Scrollable) */}
-            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3.5">
+            <div data-lenis-prevent className="flex-1 overflow-y-auto px-6 py-4 space-y-3.5">
               {specSheetStay.persona.departmentDirectives.map((dir, idx) => (
                 <div
                   key={idx}
