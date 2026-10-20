@@ -213,10 +213,10 @@ function StayContent() {
                   Frictionless Personalization
                 </span>
                 <h2 className="text-lg font-bold text-[#171E52]">
-                  How would you like to prepare your stay?
+                  How would you like Suite 412 prepared?
                 </h2>
                 <p className="text-xs text-[#5E6482]">
-                  Select your arrival mode. Both take under 30 seconds.
+                  Personalize your climate, pillows, and heated bath towels in under 30 seconds.
                 </p>
               </div>
 
@@ -232,9 +232,9 @@ function StayContent() {
                     </div>
                     <div>
                       <h3 className="text-sm font-bold text-[#171E52] group-hover:text-[#1E22AA] transition-colors">
-                        Guided 30s Calibration
+                        Customize Your Room
                       </h3>
-                      <span className="text-[11px] text-[#5E6482]">Tailor each sensory parameter</span>
+                      <span className="text-[11px] text-[#5E6482]">30 Seconds • 3 Quick Steps</span>
                     </div>
                   </div>
                   <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-[#1E22AA]">
@@ -242,7 +242,7 @@ function StayContent() {
                   </span>
                 </div>
                 <p className="text-xs text-[#5E6482] pl-11">
-                  Fine-tune climate temperature, pillow firmness, bath towel warming, and breakfast cloche.
+                  Fine-tune your room temperature, Live N' Dream pillows, towel warming, and breakfast.
                 </p>
               </div>
 
@@ -258,9 +258,9 @@ function StayContent() {
                     </div>
                     <div>
                       <h3 className="text-sm font-bold text-white group-hover:text-[#C5A880] transition-colors">
-                        1-Tap Curated Personas
+                        Choose a Ready Profile
                       </h3>
-                      <span className="text-[11px] text-white/70">10 Instant VIP Blueprints</span>
+                      <span className="text-[11px] text-white/70">1 Tap • Jet Lag, Family, Work</span>
                     </div>
                   </div>
                   <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#C5A880] text-[#171E52]">
@@ -268,7 +268,7 @@ function StayContent() {
                   </span>
                 </div>
                 <p className="text-xs text-white/80 pl-11">
-                  Choose from 10 signature guest profiles (Jet Lag Reset, Athlete, Wine Epicurean, Romance, HNW Privacy).
+                  Instantly apply tailored settings for Jet Lag Reset, Wellness, Family, Romance, or Business.
                 </p>
               </div>
 
@@ -318,9 +318,9 @@ function StayContent() {
                     Step {guidedStep} of 3
                   </span>
                   <h2 className="text-base font-bold text-[#171E52]">
-                    {guidedStep === 1 && 'Ambient Sensory & Climate'}
-                    {guidedStep === 2 && 'Restorative Sleep & Bath Warmth'}
-                    {guidedStep === 3 && 'Artisanal Gastronomy & Barista'}
+                    {guidedStep === 1 && 'Room Climate & Aromatherapy'}
+                    {guidedStep === 2 && 'Pillows & Heated Towels'}
+                    {guidedStep === 3 && 'Breakfast & Dietary Alerts'}
                   </h2>
                 </div>
                 <button
@@ -346,7 +346,7 @@ function StayContent() {
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-[#171E52] flex items-center gap-1.5">
                     <Wind className="w-3.5 h-3.5 text-[#1E22AA]" />
-                    Ultrasonic Diffuser Essence
+                    Room Scent (Essential Oil Diffuser)
                   </label>
                   <div className="grid grid-cols-1 gap-1.5">
                     {[
@@ -378,7 +378,7 @@ function StayContent() {
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold uppercase tracking-wider text-[#171E52] flex items-center gap-1.5">
                     <Music className="w-3.5 h-3.5 text-[#1E22AA]" />
-                    Neuro-Acoustic Resonance
+                    Sleep Soundscape (Optional)
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     {[
@@ -627,7 +627,7 @@ function StayContent() {
                   className="flex-1 py-3 bg-[#1E22AA] hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-2 clickable-card"
                 >
                   <Sparkles className="w-4 h-4 text-[#C5A880]" />
-                  <span>{isSaving ? 'Activating Sanctuary...' : 'Activate Residence Sanctuary'}</span>
+                  <span>{isSaving ? 'Saving Setup...' : 'Confirm Room Setup'}</span>
                 </button>
               )}
             </div>
@@ -644,10 +644,10 @@ function StayContent() {
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#C5A880] block">
-                    Accor VIP Blueprints
+                    1-Tap Arrival Blueprints
                   </span>
                   <h2 className="text-base font-bold text-[#171E52]">
-                    Select Your Luxury Persona
+                    Choose Your Stay Profile
                   </h2>
                 </div>
                 <button
@@ -658,7 +658,7 @@ function StayContent() {
                 </button>
               </div>
               <p className="text-xs text-[#5E6482]">
-                1 tap applies complete sensory climate, sleep ergonomics, and staff dispatch.
+                1 tap applies complete temperature, pillow selection, and butler delivery schedule.
               </p>
             </div>
 
@@ -731,13 +731,13 @@ function StayContent() {
 
             <div className="space-y-2">
               <span className="text-[10px] font-bold uppercase tracking-widest text-[#C5A880] block">
-                Sanctuary Calibrated & Active • {activeBranch.name}
+                Room Calibrated & Ready • {activeBranch.name}
               </span>
               <h2 className="text-2xl font-bold text-[#171E52]">
-                Suite 412 is Ready
+                Suite 412 is Ready for You
               </h2>
               <p className="text-xs text-[#5E6482] max-w-xs mx-auto">
-                Your sensory preferences have been synchronized directly to the Floor Butler & Housekeeping tablets.
+                Your room preferences are synchronized directly with your Floor Butler and Housekeeping teams.
               </p>
             </div>
 

@@ -70,10 +70,10 @@ export default function WhatsAppPreviewPage() {
 
             <div className="space-y-1">
               <h4 className="font-semibold text-sm text-white">
-                Welcome to Novotel, Mr. Hastings
+                Welcome to Novotel, Arthur
               </h4>
               <p className="text-xs text-white/75 leading-relaxed">
-                Your Executive Residence Suite 412 is being prepared. Tailor your bedding, heated towel timings, and tennis court access ahead of arrival.
+                Suite 412 is reserved for your arrival. To choose your Live N' Dream pillows and have heated towels waiting before you step into the room, tap your key link below:
               </p>
             </div>
 
@@ -89,7 +89,7 @@ export default function WhatsAppPreviewPage() {
                 className="w-full py-2.5 bg-[#00A884] hover:bg-[#008f6f] text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-sm"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Personalize My Stay (&lt;30s)</span>
+                <span>Personalize My Room (30s)</span>
               </Link>
               <button
                 onClick={() => alert('Dialing Novotel Executive Butler Desk: +33 1 40 00 00 00')}

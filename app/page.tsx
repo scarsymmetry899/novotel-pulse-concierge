@@ -338,7 +338,7 @@ export default function GuestMiniApp() {
               </div>
               <div className="text-left">
                 <span className="text-[9px] text-[#C5A880] font-bold uppercase tracking-wider block">
-                  Active Persona Blueprint
+                  Your Arrival Profile
                 </span>
                 <span className="text-xs font-semibold text-white truncate max-w-[210px] block">
                   {currentPersona.title}
@@ -502,18 +502,18 @@ export default function GuestMiniApp() {
               </div>
             </div>
 
-            {/* Official Novotel In-Stay Butler Quick-Dispatch Grid */}
+            {/* Official Novotel In-Stay Butler Directives */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-[#5E6482]">
-                  Novotel In-Stay Butler Directives
+                  Novotel Butler Directives
                 </h3>
-                <span className="text-[10px] text-emerald-600 font-semibold">Avg dispatch: 6 mins</span>
+                <span className="text-[10px] text-emerald-600 font-semibold">Dispatched in ~6 mins</span>
               </div>
 
               <div className="grid grid-cols-2 gap-2.5">
                 <button
-                  onClick={() => createServiceRequest('Pre-Warm Bath Sheets', 'housekeeping', 'Pre-warm 2x Egyptian bath sheets', preferences.towelWarmingTime || '21:30')}
+                  onClick={() => createServiceRequest('Warm My Towels', 'housekeeping', 'Pre-warm 2x Egyptian bath sheets', preferences.towelWarmingTime || '21:30')}
                   className="p-3 bg-white hover:bg-blue-50/50 border border-[#E2E5F0] rounded-2xl text-left transition-all shadow-sm flex flex-col justify-between h-[88px] group clickable-card"
                 >
                   <div className="flex items-center justify-between text-[#1E22AA]">
@@ -523,13 +523,13 @@ export default function GuestMiniApp() {
                     </span>
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-[#171E52] block group-hover:text-[#1E22AA]">Warm Bath Sheets</span>
-                    <span className="text-[10px] text-[#5E6482]">Evening heating cycle</span>
+                    <span className="text-xs font-bold text-[#171E52] block group-hover:text-[#1E22AA]">Warm My Towels</span>
+                    <span className="text-[10px] text-[#5E6482]">Target: {preferences.towelWarmingTime || '21:30'} PM</span>
                   </div>
                 </button>
 
                 <button
-                  onClick={() => createServiceRequest('Live N Dream Pillow Refresh', 'housekeeping', 'Deliver extra Live N Dream Smart Pillows')}
+                  onClick={() => createServiceRequest('Extra Pillows Request', 'housekeeping', 'Deliver extra Live N Dream Smart Pillows')}
                   className="p-3 bg-white hover:bg-blue-50/50 border border-[#E2E5F0] rounded-2xl text-left transition-all shadow-sm flex flex-col justify-between h-[88px] group clickable-card"
                 >
                   <div className="flex items-center justify-between text-[#171E52]">
@@ -537,13 +537,13 @@ export default function GuestMiniApp() {
                     <span className="text-[10px] bg-indigo-50 text-indigo-700 font-semibold px-1.5 py-0.5 rounded">Live N' Dream</span>
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-[#171E52] block group-hover:text-[#1E22AA]">Live N' Dream Pillows</span>
-                    <span className="text-[10px] text-[#5E6482]">Dual-comfort support</span>
+                    <span className="text-xs font-bold text-[#171E52] block group-hover:text-[#1E22AA]">Extra Pillows</span>
+                    <span className="text-[10px] text-[#5E6482]">Live N' Dream Dual-Comfort</span>
                   </div>
                 </button>
 
                 <button
-                  onClick={() => createServiceRequest('Double Ristretto 06:15 Wake', 'fnb', 'Double-shot Italian ristretto with San Pellegrino at 06:15')}
+                  onClick={() => createServiceRequest('Morning Coffee 06:15 Wake', 'fnb', 'Double-shot Italian ristretto with San Pellegrino at 06:15')}
                   className="p-3 bg-white hover:bg-blue-50/50 border border-[#E2E5F0] rounded-2xl text-left transition-all shadow-sm flex flex-col justify-between h-[88px] group clickable-card"
                 >
                   <div className="flex items-center justify-between text-[#C5A880]">
@@ -551,13 +551,13 @@ export default function GuestMiniApp() {
                     <span className="text-[10px] bg-slate-100 text-[#5E6482] font-semibold px-1.5 py-0.5 rounded">06:15 Prompt</span>
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-[#171E52] block group-hover:text-[#1E22AA]">Double Ristretto</span>
-                    <span className="text-[10px] text-[#5E6482]">Wake barista delivery</span>
+                    <span className="text-xs font-bold text-[#171E52] block group-hover:text-[#1E22AA]">Morning Coffee</span>
+                    <span className="text-[10px] text-[#5E6482]">06:15 Double Ristretto</span>
                   </div>
                 </button>
 
                 <button
-                  onClick={() => createServiceRequest('InBalance Recovery Soak', 'wellness', 'Deliver InBalance thermal mineral salts for bath')}
+                  onClick={() => createServiceRequest('Bath Mineral Salts Delivery', 'wellness', 'Deliver InBalance thermal mineral salts for bath')}
                   className="p-3 bg-white hover:bg-blue-50/50 border border-[#E2E5F0] rounded-2xl text-left transition-all shadow-sm flex flex-col justify-between h-[88px] group clickable-card"
                 >
                   <div className="flex items-center justify-between text-[#171E52]">
@@ -565,20 +565,20 @@ export default function GuestMiniApp() {
                     <span className="text-[10px] bg-cyan-50 text-cyan-700 font-semibold px-1.5 py-0.5 rounded">InBalance</span>
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-[#171E52] block group-hover:text-[#1E22AA]">InBalance Soak</span>
-                    <span className="text-[10px] text-[#5E6482]">Thermal mineral bath</span>
+                    <span className="text-xs font-bold text-[#171E52] block group-hover:text-[#1E22AA]">Bath Mineral Soak</span>
+                    <span className="text-[10px] text-[#5E6482]">InBalance Recovery Salts</span>
                   </div>
                 </button>
               </div>
             </div>
 
-            {/* 4-Stage Live Dispatch Pipeline */}
+            {/* Live Dispatch Tracker */}
             <div className="bg-white border border-[#E2E5F0] rounded-2xl p-4 shadow-sm space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-[#1E22AA] animate-ping" />
                   <span className="text-xs font-bold text-[#171E52] uppercase tracking-wide">
-                    Live Dispatch Pipeline
+                    Live Butler Tracker
                   </span>
                 </div>
                 <span className="text-[10px] text-[#5E6482] font-medium">{activeBranch.code} • Suite 412</span>
@@ -676,9 +676,9 @@ export default function GuestMiniApp() {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-base font-bold text-[#171E52]">
-                  Live N' Dream Sanctuary Tuning
+                  Sleep & Room Comfort Tuning
                 </h2>
-                <p className="text-[11px] text-[#5E6482]">Official Novotel sleep & ambient comfort settings.</p>
+                <p className="text-[11px] text-[#5E6482]">Personalize your Live N' Dream pillows, scent, and heated bath sheets.</p>
               </div>
               <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full font-bold border border-emerald-200">
                 {saveStatus}
@@ -727,7 +727,7 @@ export default function GuestMiniApp() {
             <div className="bg-white border border-[#E2E5F0] rounded-2xl p-4 shadow-sm space-y-2">
               <label className="text-xs font-bold uppercase tracking-wider text-[#171E52] flex items-center gap-1.5">
                 <Wind className="w-3.5 h-3.5 text-[#1E22AA]" />
-                Ultrasonic Aromatherapy Diffuser
+                Room Scent (Essential Oil Diffuser)
               </label>
               <div className="space-y-1.5">
                 {[
@@ -939,10 +939,10 @@ export default function GuestMiniApp() {
             <div className="flex items-start justify-between border-b border-white/10 pb-3">
               <div>
                 <span className="text-[10px] font-bold tracking-widest text-[#C5A880] uppercase block">
-                  Accor ALL VIP Blueprints
+                  1-Tap Arrival Blueprints
                 </span>
                 <h3 className="text-lg font-bold text-white tracking-wide">
-                  Select Guest Persona
+                  Choose Your Stay Profile
                 </h3>
               </div>
               <button

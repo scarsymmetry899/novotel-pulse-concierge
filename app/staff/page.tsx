@@ -380,7 +380,7 @@ export default function StaffCommandPortal() {
                       onClick={() => updateRequestStatus(req.id, 'in_progress')}
                       className="flex-1 py-1.5 bg-[#1E22AA] hover:bg-blue-700 text-white text-xs font-semibold rounded-xl transition-all clickable-card"
                     >
-                      Dispatch En Route
+                      Mark En Route
                     </button>
                   )}
                   {req.status === 'in_progress' && (
@@ -388,7 +388,7 @@ export default function StaffCommandPortal() {
                       onClick={() => updateRequestStatus(req.id, 'completed')}
                       className="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition-all clickable-card"
                     >
-                      Mark Delivered (WhatsApp Alert)
+                      Mark Delivered & Notify Guest
                     </button>
                   )}
                   <button
@@ -462,7 +462,7 @@ export default function StaffCommandPortal() {
                 className="px-3 py-2 bg-[#C5A880] hover:bg-amber-500 text-[#171E52] text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-1.5 shrink-0 clickable-card"
               >
                 <Flame className="w-3.5 h-3.5" />
-                Dispatch All
+                Send All Tasks
               </button>
             </div>
 
@@ -506,7 +506,7 @@ export default function StaffCommandPortal() {
                 className="px-4 py-2 bg-white hover:bg-slate-100 text-[#171E52] border border-slate-200 text-xs font-semibold rounded-xl flex items-center gap-1.5 clickable-card"
               >
                 <Printer className="w-4 h-4" />
-                Print Spec Sheet
+                Print Butler Sheet (Shift Briefing)
               </button>
 
               <div className="flex items-center gap-2">

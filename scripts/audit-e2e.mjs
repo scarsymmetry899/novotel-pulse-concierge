@@ -1,7 +1,7 @@
 import { chromium } from 'playwright';
 
 async function runAudit() {
-  console.log('🚀 Starting Novotel Pulse Concierge End-to-End Playwright Audit...');
+  console.log('🚀 Starting Novotel Pulse Concierge End-to-End Playwright Audit with Polished Copy...');
   
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
@@ -21,8 +21,7 @@ async function runAudit() {
     onboarding: {},
     staffPortal: {},
     whatsapp: {},
-    consoleErrors: [],
-    uxObservations: []
+    consoleErrors: []
   };
 
   const BASE_URL = 'https://novotel-pulse-concierge.vercel.app';
@@ -59,7 +58,7 @@ async function runAudit() {
       }
     }
 
-    // Test the 4 View Switcher Chips inside Mobile Frame
+    // Test View Switcher Chips inside Mobile Frame
     const tabs = ['Hub', 'Sanctuary', 'Facilities', 'Key Pass'];
     for (const tab of tabs) {
       const tabBtn = page.locator(`button:has-text("${tab}")`).first();
@@ -74,23 +73,23 @@ async function runAudit() {
     await page.locator('button:has-text("Hub")').first().click();
     await page.waitForTimeout(400);
 
-    // Test Butler Dispatch: Warm Bath Sheets
-    const warmTowelsBtn = page.locator('button:has-text("Warm Bath Sheets")');
+    // Test Polished Butler Directive: Warm My Towels
+    const warmTowelsBtn = page.locator('button:has-text("Warm My Towels"), button:has-text("Warm Bath Sheets")').first();
     if (await warmTowelsBtn.isVisible()) {
       await warmTowelsBtn.click();
       await page.waitForTimeout(600);
-      console.log('✓ Clicked "Warm Bath Sheets" Butler Directive');
-      results.guestHub.butlerDispatch = 'Dispatched Warm Bath Sheets successfully';
+      console.log('✓ Clicked "Warm My Towels" Butler Directive');
+      results.guestHub.butlerDispatch = 'Dispatched Warm My Towels successfully';
     }
 
-    // Test Active Persona Quick-Drawer Trigger
-    const personaTrigger = page.locator('text=Active Persona Blueprint');
+    // Test Active Persona Quick-Drawer Trigger (Polished copy: "Your Arrival Profile")
+    const personaTrigger = page.locator('text=Your Arrival Profile, text=Active Persona Blueprint').first();
     if (await personaTrigger.isVisible()) {
       await personaTrigger.click();
       await page.waitForTimeout(500);
       console.log('✓ Opened Emil Kowalski Persona Quick-Drawer');
       
-      // Select Jet Lag Recovery Protocol by clicking the card
+      // Select Jet Lag Recovery Protocol
       const jetLagOption = page.locator('div:has-text("Jet Lag Recovery Protocol")').last();
       if (await jetLagOption.isVisible()) {
         await jetLagOption.click({ force: true });
@@ -99,7 +98,7 @@ async function runAudit() {
         results.guestHub.personaDrawer = 'Applied Jet Lag Recovery cleanly';
       }
 
-      // Close drawer if still open
+      // Close drawer if open
       const doneBtn = page.locator('button:has-text("Done")');
       if (await doneBtn.isVisible()) {
         await doneBtn.click();
@@ -130,19 +129,19 @@ async function runAudit() {
     console.log(`Onboarding Heading: ${welcomeHeading}`);
     results.onboarding.heading = welcomeHeading;
 
-    // Test Choice View: Click "Guided 30s Calibration"
-    const guidedChoice = page.locator('h3:has-text("Guided 30s Calibration")');
+    // Test Choice View: Click "Customize Your Room" / "Guided 30s Calibration"
+    const guidedChoice = page.locator('h3:has-text("Customize Your Room"), h3:has-text("Guided 30s Calibration")').first();
     if (await guidedChoice.isVisible()) {
       await guidedChoice.click();
       await page.waitForTimeout(500);
-      console.log('✓ Entered Guided 30s Calibration');
+      console.log('✓ Entered 30s Room Customization');
 
       // Step 1: Click Continue
       const step1Continue = page.locator('button:has-text("Continue")');
       if (await step1Continue.isVisible()) {
         await step1Continue.click();
         await page.waitForTimeout(400);
-        console.log('✓ Passed Step 1 (Ambient Sensory & Climate)');
+        console.log('✓ Passed Step 1 (Room Climate & Scent)');
       }
 
       // Step 2: Live N' Dream pillow choice and Continue
@@ -154,18 +153,18 @@ async function runAudit() {
       if (await step2Continue.isVisible()) {
         await step2Continue.click();
         await page.waitForTimeout(400);
-        console.log('✓ Passed Step 2 (Live N\' Dream Pillows & Bath Sheets)');
+        console.log('✓ Passed Step 2 (Live N\' Dream Pillows & Heated Towels)');
       }
 
       // Step 3: Complete calibration
-      const activateBtn = page.locator('button:has-text("Activate Residence Sanctuary")');
+      const activateBtn = page.locator('button:has-text("Confirm Room Setup"), button:has-text("Activate Residence Sanctuary")').first();
       if (await activateBtn.isVisible()) {
         await activateBtn.click();
         await page.waitForTimeout(800);
-        console.log('✓ Passed Step 3 (Dining & Allergen direct)');
+        console.log('✓ Passed Step 3 (Breakfast & Dietary Directives)');
         
         const readyNotice = await page.locator('text=Suite 412 is Ready').isVisible();
-        console.log(`✓ Sanctuary Activation Confirmation: ${readyNotice ? 'Confirmed' : 'Checked'}`);
+        console.log(`✓ Room Ready Confirmation: ${readyNotice ? 'Confirmed' : 'Checked'}`);
         results.onboarding.guidedFlow = readyNotice ? 'Suite 412 Ready Confirmed' : 'Completed';
       }
     }
@@ -195,12 +194,12 @@ async function runAudit() {
       console.log(`✓ Butler Spec Sheet Drawer: ${drawerVisible ? 'Opened' : 'Not detected'}`);
       results.staffPortal.specSheetDrawer = drawerVisible ? 'Opened' : 'Not detected';
 
-      // Test Dispatch All Directives
-      const dispatchAllBtn = page.locator('button:has-text("Dispatch All")');
+      // Test Send All Tasks / Dispatch All Directives
+      const dispatchAllBtn = page.locator('button:has-text("Send All Tasks"), button:has-text("Dispatch All")').first();
       if (await dispatchAllBtn.isVisible()) {
         await dispatchAllBtn.click();
         await page.waitForTimeout(500);
-        console.log('✓ Clicked "Dispatch All Directives"');
+        console.log('✓ Clicked "Send All Tasks" to Department Tablets');
         results.staffPortal.dispatchAllDirectives = 'Dispatched action items';
       }
 
@@ -225,11 +224,11 @@ async function runAudit() {
     }
 
     // Test Kanban Status Transition
-    const dispatchEnRouteBtn = page.locator('button:has-text("Dispatch En Route")').first();
+    const dispatchEnRouteBtn = page.locator('button:has-text("Mark En Route"), button:has-text("Dispatch En Route")').first();
     if (await dispatchEnRouteBtn.isVisible()) {
       await dispatchEnRouteBtn.click();
       await page.waitForTimeout(500);
-      console.log('✓ Kanban transition: Dispatch En Route');
+      console.log('✓ Kanban transition: Mark En Route');
       results.staffPortal.statusTransition = 'En Route confirmed';
     }
 
@@ -261,9 +260,9 @@ async function runAudit() {
     console.log(`Verified Green Check & Business Badge: ${verifiedBadge}`);
     results.whatsapp.verifiedBadge = verifiedBadge;
 
-    const actionBtn = page.locator('a:has-text("Personalize My Stay")');
+    const actionBtn = page.locator('a:has-text("Personalize My Room"), a:has-text("Personalize My Stay")').first();
     const actionBtnVisible = await actionBtn.isVisible();
-    console.log(`"Personalize My Stay" Action Card: ${actionBtnVisible}`);
+    console.log(`"Personalize My Room" Action Card: ${actionBtnVisible}`);
     results.whatsapp.personalizeAction = actionBtnVisible ? 'Ready & Linked' : 'Missing';
 
   } catch (err) {
