@@ -6,6 +6,7 @@ import {
   CheckCheck, Phone, ArrowUpRight, ShieldCheck, 
   Sparkles, ExternalLink, MessageSquare, ChevronLeft 
 } from 'lucide-react';
+import NovotelLogo from '@/components/NovotelLogo';
 
 export default function WhatsAppPreviewPage() {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
@@ -24,10 +25,8 @@ export default function WhatsAppPreviewPage() {
             
             {/* Avatar with Verified Green Badge */}
             <div className="relative">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#171E52] to-[#0F1155] border border-[#C5A880]/50 flex items-center justify-center font-bold text-[#C5A880] text-sm">
-                N
-              </div>
-              <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#00A884] border-2 border-[#202C33] flex items-center justify-center text-[9px] text-white font-bold">
+              <NovotelLogo variant="badge" size="sm" theme="dark" />
+              <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#00A884] border-2 border-[#202C33] flex items-center justify-center text-[8px] text-white font-bold">
                 ✓
               </div>
             </div>
@@ -63,8 +62,9 @@ export default function WhatsAppPreviewPage() {
                 alt="Novotel Heated Pool"
                 className="w-full h-36 object-cover"
               />
-              <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-[#171E52]/90 backdrop-blur-md text-[#C5A880] text-[10px] font-semibold tracking-wider">
-                EXECUTIVE SUITE 412
+              <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded-md bg-[#171E52]/90 backdrop-blur-md text-[#C5A880] text-[10px] font-semibold tracking-wider flex items-center gap-1.5 border border-[#C5A880]/30">
+                <NovotelLogo variant="symbol" size="xs" />
+                <span>EXECUTIVE SUITE 412</span>
               </div>
             </div>
 

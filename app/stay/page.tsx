@@ -12,6 +12,7 @@ import { INITIAL_STAYS, INITIAL_PREFERENCES, LUXURY_PERSONAS } from '@/lib/mockD
 import { Stay, GuestPreferences, LuxuryPersona } from '@/types/hospitality';
 import { supabase } from '@/lib/supabase';
 import { useBranch } from '@/context/BranchContext';
+import NovotelLogo from '@/components/NovotelLogo';
 
 function StayContent() {
   const searchParams = useSearchParams();
@@ -174,27 +175,31 @@ function StayContent() {
         {/* Top Status Bar & Accor Brand Pill */}
         <div className="bg-[#171E52] px-6 pt-3.5 pb-2.5 text-white/80 flex items-center justify-between text-xs font-medium select-none">
           <span>9:41</span>
-          <div className="flex items-center gap-2 text-[10px] tracking-wider text-[#C5A880]">
+          <div className="flex items-center gap-1.5 text-[10px] tracking-wider text-[#C5A880]">
+            <NovotelLogo variant="symbol" size="xs" />
             <span className="font-bold">{activeBranch.code} PULSE</span>
-            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           </div>
           <span>5G • 100%</span>
         </div>
 
         {/* Brand Header */}
         <div className="bg-gradient-to-b from-[#171E52] to-[#0F1155] text-white px-6 pt-4 pb-5 rounded-b-[28px] shadow-md">
+          <div className="flex items-center justify-between mb-2.5 border-b border-white/10 pb-2">
+            <NovotelLogo variant="horizontal" size="xs" subtitle={activeBranch.city.toUpperCase()} />
+            <div className="px-2.5 py-0.5 rounded-full bg-[#C5A880]/15 border border-[#C5A880]/40 text-[#C5A880] text-[9px] font-semibold tracking-wider flex items-center gap-1">
+              <Sparkles className="w-2.5 h-2.5 text-[#C5A880]" />
+              SUITE 412
+            </div>
+          </div>
           <div className="flex items-center justify-between">
             <div>
               <span className="text-[10px] font-semibold tracking-widest text-[#C5A880] uppercase block">
-                {activeBranch.name} • {activeBranch.city}
+                {activeBranch.name}
               </span>
               <h1 className="text-xl font-bold text-white tracking-wide">
                 Welcome, {stay.guestName.split(' ')[0]}
               </h1>
-            </div>
-            <div className="px-3 py-1 rounded-full bg-[#C5A880]/15 border border-[#C5A880]/40 text-[#C5A880] text-[10px] font-semibold tracking-wider flex items-center gap-1.5">
-              <Sparkles className="w-3 h-3 text-[#C5A880]" />
-              SUITE 412
             </div>
           </div>
           <p className="text-xs text-white/70 mt-1">
@@ -725,8 +730,11 @@ function StayContent() {
         {viewMode === 'activated' && (
           <div className="flex-1 p-6 space-y-6 flex flex-col items-center justify-center text-center animate-modal">
             
-            <div className="w-16 h-16 rounded-full bg-emerald-500/20 border-2 border-emerald-500 text-emerald-600 flex items-center justify-center animate-pulse">
-              <Check className="w-8 h-8 stroke-[3]" />
+            <div className="relative flex items-center justify-center">
+              <NovotelLogo variant="gold-seal" size="xl" />
+              <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-emerald-500 border-2 border-white text-white flex items-center justify-center shadow-md">
+                <Check className="w-4 h-4 stroke-[3]" />
+              </div>
             </div>
 
             <div className="space-y-2">

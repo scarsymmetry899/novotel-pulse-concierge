@@ -15,6 +15,7 @@ import { supabase } from '@/lib/supabase';
 import { INITIAL_FACILITIES, INITIAL_REQUESTS, INITIAL_PREFERENCES, LUXURY_PERSONAS } from '@/lib/mockData';
 import { GuestPreferences, ServiceRequest, Facility, LuxuryPersona } from '@/types/hospitality';
 import { useBranch } from '@/context/BranchContext';
+import NovotelLogo from '@/components/NovotelLogo';
 
 export default function GuestMiniApp() {
   const { activeBranch } = useBranch();
@@ -298,29 +299,33 @@ export default function GuestMiniApp() {
         {/* Device Notch & Status Bar */}
         <div className="bg-[#171E52] px-6 pt-3.5 pb-2 text-white/80 flex items-center justify-between text-xs font-medium select-none">
           <span>9:41</span>
-          <div className="flex items-center gap-2 text-[10px] tracking-wider text-[#C5A880] font-bold">
+          <div className="flex items-center gap-1.5 text-[10px] tracking-wider text-[#C5A880] font-bold">
+            <NovotelLogo variant="symbol" size="xs" />
             <span>NOVOTEL PULSE</span>
-            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           </div>
           <span>5G • 100%</span>
         </div>
 
         {/* Top Header Card (Accor Luxury Dark Mode) */}
         <div className="bg-gradient-to-b from-[#171E52] to-[#0F1155] text-white px-5 pt-3.5 pb-4 rounded-b-[28px] shadow-md">
+          <div className="flex items-center justify-between mb-2.5 border-b border-white/10 pb-2">
+            <NovotelLogo variant="horizontal" size="xs" subtitle={activeBranch.city.toUpperCase()} />
+            <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#C5A880]/15 border border-[#C5A880]/40 text-[#C5A880] text-[9px] font-bold tracking-wider">
+              <Sparkles className="w-2.5 h-2.5 text-[#C5A880]" />
+              ALL PLATINUM
+            </div>
+          </div>
+
           <div className="flex items-center justify-between mb-2">
             <div>
               <div className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest text-[#C5A880] uppercase">
                 <MapPin className="w-3 h-3 text-[#C5A880]" />
-                <span className="truncate max-w-[190px]">{activeBranch.name}</span>
+                <span className="truncate max-w-[240px]">{activeBranch.name}</span>
               </div>
               <h1 className="text-xl font-bold text-white tracking-wide mt-0.5">
                 Executive Suite 412
               </h1>
-            </div>
-
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C5A880]/15 border border-[#C5A880]/40 text-[#C5A880] text-[10px] font-bold tracking-wider">
-              <Sparkles className="w-3 h-3 text-[#C5A880]" />
-              ALL PLATINUM
             </div>
           </div>
 
@@ -863,22 +868,27 @@ export default function GuestMiniApp() {
               <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#C5A880_1px,transparent_1px)] [background-size:16px_16px]" />
 
               <div className="flex items-center justify-between z-10">
-                <span className="font-bold tracking-widest text-sm text-[#C5A880] font-brand">
-                  NOVOTEL
-                </span>
-                <span className="text-[10px] tracking-wider text-white/70 font-bold">ALL PLATINUM</span>
+                <NovotelLogo variant="horizontal" size="xs" subtitle="RESIDENCE KEY" />
+                <span className="text-[10px] tracking-wider text-[#C5A880] font-bold">ALL PLATINUM</span>
               </div>
 
-              {/* NFC Sensor Pulse Area */}
-              <div className="flex flex-col items-center justify-center z-10 space-y-3">
-                <div className={`w-20 h-20 rounded-full flex items-center justify-center border-2 transition-all ${
-                  nfcUnlocked
-                    ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 scale-110'
-                    : 'bg-white/10 border-white/20 text-[#C5A880] group-hover:scale-105'
-                }`}>
-                  <Key className={`w-8 h-8 ${nfcUnlocked ? 'animate-bounce text-emerald-300' : 'text-[#C5A880]'}`} />
+              {/* NFC Sensor Pulse Area with Novotel Gold Seal */}
+              <div className="flex flex-col items-center justify-center z-10 space-y-2">
+                <div className="relative flex items-center justify-center">
+                  <NovotelLogo variant="gold-seal" size="xl" className="opacity-95" />
+                  <div className={`absolute inset-0 flex items-center justify-center rounded-full transition-all ${
+                    nfcUnlocked ? 'bg-emerald-500/30 scale-110' : ''
+                  }`}>
+                    {nfcUnlocked ? (
+                      <Key className="w-8 h-8 text-emerald-300 animate-bounce" />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-black/20 flex items-center justify-center">
+                        <Key className="w-6 h-6 text-[#C5A880]/80 group-hover:scale-110 transition-transform" />
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <span className="text-xs font-bold tracking-wide">
+                <span className="text-xs font-bold tracking-wide text-white">
                   {nfcUnlocked ? 'DOOR UNLOCKED • WELCOME' : 'TAP TO TRANSMIT NFC'}
                 </span>
               </div>

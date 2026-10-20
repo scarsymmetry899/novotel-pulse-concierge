@@ -1,14 +1,19 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Link from "next/link";
-import { Hotel, ShieldCheck, MessageSquare, Key, Sparkles } from "lucide-react";
+import { ShieldCheck, MessageSquare, Key, Sparkles } from "lucide-react";
 import { BranchProvider } from "@/context/BranchContext";
 import BranchSelector from "@/components/BranchSelector";
 import SmoothScroll from "@/components/SmoothScroll";
+import NovotelLogo from "@/components/NovotelLogo";
 
 export const metadata: Metadata = {
   title: "Novotel Pulse Concierge | Accor Executive Leisure",
   description: "Ultra-responsive, zero-download guest mobile mini-app and cross-department operations command center.",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/novotel-symbol.svg",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -37,10 +42,9 @@ export default function RootLayout({
           {/* Top Global Quick Switcher Bar */}
           <header className="sticky top-0 z-50 bg-[#171E52] text-white border-b border-[#0F1155]/60 px-4 py-2 text-xs flex flex-wrap items-center justify-between gap-2 shadow-sm">
             <div className="flex items-center gap-3">
-              <span className="font-bold tracking-widest uppercase text-[#C5A880] flex items-center gap-1.5 font-brand">
-                <Hotel className="w-3.5 h-3.5 text-[#C5A880]" />
-                Novotel Pulse
-              </span>
+              <Link href="/" className="hover:opacity-90 transition-opacity">
+                <NovotelLogo variant="horizontal" size="xs" subtitle="PULSE CONCIERGE" />
+              </Link>
 
               {/* Dynamic Branch Customization Dropdown */}
               <BranchSelector />

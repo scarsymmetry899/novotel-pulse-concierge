@@ -12,6 +12,7 @@ import { supabase } from '@/lib/supabase';
 import { INITIAL_ROOMS, INITIAL_STAYS, INITIAL_PREFERENCES, INITIAL_REQUESTS, LUXURY_PERSONAS } from '@/lib/mockData';
 import { Room, Stay, GuestPreferences, ServiceRequest, Department, LuxuryPersona } from '@/types/hospitality';
 import { useBranch } from '@/context/BranchContext';
+import NovotelLogo from '@/components/NovotelLogo';
 
 export default function StaffCommandPortal() {
   const { activeBranch } = useBranch();
@@ -139,12 +140,10 @@ export default function StaffCommandPortal() {
       {/* Top Header Bar (Blue Zodiac #0F1155) */}
       <div className="bg-[#0F1155] text-white px-6 py-3.5 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 shadow-md">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-[#C5A880]/20 border border-[#C5A880]/40 flex items-center justify-center text-[#C5A880] font-bold text-sm">
-            N
-          </div>
+          <NovotelLogo variant="badge" size="sm" theme="dark" />
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="font-bold text-base tracking-wider uppercase">
+              <h1 className="font-bold text-base tracking-wider uppercase font-brand">
                 {activeBranch.name} • Operations Command
               </h1>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#C5A880]/20 text-[#C5A880] border border-[#C5A880]/40">
@@ -417,6 +416,9 @@ export default function StaffCommandPortal() {
             {/* Drawer Top Header */}
             <div className="p-6 border-b border-slate-200 flex items-start justify-between bg-[#F8F9FC]">
               <div>
+                <div className="mb-2">
+                  <NovotelLogo variant="horizontal" size="xs" theme="light" subtitle="OFFICIAL BUTLER SPECIFICATION" />
+                </div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-xl font-bold text-[#171E52]">
                     Suite {specSheetStay.room.roomNumber} Butler Spec Sheet
@@ -545,9 +547,9 @@ export default function StaffCommandPortal() {
 
             {/* Header */}
             <div className="text-center space-y-1">
-              <span className="text-[10px] font-semibold tracking-widest text-[#C5A880] uppercase">
-                {activeBranch.name} • Sanctuary Pass
-              </span>
+              <div className="flex justify-center mb-1">
+                <NovotelLogo variant="horizontal" size="xs" subtitle="RESIDENCE KEY PASS" />
+              </div>
               <h3 className="text-xl font-bold text-white tracking-wide">
                 Scan to Unlock Your Stay
               </h3>
@@ -558,6 +560,9 @@ export default function StaffCommandPortal() {
 
             {/* Central Hero QR Card */}
             <div className="bg-white p-6 rounded-2xl flex flex-col items-center justify-center text-center shadow-lg border border-[#C5A880]/40 relative group">
+              <div className="mb-2">
+                <NovotelLogo variant="badge" size="xs" theme="light" />
+              </div>
               <div className="w-44 h-44 bg-white p-2 flex items-center justify-center">
                 <svg className="w-full h-full text-[#171E52]" viewBox="0 0 100 100" fill="currentColor">
                   <rect x="5" y="5" width="28" height="28" fill="#171E52" rx="4"/>
